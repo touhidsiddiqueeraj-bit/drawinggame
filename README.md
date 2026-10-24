@@ -1,128 +1,141 @@
-# Draw & Learn! 🎨⭐
+<p align="center">
+  <img src="docs/banner.png" alt="Draw &amp; Learn — a colorful tracing game for toddlers">
+</p>
 
-A joyful, colorful tracing game for toddlers (ages 1–5). Big friendly guides appear
-as dotted lines and little artists trace over them with a fat rainbow crayon —
-learning **shapes, letters and numbers** while sparkles fly, confetti bursts and a
-cheerful voice celebrates every finished drawing.
+<h1 align="center">🎨 Draw &amp; Learn</h1>
 
-**50 traceable things**: 14 shapes (circle, star, heart, moon, sun...), 26 letters
-(A is for Apple...) and 10 numbers — each with its own voice-over, colors and a
-star reward.
+<p align="center">
+  <b>A big, bright, no-rules tracing game for toddlers (ages 2–5).</b><br>
+  Trace letters, numbers and shapes with a fat rainbow crayon — while a friendly voice cheers them on.
+</p>
 
-## ✨ Features
+<p align="center">
+  <a href="https://github.com/touhidsiddiqueeraj-bit/drawinggame/releases/latest"><img src="https://img.shields.io/github/v/release/touhidsiddiqueeraj-bit/drawinggame?label=release&color=%23e91e63" alt="Latest release"></a>
+  <a href="https://github.com/touhidsiddiqueeraj-bit/drawinggame/actions/workflows/build-apk.yml"><img src="https://github.com/touhidsiddiqueeraj-bit/drawinggame/actions/workflows/build-apk.yml/badge.svg" alt="Build APK"></a>
+  <a href="https://touhidsiddiqueeraj-bit.github.io/drawinggame/"><img src="https://img.shields.io/badge/play-online-2ED573" alt="Play online"></a>
+  <img src="https://img.shields.io/badge/platform-Android%20%C2%B7%20Web%20(PWA)-1E88E5" alt="Platforms">
+  <img src="https://img.shields.io/badge/ads%20%C2%B7%20tracking%20%C2%B7%20iap-none-8E24AA" alt="No ads, no tracking, no in-app purchases">
+  <img src="https://img.shields.io/badge/license-MIT-F50057" alt="MIT license">
+</p>
 
-- **Trace & complete** — guide paths appear as pastel roads with animated candy dots and
-  pulsing start markers. Drawing over ~72% of the guide triggers a celebration.
-- **Made for tiny hands** — giant touch targets, palm-friendly multi-touch, no fail states,
-  no menus to get lost in, auto-advance to the next drawing.
-- **Colors!** — 11 crayons (plus a hue-cycling rainbow brush). Tapping a color says its name.
-- **Sounds** — punchy pop/whoosh/fanfare sound effects synthesized live with WebAudio,
-  a gentle pentatonic background loop (mute button included for parents 😉), and 75
-  spoken lines (instructions, praise, color names).
-- **Rewarding** — confetti cannons, star bursts, bouncing praise cards and a ⭐ badge
-  on every finished item (saved on the device).
-- **Offline-first PWA** — installable from the browser, works fully offline via a
-  service worker. No accounts, no ads, no tracking, no permissions.
+---
 
-## 🌐 Play it
+## 📸 Peek inside
 
-- **On the web (GitHub Pages)**: https://touhidsiddiqueeraj-bit.github.io/drawinggame/
-- **On Android**: install the APK from [Releases](../../releases) (`DrawAndLearn-vX.Y.Z.apk`),
-  or build it yourself (below).
-- **Locally**: just open `index.html`, or serve the folder
-  (`npx serve .` / `python3 -m http.server`) — everything is static.
+| | | |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/home.png" width="265" alt="Home screen"><br><sub><b>Pick a world</b> — shapes, letters or numbers</sub> | <img src="docs/screenshots/picker-letters.png" width="265" alt="Letters picker"><br><sub><b>50 cards</b> — every letter has its word 🍎⚽🐱</sub> | <img src="docs/screenshots/draw-letter.png" width="265" alt="Tracing the letter M"><br><sub><b>Follow the dotted road</b> — rainbow crayon!</sub> |
+| <img src="docs/screenshots/draw-shape.png" width="265" alt="Tracing a star"><br><sub><b>Sharp corners</b> — polygons trace like real polygons</sub> | <img src="docs/screenshots/celebration.png" width="265" alt="Celebration"><br><sub><b>Confetti!</b> — impossible to fail, always a win</sub> | <img src="docs/screenshots/picker-shapes.png" width="265" alt="Shapes picker"><br><sub><b>14 shapes</b> — circle to star to sunshine</sub> |
 
-For the best phone experience use the **Add to Home Screen** option in the browser menu.
+## ✨ Made for little hands
 
-## 📱 Building the Android APK
+- 🖍️ **50 things to trace** — 26 capital letters (each with a word and emoji: 🍎 Apple, ⚽ Ball, 🌈 Rainbow…), the numbers 0–9, and 14 shapes from circle to star to sun.
+- 🌈 **A fat rainbow crayon** — 11 bright colors that *speak their own name* when picked, plus a rainbow brush that cycles hues as they draw.
+- 👆 **Impossible to fail** — no scores, no timers, no wrong answers. Follow the dotted road, wander off it, scribble all over — it's all fine. Cover enough of the guide and the confetti flies.
+- 🎈 **Guides that teach themselves** — numbered start badges show stroke order, marching candy dots show the direction, and a glowing hint orb demonstrates the path whenever they pause.
+- 🔊 **It talks** — 75 recorded lines: the voice names every item ("M is for Moon!"), cheers progress, and celebrates the win. Punchy pop / swish / sparkle sound effects and a gentle music loop are synthesized live in the browser — one tap to mute.
+- 🎉 **Celebrations!** — confetti bursts, a big "You did it!", and gold stars collected per category.
+- 📴 **Works offline** — install once (APK or PWA), then it's airplane-mode friendly. No account, no ads, no tracking, no in-app purchases. Nothing to tap but the game.
 
-The web app is wrapped with [Capacitor](https://capacitorjs.com). Prerequisites:
-Node 18+, JDK 17+, Android SDK (platform 35, build-tools 35.0.0).
+## 🎮 How a toddler plays it
+
+1. **Tap** a big picture button — ⭐ Shapes, 🐤 Letters or 🔢 Numbers — then tap any card.
+2. **Trace** the dotted road with a finger. Any color, any speed, any order.
+3. **Confetti!** 🎉 A happy voice says *"You drew the star!"* — and the next card is one tap away.
+
+## 📥 Get it
+
+### 🤖 Android (APK)
+
+[**⬇️ Download the latest APK**](https://github.com/touhidsiddiqueeraj-bit/drawinggame/releases/latest)
+(~6 MB · Android 6.0+ · portrait · fully offline · no permissions needed)
+
+Grab `DrawAndLearn-v1.0.1.apk` from the release, copy it to a phone (or download it right on the phone), tap it and allow "install from unknown apps" once. Every future release tag gets a fresh APK attached automatically by CI.
+
+### 🌐 Any browser
+
+**[▶️ Play it online](https://touhidsiddiqueeraj-bit.github.io/drawinggame/)** — or run it yourself, no build step needed:
 
 ```bash
-npm install                # installs Capacitor
-npm run android:release    # assembles www/ + builds the signed release APK
-# APK lands in android/app/build/outputs/apk/release/app-release.apk
+git clone https://github.com/touhidsiddiqueeraj-bit/drawinggame.git
+cd drawinggame
+npx serve .        # or: python3 -m http.server 8000
 ```
 
-Other useful commands:
+Installed from the browser as a **PWA**, it keeps working offline.
 
-```bash
-npm run android:run        # build + install on a connected device (debug)
-npm run android:open       # open the project in Android Studio
-npm run android:sync       # re-copy web assets after editing the game
-```
+## 🔊 The voice
 
-The APK is signed with `android/app/drawinggame.keystore`
-(password `DrawLearn2026`, alias `drawinggame`) — replace it with your own for
-anything serious. A ready-to-use GitHub Actions workflow is included at
-`tools/github-workflow-build-apk.yml` — it builds the APK on every push and
-attaches it to Releases for version tags (`git tag v1.0.1 && git push --tags`).
+All 75 lines ship as small MP3s (a cheerful child voice) so the game works offline with zero API calls, with an automatic fallback to the browser's built-in speech synthesis if a file is ever missing.
 
-> **Enable CI in 2 clicks:** open
-> `tools/github-workflow-build-apk.yml` on GitHub → copy its contents → create
-> the file `.github/workflows/build-apk.yml` via the web UI (Add file →
-> Create new file). Doing it through the web UI needs no extra token
-> permissions.
-
-## 🗣️ Voice-overs
-
-All 75 voice lines are pre-generated MP3s in `assets/audio/` (currently the
-"Ana" child voice via edge-tts) so the game works offline with zero API calls.
-
-To regenerate the identical set with **Gemini TTS** (as originally intended), run
-from a Gemini-supported region:
+Prefer **Gemini TTS** voices? Regenerate every line with your own key:
 
 ```bash
 python3 tools/generate_audio_gemini.py --key YOUR_GEMINI_API_KEY
-# options: --voice Leda|Puck|Kore|...  --style "..."  --only items/circle
+# optional: --voice Leda|Puck|Kore   --style "warm and bubbly"
 ```
 
-Clip texts live in one place: `js/data.js` → export with `npm run clips:export`
-→ `tools/voice_clips.json` is what both generators read.
+## 🛠️ Build it yourself
 
-## 🛠️ Tech
+```bash
+npm install
+npm run www             # assemble the static site into www/
+npm run android:sync    # copy web assets into the Android project
+npm run android:release # → android/app/build/outputs/apk/release/app-release.apk
+npm run audio:gemini    # shortcut for the Gemini TTS regenerator above
+```
 
-- Pure static web app — HTML5 Canvas + vanilla JS, no frameworks, no build step.
-  (Great for toddlers: instant load, works offline, trivially wrappable into an APK.)
-- Tracing detection: guides are resampled every ~5 px; a guide point counts as
-  covered when the finger passes within a generous radius; 72% coverage = done.
-- Sound effects are synthesized at runtime (WebAudio) — no audio files to download.
-- Fredoka font (SIL OFL) bundled in `assets/fonts/`.
+CI does the same on every push — `.github/workflows/build-apk.yml` builds the APK and attaches it to the release whenever you push a `v*` tag.
 
-## 📁 Layout
+> Signing: the repo contains a demo keystore (`android/app/drawinggame.keystore`, password `DrawLearn2026`). Replace it with your own before publishing to a store.
+
+## 🧠 Under the hood
+
+- **Vanilla JS + Canvas, zero dependencies** — the whole game is a static site that loads instantly, even on old phones.
+- **Corner-preserving path rendering** — tracing guides switch between soft curve smoothing and crisp line corners using a 50° turn threshold, so hearts stay round while hexagons stay pointy.
+- **Forgiving tracing detection** — each guide is resampled every 5 px; the finger marks any sample within a generous radius, and 72% coverage counts as a win. Wobbly little fingers succeed.
+- **All SFX + music are synthesized** with the Web Audio API — pops, swishes, fanfares and a pentatonic music loop, no audio files to download.
+- **PWA** — manifest + cache-first service worker (`sw.js`; bump `CACHE_VERSION` when you ship changes).
+- **Capacitor** wraps the very same static site into the Android APK — one codebase, two platforms.
+
+## 📁 Project layout
 
 ```
-index.html            the whole game (3 screens)
+index.html            the whole game — single-page app
 css/style.css         candy-bright styling + animations
-js/data.js            50 glyphs as stroke paths + voice clip manifest
-js/audio.js           WebAudio SFX synth + music loop + voice manager
-js/fx.js              sparkles / confetti particle layer
+js/data.js            50 glyphs as stroke paths + voice manifest
+js/audio.js           WebAudio SFX + music + voice manager
+js/fx.js              sparkle / confetti particle layer
 js/game.js            tracing engine (guides, brush, coverage, hints)
 js/app.js             screens, palette, progress, celebration
 assets/audio/         75 spoken lines (mp3)
-tools/                www assembly, clip manifest, Gemini TTS regenerator
-android/              Capacitor Android project (signed release config)
+assets/fonts/         Fredoka (SIL OFL)
+tools/                www assembly + Gemini TTS regenerator
+android/              Capacitor Android project
+docs/                 banner + screenshots
 ```
 
-## ⚠️ Notes
+## 🗺️ Ideas for next versions
 
-- When you change game files, bump `CACHE_VERSION` in `sw.js` so installed
-  copies pick up the update.
-- The Gemini API is region-restricted; the included fallback script keeps
-  working voice-overs regardless (edge-tts), and the app itself falls back to
-  the browser's speech synthesis if an audio file is ever missing.
-
-Made with ❤️ for little artists.
+- Lowercase letters & a cursive mode
+- Free-draw canvas — "make your own shape!"
+- More languages for the voice lines
+- A tiny shape-matching mini-game
 
 ## 📝 Changelog
 
-**v1.0.1 — Shape accuracy fix**
-- Guides are now drawn with **corner-preserving smoothing**: strokes that
-  turn sharper than 50° keep crisp straight corners (Rectangle, Hexagon,
-  Pentagon, Square, Triangle, Diamond, Star, Arrow, and letters like
-  A E F H K L M N V W X Y Z), while curvy glyphs (S, O, B, 3, hearts…)
-  keep their soft rounded look. Previously every corner was being rounded
-  off, which made polygons and zig-zag letters look wrong.
-- All 50 glyphs visually verified (grid review + on-device draw screen).
-- Bumped versionCode 2 / versionName 1.0.1, service-worker cache v1.0.2.
+**v1.0.1** — *shape-accuracy fix:* corner-preserving guide rendering. Rectangles, hexagons, pentagons, squares, triangles, stars and zig-zag letters (A E F H K L M N V W X Y Z…) now trace with crisp, correct corners; curvy glyphs (S, O, B, 3, hearts…) stay soft. All 50 glyphs visually verified.
+
+**v1.0.0** — first release: 50 traceable glyphs, 75 voice lines, 11-color rainbow crayon, confetti celebrations, offline PWA + signed Android APK.
+
+## 💛 Credits
+
+- [Fredoka](https://fonts.google.com/specimen/Fredoka) typeface — SIL Open Font License 1.1
+- Voice clips generated with [edge-tts](https://github.com/rany2/edge-tts); a Gemini TTS regenerator is included
+- Android shell by [Capacitor](https://capacitorjs.com)
+
+## 📄 License
+
+MIT — see [LICENSE](LICENSE). The bundled Fredoka font files remain under the SIL Open Font License 1.1.
+
+<p align="center"><sub>Made with ❤️ for little artists.</sub></p>
