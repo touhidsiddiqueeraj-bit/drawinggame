@@ -3,11 +3,12 @@
 buildscript {
     
     repositories {
-        // Aliyun mirrors first (much faster / more reliable from this build environment)
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
+        // Standard repos first; Aliyun mirrors kept as fallback
         google()
         mavenCentral()
+        // Aliyun mirrors last: fallback only (they can 502, which breaks CI)
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.7.2'
@@ -22,10 +23,11 @@ apply from: "variables.gradle"
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         mavenCentral()
+        // Aliyun mirrors last: fallback only (they can 502, which breaks CI)
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
     }
 }
 
