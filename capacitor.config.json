@@ -1,0 +1,11 @@
+{
+  "appId": "com.touhidsiddiqueeraj.drawinggame",
+  "appName": "Draw & Learn",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

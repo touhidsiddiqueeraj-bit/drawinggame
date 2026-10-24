@@ -1,0 +1,452 @@
+[
+  {
+    "id": "a",
+    "group": "items",
+    "file": "items/a",
+    "text": "A is for Apple! Can you draw the letter A?"
+  },
+  {
+    "id": "b",
+    "group": "items",
+    "file": "items/b",
+    "text": "B is for Ball! Can you draw the letter B?"
+  },
+  {
+    "id": "c",
+    "group": "items",
+    "file": "items/c",
+    "text": "C is for Cat! Can you draw the letter C?"
+  },
+  {
+    "id": "d",
+    "group": "items",
+    "file": "items/d",
+    "text": "D is for Dog! Can you draw the letter D?"
+  },
+  {
+    "id": "e",
+    "group": "items",
+    "file": "items/e",
+    "text": "E is for Elephant! Can you draw the letter E?"
+  },
+  {
+    "id": "f",
+    "group": "items",
+    "file": "items/f",
+    "text": "F is for Fish! Can you draw the letter F?"
+  },
+  {
+    "id": "g",
+    "group": "items",
+    "file": "items/g",
+    "text": "G is for Grapes! Can you draw the letter G?"
+  },
+  {
+    "id": "h",
+    "group": "items",
+    "file": "items/h",
+    "text": "H is for Hat! Can you draw the letter H?"
+  },
+  {
+    "id": "i",
+    "group": "items",
+    "file": "items/i",
+    "text": "I is for Ice cream! Can you draw the letter I?"
+  },
+  {
+    "id": "j",
+    "group": "items",
+    "file": "items/j",
+    "text": "J is for Juice! Can you draw the letter J?"
+  },
+  {
+    "id": "k",
+    "group": "items",
+    "file": "items/k",
+    "text": "K is for Kite! Can you draw the letter K?"
+  },
+  {
+    "id": "l",
+    "group": "items",
+    "file": "items/l",
+    "text": "L is for Lion! Can you draw the letter L?"
+  },
+  {
+    "id": "m",
+    "group": "items",
+    "file": "items/m",
+    "text": "M is for Moon! Can you draw the letter M?"
+  },
+  {
+    "id": "n",
+    "group": "items",
+    "file": "items/n",
+    "text": "N is for Nest! Can you draw the letter N?"
+  },
+  {
+    "id": "o",
+    "group": "items",
+    "file": "items/o",
+    "text": "O is for Orange! Can you draw the letter O?"
+  },
+  {
+    "id": "p",
+    "group": "items",
+    "file": "items/p",
+    "text": "P is for Panda! Can you draw the letter P?"
+  },
+  {
+    "id": "q",
+    "group": "items",
+    "file": "items/q",
+    "text": "Q is for Queen! Can you draw the letter Q?"
+  },
+  {
+    "id": "r",
+    "group": "items",
+    "file": "items/r",
+    "text": "R is for Rainbow! Can you draw the letter R?"
+  },
+  {
+    "id": "s",
+    "group": "items",
+    "file": "items/s",
+    "text": "S is for Sun! Can you draw the letter S?"
+  },
+  {
+    "id": "t",
+    "group": "items",
+    "file": "items/t",
+    "text": "T is for Tiger! Can you draw the letter T?"
+  },
+  {
+    "id": "u",
+    "group": "items",
+    "file": "items/u",
+    "text": "U is for Umbrella! Can you draw the letter U?"
+  },
+  {
+    "id": "v",
+    "group": "items",
+    "file": "items/v",
+    "text": "V is for Van! Can you draw the letter V?"
+  },
+  {
+    "id": "w",
+    "group": "items",
+    "file": "items/w",
+    "text": "W is for Watermelon! Can you draw the letter W?"
+  },
+  {
+    "id": "x",
+    "group": "items",
+    "file": "items/x",
+    "text": "X is for X-ray! Can you draw the letter X?"
+  },
+  {
+    "id": "y",
+    "group": "items",
+    "file": "items/y",
+    "text": "Y is for Yo-yo! Can you draw the letter Y?"
+  },
+  {
+    "id": "z",
+    "group": "items",
+    "file": "items/z",
+    "text": "Z is for Zebra! Can you draw the letter Z?"
+  },
+  {
+    "id": "n0",
+    "group": "items",
+    "file": "items/n0",
+    "text": "Zero! Can you draw the number zero?"
+  },
+  {
+    "id": "n1",
+    "group": "items",
+    "file": "items/n1",
+    "text": "One! Can you draw the number one?"
+  },
+  {
+    "id": "n2",
+    "group": "items",
+    "file": "items/n2",
+    "text": "Two! Can you draw the number two?"
+  },
+  {
+    "id": "n3",
+    "group": "items",
+    "file": "items/n3",
+    "text": "Three! Can you draw the number three?"
+  },
+  {
+    "id": "n4",
+    "group": "items",
+    "file": "items/n4",
+    "text": "Four! Can you draw the number four?"
+  },
+  {
+    "id": "n5",
+    "group": "items",
+    "file": "items/n5",
+    "text": "Five! Can you draw the number five?"
+  },
+  {
+    "id": "n6",
+    "group": "items",
+    "file": "items/n6",
+    "text": "Six! Can you draw the number six?"
+  },
+  {
+    "id": "n7",
+    "group": "items",
+    "file": "items/n7",
+    "text": "Seven! Can you draw the number seven?"
+  },
+  {
+    "id": "n8",
+    "group": "items",
+    "file": "items/n8",
+    "text": "Eight! Can you draw the number eight?"
+  },
+  {
+    "id": "n9",
+    "group": "items",
+    "file": "items/n9",
+    "text": "Nine! Can you draw the number nine?"
+  },
+  {
+    "id": "circle",
+    "group": "items",
+    "file": "items/circle",
+    "text": "Circle! Can you draw a circle?"
+  },
+  {
+    "id": "square",
+    "group": "items",
+    "file": "items/square",
+    "text": "Square! Can you draw a square?"
+  },
+  {
+    "id": "triangle",
+    "group": "items",
+    "file": "items/triangle",
+    "text": "Triangle! Can you draw a triangle?"
+  },
+  {
+    "id": "star",
+    "group": "items",
+    "file": "items/star",
+    "text": "Star! Can you draw a star?"
+  },
+  {
+    "id": "heart",
+    "group": "items",
+    "file": "items/heart",
+    "text": "Heart! Can you draw a heart?"
+  },
+  {
+    "id": "diamond",
+    "group": "items",
+    "file": "items/diamond",
+    "text": "Diamond! Can you draw a diamond?"
+  },
+  {
+    "id": "rectangle",
+    "group": "items",
+    "file": "items/rectangle",
+    "text": "Rectangle! Can you draw a rectangle?"
+  },
+  {
+    "id": "oval",
+    "group": "items",
+    "file": "items/oval",
+    "text": "Oval! Can you draw a oval?"
+  },
+  {
+    "id": "hexagon",
+    "group": "items",
+    "file": "items/hexagon",
+    "text": "Hexagon! Can you draw a hexagon?"
+  },
+  {
+    "id": "pentagon",
+    "group": "items",
+    "file": "items/pentagon",
+    "text": "Pentagon! Can you draw a pentagon?"
+  },
+  {
+    "id": "moon",
+    "group": "items",
+    "file": "items/moon",
+    "text": "Moon! Can you draw a moon?"
+  },
+  {
+    "id": "plus",
+    "group": "items",
+    "file": "items/plus",
+    "text": "Plus! Can you draw a plus?"
+  },
+  {
+    "id": "arrow",
+    "group": "items",
+    "file": "items/arrow",
+    "text": "Arrow! Can you draw a arrow?"
+  },
+  {
+    "id": "sun",
+    "group": "items",
+    "file": "items/sun",
+    "text": "Sun! Can you draw a sun?"
+  },
+  {
+    "id": "great-job",
+    "group": "praise",
+    "file": "praise/great-job",
+    "text": "Great job!"
+  },
+  {
+    "id": "amazing",
+    "group": "praise",
+    "file": "praise/amazing",
+    "text": "Amazing!"
+  },
+  {
+    "id": "wonderful",
+    "group": "praise",
+    "file": "praise/wonderful",
+    "text": "Wonderful!"
+  },
+  {
+    "id": "perfect",
+    "group": "praise",
+    "file": "praise/perfect",
+    "text": "Perfect!"
+  },
+  {
+    "id": "you-did-it",
+    "group": "praise",
+    "file": "praise/you-did-it",
+    "text": "You did it!"
+  },
+  {
+    "id": "super-star",
+    "group": "praise",
+    "file": "praise/super-star",
+    "text": "Super star!"
+  },
+  {
+    "id": "fantastic",
+    "group": "praise",
+    "file": "praise/fantastic",
+    "text": "Fantastic!"
+  },
+  {
+    "id": "beautiful",
+    "group": "praise",
+    "file": "praise/beautiful",
+    "text": "So beautiful!"
+  },
+  {
+    "id": "red",
+    "group": "colors",
+    "file": "colors/red",
+    "text": "Red!"
+  },
+  {
+    "id": "orange",
+    "group": "colors",
+    "file": "colors/orange",
+    "text": "Orange!"
+  },
+  {
+    "id": "yellow",
+    "group": "colors",
+    "file": "colors/yellow",
+    "text": "Yellow!"
+  },
+  {
+    "id": "green",
+    "group": "colors",
+    "file": "colors/green",
+    "text": "Green!"
+  },
+  {
+    "id": "blue",
+    "group": "colors",
+    "file": "colors/blue",
+    "text": "Blue!"
+  },
+  {
+    "id": "purple",
+    "group": "colors",
+    "file": "colors/purple",
+    "text": "Purple!"
+  },
+  {
+    "id": "pink",
+    "group": "colors",
+    "file": "colors/pink",
+    "text": "Pink!"
+  },
+  {
+    "id": "brown",
+    "group": "colors",
+    "file": "colors/brown",
+    "text": "Brown!"
+  },
+  {
+    "id": "black",
+    "group": "colors",
+    "file": "colors/black",
+    "text": "Black!"
+  },
+  {
+    "id": "white",
+    "group": "colors",
+    "file": "colors/white",
+    "text": "White!"
+  },
+  {
+    "id": "rainbow",
+    "group": "colors",
+    "file": "colors/rainbow",
+    "text": "Rainbow colors!"
+  },
+  {
+    "id": "welcome",
+    "group": "ui",
+    "file": "ui/welcome",
+    "text": "Welcome to Draw and Learn! Tap a picture and let’s play!"
+  },
+  {
+    "id": "lets-draw",
+    "group": "ui",
+    "file": "ui/lets-draw",
+    "text": "Yay! Let’s draw!"
+  },
+  {
+    "id": "tap-a-picture",
+    "group": "ui",
+    "file": "ui/tap-a-picture",
+    "text": "Tap a picture to play!"
+  },
+  {
+    "id": "wow",
+    "group": "ui",
+    "file": "ui/wow",
+    "text": "Wow! So pretty!"
+  },
+  {
+    "id": "keep-going",
+    "group": "ui",
+    "file": "ui/keep-going",
+    "text": "Keep going! You can do it!"
+  },
+  {
+    "id": "almost-there",
+    "group": "ui",
+    "file": "ui/almost-there",
+    "text": "Almost there!"
+  }
+]

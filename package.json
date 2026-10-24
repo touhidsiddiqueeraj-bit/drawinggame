@@ -1,0 +1,21 @@
+{
+  "name": "draw-and-learn",
+  "version": "1.0.0",
+  "description": "Draw & Learn — a joyful tracing game for toddlers (shapes, letters, numbers). Static web app + Capacitor Android wrapper.",
+  "private": true,
+  "scripts": {
+    "www": "bash tools/build-www.sh",
+    "android:add": "npm run www && npx cap add android",
+    "android:sync": "npm run www && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:run": "npm run android:sync && cd android && ./gradlew installDebug",
+    "android:release": "npm run android:sync && cd android && ./gradlew assembleRelease",
+    "audio:gemini": "python3 tools/generate_audio_gemini.py",
+    "clips:export": "node tools/export_clips.js"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0"
+  }
+}

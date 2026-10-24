@@ -1,0 +1,17 @@
+{
+  "name": "Draw & Learn — Toddler Tracing Fun",
+  "short_name": "Draw & Learn",
+  "description": "A joyful tracing game for toddlers — draw shapes, letters and numbers with colors, sparkles and cheerful voices.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#8C6FF0",
+  "theme_color": "#7C4DFF",
+  "categories": ["education", "kids", "games"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
