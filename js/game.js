@@ -4,6 +4,11 @@
  *
  * - Guides: pastel "road" + colored line + marching candy dots,
  *   pulsing start stars, numbered stroke badges.
+ * - Paths: CORNER-PRESERVING smoothing — points where the stroke
+ *   turns sharper than ~50° are drawn as crisp lineTo corners
+ *   (rectangles, polygons, letters like M V W Z A), everything
+ *   else keeps the soft midpoint quadratic smoothing (S, O, 3,
+ *   hearts, moons). Best of both worlds for tracing.
  * - Brush: fat rounded crayon (opaque single-pass = no joint artifacts),
  *   rainbow mode cycles hue along the line.
  * - Coverage: guide is resampled every ~5px; a sample counts as "hit"
@@ -144,15 +149,46 @@
 
   /* ================= geometry helpers ================= */
 
+  // Turn threshold: sharper than this = keep the point as a crisp corner.
+  // 50° sits safely between the gentlest polygon corner (hexagon, 60°)
+  // and the sharpest hand-authored curve joint (letter S, ~45°).
+  var CORNER_TURN = 50 * Math.PI / 180;
+
+  function _isCorner(prev, cur, next) {
+    var ax = cur[0] - prev[0], ay = cur[1] - prev[1];
+    var bx = next[0] - cur[0], by = next[1] - cur[1];
+    var la = Math.hypot(ax, ay), lb = Math.hypot(bx, by);
+    if (la < 0.001 || lb < 0.001) return false; // duplicate/junction point
+    var cos = (ax * bx + ay * by) / (la * lb);
+    cos = Math.max(-1, Math.min(1, cos));
+    return Math.acos(cos) > CORNER_TURN;
+  }
+
+  // Soft midpoint quadratics from pts[s] to pts[e], straight arrival at pts[e].
+  function _smoothRun(path, pts, s, e) {
+    if (e - s === 1) { path.lineTo(pts[e][0], pts[e][1]); return; }
+    for (var j = s + 1; j < e; j++) {
+      var mx = (pts[j][0] + pts[j + 1][0]) / 2;
+      var my = (pts[j][1] + pts[j + 1][1]) / 2;
+      path.quadraticCurveTo(pts[j][0], pts[j][1], mx, my);
+    }
+    path.lineTo(pts[e][0], pts[e][1]);
+  }
+
+  // Corner-preserving path builder: split the point list into runs at
+  // sharp corners; corners are joined with straight lines, runs between
+  // them get the soft quadratic smoothing.
   function _pathThrough(path, pts) {
     path.moveTo(pts[0][0], pts[0][1]);
     if (pts.length === 2) { path.lineTo(pts[1][0], pts[1][1]); return; }
-    for (var i = 1; i < pts.length - 1; i++) {
-      var mx = (pts[i][0] + pts[i + 1][0]) / 2;
-      var my = (pts[i][1] + pts[i + 1][1]) / 2;
-      path.quadraticCurveTo(pts[i][0], pts[i][1], mx, my);
+    var n = pts.length;
+    var runStart = 0;
+    for (var i = 1; i < n; i++) {
+      var atEnd = (i === n - 1);
+      if (!atEnd && !_isCorner(pts[i - 1], pts[i], pts[i + 1])) continue;
+      _smoothRun(path, pts, runStart, i);
+      runStart = i;
     }
-    path.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]);
   }
 
   function _resample(pts, step) {

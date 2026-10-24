@@ -55,9 +55,15 @@ npm run android:sync       # re-copy web assets after editing the game
 
 The APK is signed with `android/app/drawinggame.keystore`
 (password `DrawLearn2026`, alias `drawinggame`) — replace it with your own for
-anything serious. A GitHub Actions workflow (`.github/workflows/build-apk.yml`)
-also builds the APK on every push and attaches it to Releases for version tags
-(`git tag v1.0.0 && git push --tags`).
+anything serious. A ready-to-use GitHub Actions workflow is included at
+`tools/github-workflow-build-apk.yml` — it builds the APK on every push and
+attaches it to Releases for version tags (`git tag v1.0.1 && git push --tags`).
+
+> **Enable CI in 2 clicks:** open
+> `tools/github-workflow-build-apk.yml` on GitHub → copy its contents → create
+> the file `.github/workflows/build-apk.yml` via the web UI (Add file →
+> Create new file). Doing it through the web UI needs no extra token
+> permissions.
 
 ## 🗣️ Voice-overs
 
@@ -108,3 +114,15 @@ android/              Capacitor Android project (signed release config)
   the browser's speech synthesis if an audio file is ever missing.
 
 Made with ❤️ for little artists.
+
+## 📝 Changelog
+
+**v1.0.1 — Shape accuracy fix**
+- Guides are now drawn with **corner-preserving smoothing**: strokes that
+  turn sharper than 50° keep crisp straight corners (Rectangle, Hexagon,
+  Pentagon, Square, Triangle, Diamond, Star, Arrow, and letters like
+  A E F H K L M N V W X Y Z), while curvy glyphs (S, O, B, 3, hearts…)
+  keep their soft rounded look. Previously every corner was being rounded
+  off, which made polygons and zig-zag letters look wrong.
+- All 50 glyphs visually verified (grid review + on-device draw screen).
+- Bumped versionCode 2 / versionName 1.0.1, service-worker cache v1.0.2.
