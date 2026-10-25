@@ -123,6 +123,20 @@
     var ox = (w - size) / 2, oy = (h - size) / 2, s = size / 100;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
+    // pre-applied animal colors + decorative eyes (recognizability)
+    if (glyph.fill) {
+      ctx.save();
+      glyph.fill.forEach(function (f) {
+        ctx.globalAlpha = (typeof f.a === 'number') ? f.a : 0.32;
+        ctx.fillStyle = f.c;
+        ctx.beginPath();
+        _pathOn(ctx, f.p, ox, oy, s);
+        ctx.closePath();
+        ctx.fill();
+      });
+      ctx.restore();
+    }
+    if (glyph.eyes) _drawEyes(ctx, glyph, ox, oy, s);
     ctx.globalAlpha = 0.16;
     ctx.strokeStyle = glyph.color;
     ctx.lineWidth = size / 26;
@@ -145,6 +159,33 @@
     for (var i = 1; i < pts.length; i++) {
       ctx.lineTo(ox + pts[i][0] * s, oy + pts[i][1] * s);
     }
+  }
+
+  // Decorative animal eyes for picker cards (same look as the engine's).
+  function _drawEyes(ctx, glyph, ox, oy, s) {
+    ctx.save();
+    ctx.globalAlpha = 0.92;
+    glyph.eyes.forEach(function (e) {
+      var x = ox + e[0] * s, y = oy + e[1] * s, r = Math.max(1.4, e[2] * s);
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      if (e[3] === 'w') {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x + r * 0.18, y, r * 0.52, 0, Math.PI * 2);
+        ctx.fillStyle = '#2B2B33';
+        ctx.fill();
+      } else {
+        ctx.fillStyle = '#2B2B33';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x - r * 0.32, y - r * 0.36, r * 0.34, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,.95)';
+        ctx.fill();
+      }
+    });
+    ctx.restore();
   }
 
   /* ================= DRAW ================= */

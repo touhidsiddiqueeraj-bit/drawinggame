@@ -336,12 +336,6 @@
     "text": "A cow! Can you draw the cow?"
   },
   {
-    "id": "pig",
-    "group": "items",
-    "file": "items/pig",
-    "text": "A pig! Can you draw the pig?"
-  },
-  {
     "id": "sheep",
     "group": "items",
     "file": "items/sheep",

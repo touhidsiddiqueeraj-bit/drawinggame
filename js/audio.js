@@ -267,15 +267,6 @@
       o.start(t); o.stop(t + 0.95);
     },
 
-    // two greedy oinks
-    oink: function (t) {
-      [0, 0.21].forEach(function (dt, i) {
-        var t0 = t + dt;
-        voice(t0, 0.14, 'sawtooth', i ? 190 : 160, 70, 0.45, [480, 2]);
-        noise(t0, 0.1, 0.14, 'bandpass', 320, 700, 1.2);
-      });
-    },
-
     // bleating baa: strong tremolo = woolly "ba-a-a"
     baa: function (t) {
       var o = ctx.createOscillator(); o.type = 'sawtooth';

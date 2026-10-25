@@ -1,7 +1,7 @@
 /*
  * Draw & Learn — data.js
  * Single source of truth for:
- *  - The 62 traceable glyphs (26 letters, 10 numbers, 14 shapes, 12 animals)
+ *  - The 61 traceable glyphs (26 letters, 10 numbers, 14 shapes, 11 animals)
  *  - Brush color palette
  *  - Voice clip manifest (texts shared by the audio generator tools)
  *
@@ -208,80 +208,132 @@
 
   // Fluffy wool cloud for the sheep: a circle whose radius wobbles gently,
   // traced counterclockwise (top -> left -> bottom -> right) like the O.
-  function cloudPts(cx, cy, rx, ry, bumps, amp) {
+  // Optional a0/a1 (degrees, y-up param space) clip the cloud to an open arc —
+  // the sheep's wool skips the bottom-center so it never cuts across the face.
+  function cloudPts(cx, cy, rx, ry, bumps, amp, a0, a1) {
+    if (typeof a0 !== 'number') { a0 = 0; a1 = 360; }
     var pts = [];
     for (var i = 0; i <= 96; i++) {
-      var t = Math.PI * 2 * i / 96;
+      var t = ((a0 + (a1 - a0) * i / 96) * Math.PI) / 180;
       var w = 1 + amp * Math.sin(bumps * t);
       pts.push([cx + rx * w * Math.cos(t), cy - ry * w * Math.sin(t)]);
     }
     return pts;
   }
 
-  // Each animal: traceable outline strokes + its very own sound (see audio.js).
+  // Each animal: traceable outline strokes + its very own sound (see audio.js)
+  // PLUS the two things that make a critter readable BEFORE it is traced:
+  //   fill — soft pre-applied color regions: [{ c: '#hex', p: [closed pts], a: alpha }]
+  //   eyes — decorative (non-traceable) eyes: [x, y, radius] or [x, y, radius, 'w']
+  //          ('w' = white sclera + pupil, for dark faces like the sheep's)
+  //   color — the road/card color, tuned to the animal's natural hue.
+  var DUCK_BODY = [[48, 40], [58, 44], [68, 49], [79, 44], [75, 58], [68, 66],
+                   [56, 72], [42, 72], [30, 66], [23, 56], [22, 46], [30, 39], [42, 36]];
+
   var ANIMALS = [
-    { id: 'cat', name: 'Cat', emoji: '\uD83D\uDC31', sound: 'meow',
+    { id: 'cat', name: 'Cat', emoji: '\uD83D\uDC31', sound: 'meow', color: '#FB8C00',
       say: 'A cat! Can you draw the cat?',
+      fill: [{ c: '#FFC66E', p: arc(50, 58, 30, 28, 270, 630, 40) }],
+      eyes: [[41, 53, 3.4], [59, 53, 3.4]],
       strokes: [arc(50, 58, 30, 28, 270, -90, 40),
                 [[29, 40], [21, 14], [41, 33]],
                 [[71, 40], [79, 14], [59, 33]]] },
-    { id: 'dog', name: 'Dog', emoji: '\uD83D\uDC36', sound: 'woof',
+    { id: 'dog', name: 'Dog', emoji: '\uD83D\uDC36', sound: 'woof', color: '#8D6E63',
       say: 'A dog! Can you draw the dog?',
+      fill: [{ c: '#E3B47E', p: arc(50, 55, 30, 27, 270, 630, 40) },
+             { c: '#F5DDB8', p: arc(50, 70, 13, 10, 270, 630, 26) },
+             { c: '#4E342E', a: 0.5, p: arc(50, 67, 4, 3, 270, 630, 16) }],
+      eyes: [[42, 48, 3.2], [58, 48, 3.2]],
       strokes: [arc(50, 55, 30, 27, 270, -90, 40),
                 [[37, 30], [14, 34], [9, 58], [19, 73]],
                 [[63, 30], [86, 34], [91, 58], [81, 73]],
                 arc(50, 70, 13, 10, 270, -90, 26)] },
-    { id: 'rabbit', name: 'Rabbit', emoji: '\uD83D\uDC30', sound: 'boing',
+    { id: 'rabbit', name: 'Rabbit', emoji: '\uD83D\uDC30', sound: 'boing', color: '#EC7FA9',
       say: 'A rabbit! Can you draw the rabbit?',
+      fill: [{ c: '#FCE4EC', p: arc(50, 70, 24, 19, 270, 630, 36) },
+             { c: '#FFC1D8', a: 0.4, p: arc(38, 34, 4, 14, 270, 630, 20) },
+             { c: '#FFC1D8', a: 0.4, p: arc(62, 34, 4, 14, 270, 630, 20) },
+             { c: '#F06292', a: 0.5, p: arc(50, 71, 2.5, 1.8, 270, 630, 12) }],
+      eyes: [[43, 66, 3], [57, 66, 3]],
       strokes: [arc(38, 34, 8, 20, 270, -90, 28),
                 arc(62, 34, 8, 20, 270, -90, 28),
                 arc(50, 70, 24, 19, 270, -90, 36)] },
-    { id: 'duck', name: 'Duck', emoji: '\uD83E\uDD86', sound: 'quack',
+    { id: 'duck', name: 'Duck', emoji: '\uD83E\uDD86', sound: 'quack', color: '#FFB300',
       say: 'A duck! Can you draw the duck?',
+      fill: [{ c: '#FFE66D', p: arc(36, 30, 15, 14, 270, 630, 32) },
+             { c: '#FFE66D', p: DUCK_BODY },
+             { c: '#FF9F43', a: 0.45, p: [[22, 28], [8, 32], [22, 36]] }],
+      eyes: [[30, 26, 2.6]],
       strokes: [arc(36, 30, 15, 14, 270, -90, 32),
-                [[48, 40], [58, 44], [68, 49], [79, 44], [75, 58], [68, 66],
-                 [56, 72], [42, 72], [30, 66], [23, 56], [22, 46], [30, 39], [42, 36]],
+                DUCK_BODY.slice(),
                 [[22, 28], [8, 32], [22, 36]]] },
-    { id: 'chick', name: 'Chick', emoji: '\uD83D\uDC24', sound: 'cheep',
+    { id: 'chick', name: 'Chick', emoji: '\uD83D\uDC24', sound: 'cheep', color: '#F57F17',
       say: 'A little chick! Can you draw the chick?',
-      strokes: [arc(48, 56, 26, 25, 270, -90, 36),
-                [[72, 50], [84, 56], [72, 62]],
-                [[40, 80], [36, 92]],
-                [[58, 80], [64, 92]]] },
-    { id: 'cow', name: 'Cow', emoji: '\uD83D\uDC2E', sound: 'moo',
+      fill: [{ c: '#FFD93B', p: arc(48, 52, 27, 25, 270, 630, 40) },
+             { c: '#FF9F43', a: 0.45, p: [[73, 46], [88, 53], [73, 60]] }],
+      eyes: [[40, 46, 3.2], [56, 46, 3.2]],
+      strokes: [arc(48, 52, 27, 25, 270, -90, 40),
+                [[73, 46], [88, 53], [73, 60]],
+                arc(45, 57, 11, 8, 150, 30, 18),
+                [[44, 26], [40, 17]],
+                [[54, 26], [58, 17]],
+                [[42, 77], [37, 92]],
+                [[56, 77], [61, 92]]] },
+    { id: 'cow', name: 'Cow', emoji: '\uD83D\uDC2E', sound: 'moo', color: '#6D4C41',
       say: 'A cow! Can you draw the cow?',
-      strokes: [arc(50, 58, 32, 26, 270, -90, 40),
-                [[26, 40], [8, 17], [34, 30]],
-                [[74, 40], [92, 17], [66, 30]],
-                [[19, 52], [7, 56], [18, 62]],
-                [[81, 52], [93, 56], [82, 62]],
-                arc(50, 70, 17, 11, 270, -90, 28)] },
-    { id: 'pig', name: 'Pig', emoji: '\uD83D\uDC37', sound: 'oink',
-      say: 'A pig! Can you draw the pig?',
-      strokes: [arc(50, 54, 32, 29, 270, -90, 40),
-                [[30, 32], [20, 15], [43, 27]],
-                [[70, 32], [80, 15], [57, 27]],
-                arc(50, 66, 13, 9, 270, -90, 26)] },
-    { id: 'sheep', name: 'Sheep', emoji: '\uD83D\uDC11', sound: 'baa',
+      fill: [{ c: '#FDF3E7', p: arc(50, 56, 38, 24, 270, 630, 44) },
+             { c: '#FFD9E0', p: arc(50, 68, 20, 10, 270, 630, 28) },
+             { c: '#4E342E', a: 0.45, p: arc(42, 68, 2.2, 1.7, 270, 630, 12) },
+             { c: '#4E342E', a: 0.45, p: arc(58, 68, 2.2, 1.7, 270, 630, 12) },
+             { c: '#6D4C41', a: 0.38, p: cloudPts(26, 54, 5.5, 4, 5, 0.22) },
+             { c: '#6D4C41', a: 0.38, p: cloudPts(75, 60, 4.5, 3.5, 4, 0.28) }],
+      eyes: [[40, 49, 3.2], [60, 49, 3.2]],
+      strokes: [arc(50, 56, 38, 24, 270, -90, 44),
+                [[37, 33], [29, 19], [44, 29]],
+                [[63, 33], [71, 19], [56, 29]],
+                [[19, 42], [10, 44], [5, 50], [12, 56]],
+                [[81, 42], [90, 44], [95, 50], [88, 56]],
+                arc(50, 68, 20, 10, 270, -90, 28)] },
+    { id: 'sheep', name: 'Sheep', emoji: '\uD83D\uDC11', sound: 'baa', color: '#8D6E63',
       say: 'A sheep! Can you draw the sheep?',
-      strokes: [cloudPts(50, 52, 30, 27, 9, 0.13),
-                arc(50, 76, 11, 9, 270, -90, 22),
-                [[38, 82], [36, 93]],
-                [[62, 82], [64, 93]]] },
-    { id: 'fish', name: 'Fish', emoji: '\uD83D\uDC1F', sound: 'blub',
+      fill: [{ c: '#F4EEE1', a: 0.5, p: cloudPts(50, 40, 34, 25, 7, 0.11) },
+             { c: '#4E342E', a: 0.85, p: arc(50, 67, 14, 13, 270, 630, 32) }],
+      eyes: [[44, 62, 3.4, 'w'], [56, 62, 3.4, 'w']],
+      strokes: [cloudPts(50, 40, 34, 25, 7, 0.11, -55, 235),
+                arc(50, 67, 14, 13, 270, -90, 32),
+                [[38, 58], [25, 62], [38, 68]],
+                [[62, 58], [75, 62], [62, 68]],
+                [[40, 76], [37, 92]],
+                [[60, 76], [63, 92]]] },
+    { id: 'fish', name: 'Fish', emoji: '\uD83D\uDC1F', sound: 'blub', color: '#FF7043',
       say: 'A fish! Can you draw the fish?',
+      fill: [{ c: '#FFAB91', p: arc(44, 50, 30, 21, 270, 630, 44) },
+             { c: '#FFAB91', p: [[74, 50], [88, 34], [82, 50], [88, 66]] }],
+      eyes: [[30, 46, 3]],
       strokes: [arc(44, 50, 30, 21, 180, 0, 26).concat(arc(44, 50, 30, 21, 360, 180, 26)),
                 [[74, 50], [88, 34], [82, 50], [88, 66], [74, 50]]] },
-    { id: 'bee', name: 'Bee', emoji: '\uD83D\uDC1D', sound: 'buzz',
+    { id: 'bee', name: 'Bee', emoji: '\uD83D\uDC1D', sound: 'buzz', color: '#FFA000',
       say: 'A buzzy bee! Can you draw the bee?',
+      fill: [{ c: '#FFE66D', p: arc(50, 60, 26, 17, 270, 630, 40) },
+             { c: '#6D4C41', a: 0.35, p: [[38, 54], [44, 54], [44, 74], [38, 74]] },
+             { c: '#6D4C41', a: 0.35, p: [[58, 54], [64, 54], [64, 74], [58, 74]] },
+             { c: '#D7ECFF', a: 0.5, p: arc(36, 32, 14, 11, 270, 630, 28) },
+             { c: '#D7ECFF', a: 0.5, p: arc(64, 32, 14, 11, 270, 630, 28) }],
+      eyes: [[44, 50, 2.8], [56, 50, 2.8]],
       strokes: [arc(50, 60, 26, 17, 270, -90, 40),
-                [[41, 46], [41, 74]],
-                [[61, 46], [61, 74]],
+                [[41, 54], [41, 74]],
+                [[61, 54], [61, 74]],
                 arc(36, 32, 14, 11, 270, -90, 28),
                 arc(64, 32, 14, 11, 270, -90, 28),
                 [[76, 60], [86, 55], [76, 65]]] },
-    { id: 'butterfly', name: 'Butterfly', emoji: '\uD83E\uDD8B', sound: 'flutter',
+    { id: 'butterfly', name: 'Butterfly', emoji: '\uD83E\uDD8B', sound: 'flutter', color: '#AB47BC',
       say: 'A butterfly! Can you draw the butterfly?',
+      fill: [{ c: '#CE93D8', p: arc(33, 40, 16, 14, 270, 630, 32) },
+             { c: '#CE93D8', p: arc(67, 40, 16, 14, 270, 630, 32) },
+             { c: '#F48FB1', p: arc(35, 66, 11, 11, 270, 630, 28) },
+             { c: '#F48FB1', p: arc(65, 66, 11, 11, 270, 630, 28) },
+             { c: '#795548', a: 0.4, p: [[47, 32], [53, 32], [53, 74], [47, 74]] }],
+      eyes: [[47, 29, 2], [53, 29, 2]],
       strokes: [arc(33, 40, 16, 14, 270, -90, 32),
                 arc(67, 40, 16, 14, 270, -90, 32),
                 arc(35, 66, 11, 11, 270, -90, 28),
@@ -289,16 +341,22 @@
                 [[50, 30], [50, 82]],
                 [[47, 30], [40, 14]],
                 [[53, 30], [60, 14]]] },
-    { id: 'owl', name: 'Owl', emoji: '\uD83E\uDD89', sound: 'hoot',
+    { id: 'owl', name: 'Owl', emoji: '\uD83E\uDD89', sound: 'hoot', color: '#795548',
       say: 'An owl! Can you draw the owl?',
-      strokes: [arc(50, 54, 28, 30, 270, -90, 40),
-                arc(38, 44, 10, 10, 270, -90, 26),
-                arc(62, 44, 10, 10, 270, -90, 26),
-                [[50, 54], [44, 62], [56, 62]],
-                [[26, 32], [19, 15], [38, 26]],
-                [[74, 32], [81, 15], [62, 26]],
-                [[40, 84], [36, 94]],
-                [[60, 84], [64, 94]]] }
+      fill: [{ c: '#C8A284', p: arc(50, 52, 29, 31, 270, 630, 44) },
+             { c: '#FFF7E8', p: arc(39, 40, 10, 10, 270, 630, 26) },
+             { c: '#FFF7E8', p: arc(61, 40, 10, 10, 270, 630, 26) },
+             { c: '#E8D3BC', a: 0.5, p: arc(50, 68, 14, 10, 270, 630, 28) },
+             { c: '#FF9F43', a: 0.45, p: [[50, 52], [45, 61], [55, 61]] }],
+      eyes: [[39, 40, 4.2], [61, 40, 4.2]],
+      strokes: [arc(50, 52, 29, 31, 270, -90, 44),
+                [[30, 30], [20, 13], [38, 24]],
+                [[70, 30], [80, 13], [62, 24]],
+                arc(39, 40, 10, 10, 270, -90, 26),
+                arc(61, 40, 10, 10, 270, -90, 26),
+                [[50, 52], [45, 61], [55, 61]],
+                [[24, 46], [15, 60], [24, 74]],
+                [[76, 46], [85, 60], [76, 74]]] }
   ];
 
   /* ---------- build glyph list ---------- */
@@ -356,7 +414,9 @@
       caption: a.name,
       emoji: a.emoji,
       sound: a.sound,
-      color: ITEM_COLORS[(i + 6) % ITEM_COLORS.length],
+      color: a.color,
+      fill: a.fill,
+      eyes: a.eyes,
       say: a.say,
       strokes: a.strokes
     });

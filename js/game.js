@@ -4,6 +4,8 @@
  *
  * - Guides: pastel "road" + colored line + marching candy dots,
  *   pulsing start stars, numbered stroke badges.
+ * - Animals: soft pre-applied color fills + decorative eyes render
+ *   UNDER the guide so critters read instantly before tracing.
  * - Paths: CORNER-PRESERVING smoothing — points where the stroke
  *   turns sharper than ~50° are drawn as crisp lineTo corners
  *   (rectangles, polygons, letters like M V W Z A), everything
@@ -104,6 +106,18 @@
       self.paths.push(path);
       self.strokePathsPts.push(_resample(pts, 5));
     });
+
+    // pre-applied animal color fills — soft closed regions under the guide
+    this.fillPaths = null;
+    if (this.glyph.fill) {
+      this.fillPaths = this.glyph.fill.map(function (f) {
+        var path = new Path2D();
+        var pts = f.p.map(function (p) { return [ox + p[0] * self.box.s, oy + p[1] * self.box.s]; });
+        _pathThrough(path, pts);
+        path.closePath();
+        return { path: path, c: f.c, a: (typeof f.a === 'number') ? f.a : 0.32 };
+      });
+    }
 
     // rebuild coverage samples (silent)
     this.samples = [];
@@ -477,6 +491,19 @@
     var gw = this.guideW;
     var dashOffset = (t / 34) % 40;
 
+    // 0. pre-applied animal colors + decorative eyes (recognizability layer)
+    if (this.fillPaths) {
+      ctx.save();
+      for (var fi = 0; fi < this.fillPaths.length; fi++) {
+        var fp = this.fillPaths[fi];
+        ctx.globalAlpha = fp.a;
+        ctx.fillStyle = fp.c;
+        ctx.fill(fp.path);
+      }
+      if (this.glyph.eyes) this._drawEyes(ctx);
+      ctx.restore();
+    }
+
     // 1. pastel road
     ctx.save();
     ctx.lineCap = 'round';
@@ -566,6 +593,35 @@
 
     // 8. user drawing on top
     ctx.drawImage(this.userCanvas, 0, 0, this.w, this.h);
+  };
+
+  // Decorative (non-traceable) animal eyes: dark pupils with a white glint,
+  // or 'w' style = white sclera + pupil for dark faces (sheep).
+  DrawEngine.prototype._drawEyes = function (ctx) {
+    var self = this;
+    ctx.globalAlpha = 0.92;
+    this.glyph.eyes.forEach(function (e) {
+      var x = self.box.x + e[0] * self.box.s;
+      var y = self.box.y + e[1] * self.box.s;
+      var r = Math.max(2.5, e[2] * self.box.s);
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      if (e[3] === 'w') {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x + r * 0.18, y, r * 0.52, 0, Math.PI * 2);
+        ctx.fillStyle = '#2B2B33';
+        ctx.fill();
+      } else {
+        ctx.fillStyle = '#2B2B33';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x - r * 0.32, y - r * 0.36, r * 0.34, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,.95)';
+        ctx.fill();
+      }
+    });
   };
 
   function _tinyStar(ctx, cx, cy, r) {

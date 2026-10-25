@@ -24,18 +24,19 @@
 
 | | | |
 |:---:|:---:|:---:|
-| <img src="docs/screenshots/home.png" width="265" alt="Home screen"><br><sub><b>Pick a world</b> — animals, shapes, letters or numbers</sub> | <img src="docs/screenshots/picker-animals.png" width="265" alt="Animals picker"><br><sub><b>12 animals</b> — cat, dog, cow, duck… each with its sound 🐾</sub> | <img src="docs/screenshots/draw-animal.png" width="265" alt="Tracing a cat"><br><sub><b>What does the cat say?</b> — tap the 🐱 button: meow!</sub> |
+| <img src="docs/screenshots/home.png" width="265" alt="Home screen"><br><sub><b>Pick a world</b> — animals, shapes, letters or numbers</sub> | <img src="docs/screenshots/picker-animals.png" width="265" alt="Animals picker"><br><sub><b>11 animals</b> — cat, dog, cow, duck… each with its sound 🐾</sub> | <img src="docs/screenshots/draw-animal.png" width="265" alt="Tracing a sheep"><br><sub><b>Fluffy sheep!</b> — pre-colored with eyes, tap 🐑: baa!</sub> |
 | <img src="docs/screenshots/picker-letters.png" width="265" alt="Letters picker"><br><sub><b>26 cards</b> — every letter has its word 🍎⚽🐱</sub> | <img src="docs/screenshots/draw-letter.png" width="265" alt="Tracing the letter M"><br><sub><b>Follow the dotted road</b> — rainbow crayon!</sub> | <img src="docs/screenshots/draw-shape.png" width="265" alt="Tracing a star"><br><sub><b>Sharp corners</b> — polygons trace like real polygons</sub> |
 | <img src="docs/screenshots/celebration.png" width="265" alt="Celebration"><br><sub><b>Confetti!</b> — impossible to fail, always a win</sub> | <img src="docs/screenshots/picker-shapes.png" width="265" alt="Shapes picker"><br><sub><b>14 shapes</b> — circle to star to sunshine</sub> |  |
 
 ## ✨ Made for little hands
 
-- 🖍️ **62 things to trace** — 🐾 12 animals (cat, dog, rabbit, duck, chick, cow, pig, sheep, fish, bee, butterfly, owl), 26 capital letters (each with a word and emoji: 🍎 Apple, ⚽ Ball, 🌈 Rainbow…), the numbers 0–9, and 14 shapes from circle to star to sun.
-- 🐮 **Animals that talk back** — every animal has its very own sound, synthesized live in the browser: meow, woof, moo, quack, oink, baa, buzz… It plays when the card opens, when they tap the animal button, and when they win.
+- 🖍️ **61 things to trace** — 🐾 11 animals (cat, dog, rabbit, duck, chick, cow, sheep, fish, bee, butterfly, owl), 26 capital letters (each with a word and emoji: 🍎 Apple, ⚽ Ball, 🌈 Rainbow…), the numbers 0–9, and 14 shapes from circle to star to sun.
+- 🎨 **Pre-colored animals with eyes** — every animal arrives softly pre-colored in its natural hue (yellow chick, brown owl, cream-wool sheep…) with cute decorative eyes, so little ones recognize the critter before they even start tracing.
+- 🐮 **Animals that talk back** — every animal has its very own sound, synthesized live in the browser: meow, woof, moo, quack, baa, buzz… It plays when the card opens, when they tap the animal button, and when they win.
 - 🌈 **A fat rainbow crayon** — 11 bright colors that *speak their own name* when picked, plus a rainbow brush that cycles hues as they draw.
 - 👆 **Impossible to fail** — no scores, no timers, no wrong answers. Follow the dotted road, wander off it, scribble all over — it's all fine. Cover enough of the guide (about 80%) and the confetti flies.
 - 🎈 **Guides that teach themselves** — numbered start badges show stroke order, marching candy dots show the direction (letters like C, G, O are traced counter-clockwise, the way schools teach it), and a glowing hint orb demonstrates the path whenever they pause.
-- 🔊 **It talks** — 87 recorded lines: the voice names every item ("M is for Moon!", "A cat! Can you draw the cat?"), cheers progress, and celebrates the win. Punchy pop / swish / sparkle sound effects, 12 animal sounds and a gentle music loop are synthesized live in the browser — one tap to mute.
+- 🔊 **It talks** — 86 recorded lines: the voice names every item ("M is for Moon!", "A cat! Can you draw the cat?"), cheers progress, and celebrates the win. Punchy pop / swish / sparkle sound effects, 11 animal sounds and a gentle music loop are synthesized live in the browser — one tap to mute.
 - 🎉 **Celebrations!** — confetti bursts, a big "You did it!", and gold stars collected per category.
 - 📴 **Works offline** — install once (APK or PWA), then it's airplane-mode friendly. No account, no ads, no tracking, no in-app purchases. Nothing to tap but the game.
 
@@ -68,7 +69,7 @@ Installed from the browser as a **PWA**, it keeps working offline.
 
 ## 🔊 The voice
 
-All 87 lines ship as small MP3s (a cheerful child voice) so the game works offline with zero API calls, with an automatic fallback to the browser's built-in speech synthesis if a file is ever missing.
+All 86 lines ship as small MP3s (a cheerful child voice) so the game works offline with zero API calls, with an automatic fallback to the browser's built-in speech synthesis if a file is ever missing.
 
 Prefer **Gemini TTS** voices? Regenerate every line with your own key:
 
@@ -105,12 +106,12 @@ CI does the same on every push — `.github/workflows/build-apk.yml` builds the 
 ```
 index.html            the whole game — single-page app
 css/style.css         candy-bright styling + animations
-js/data.js            62 glyphs as stroke paths + voice manifest
+js/data.js            61 glyphs as stroke paths + voice manifest
 js/audio.js           WebAudio SFX + animal sounds + music + voice manager
 js/fx.js              sparkle / confetti particle layer
 js/game.js            tracing engine (guides, brush, coverage, hints)
 js/app.js             screens, palette, progress, celebration
-assets/audio/         87 spoken lines (mp3)
+assets/audio/         86 spoken lines (mp3)
 assets/fonts/         Fredoka (SIL OFL)
 tools/                www assembly + Gemini TTS regenerator
 android/              Capacitor Android project
@@ -126,7 +127,9 @@ docs/                 banner + screenshots
 
 ## 📝 Changelog
 
-**v1.1.0** — *animals + smarter wins:* new 🐾 **Animals** category with 12 traceable animals, each with its own synthesized sound (meow, woof, moo, quack, oink, baa, cheep, blub, buzz, flutter, hoot, boing) — played on open, on the animal button, and at the celebration. Win threshold raised from 72% to 80% coverage so a win needs a little more of the shape. Letter-direction fix: the "magic C" family (C, G, O, Q, 0) now traces counter-clockwise from the top the way handwriting is taught — the G was reversed before.
+**v1.1.1** — *recognizable animals:* every animal now arrives **pre-colored in its natural hue** (yellow chick, brown owl, pink rabbit, cream-wool sheep…) with **cute decorative eyes**, so toddlers recognize each critter before tracing. Chick, sheep and owl redesigned from scratch; cow rebuilt with a wide face, top horns and leaf ears; bee got a proper face zone above its stripes. The pig was removed. Everything verified in a 4-round visual review — 11/11 animals recognizable.
+
+**v1.1.0** — *animals + smarter wins:* new 🐾 **Animals** category with traceable animals, each with its own synthesized sound (meow, woof, moo, quack, baa, cheep, blub, buzz, flutter, hoot, boing) — played on open, on the animal button, and at the celebration. Win threshold raised from 72% to 80% coverage so a win needs a little more of the shape. Letter-direction fix: the "magic C" family (C, G, O, Q, 0) now traces counter-clockwise from the top the way handwriting is taught — the G was reversed before.
 
 **v1.0.1** — *shape-accuracy fix:* corner-preserving guide rendering. Rectangles, hexagons, pentagons, squares, triangles, stars and zig-zag letters (A E F H K L M N V W X Y Z…) now trace with crisp, correct corners; curvy glyphs (S, O, B, 3, hearts…) stay soft. All glyphs visually verified.
 
