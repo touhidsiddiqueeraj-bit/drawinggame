@@ -159,6 +159,13 @@
     var nameEl = $('draw-name');
     nameEl.textContent = glyph.cat === 'letters' ? (glyph.name + ' is for ' + glyph.caption) : (glyph.cat === 'numbers' ? glyph.caption : glyph.name);
 
+    // animal sound button: only for critters, shows the animal itself
+    var soundBtn = $('btn-sound');
+    if (soundBtn) {
+      soundBtn.classList.toggle('hidden', !glyph.sound);
+      if (glyph.sound) soundBtn.textContent = glyph.emoji;
+    }
+
     if (!engine) {
       engine = new window.DrawEngine($('draw-canvas'), {
         onProgress: onProgress,
@@ -171,7 +178,15 @@
     buildPalette();
 
     window.SoundKit.SFX.whoosh();
-    window.SoundKit.Voice.play(glyph.id);
+    // animals: their sound plays first (the hook!), then the voice
+    if (glyph.sound) {
+      window.SoundKit.Animal.play(glyph.sound);
+      setTimeout(function () {
+        if (state.item === glyph) window.SoundKit.Voice.play(glyph.id);
+      }, 1000);
+    } else {
+      window.SoundKit.Voice.play(glyph.id);
+    }
     window.SoundKit.Voice.preload(nextItemsIds(glyph, 2));
 
     if (demoMode) setTimeout(function () { engine.demo(); }, 1400);
@@ -200,7 +215,7 @@
         star.classList.add('pop');
       }
     });
-    if (pct >= 45 && pct < 72 && !almostSpoken) {
+    if (pct >= 50 && pct < 80 && !almostSpoken) {
       almostSpoken = true;
       window.SoundKit.Voice.play('almost-there');
     }
@@ -212,6 +227,13 @@
     var glyph = state.item;
     var praises = ['great-job', 'amazing', 'wonderful', 'perfect', 'you-did-it', 'super-star', 'fantastic', 'beautiful'];
     window.SoundKit.Voice.play(praises[(Math.random() * praises.length) | 0]);
+
+    // the animal says thanks in its own voice
+    if (glyph.sound) {
+      setTimeout(function () {
+        if (state.item === glyph) window.SoundKit.Animal.play(glyph.sound);
+      }, 1700);
+    }
 
     // confetti + star bursts
     window.FX.confetti({ count: 150, power: 1.15 });
@@ -315,6 +337,18 @@
       if (state.item) window.SoundKit.Voice.play(state.item.id);
       if (engine) engine.hint();
     });
+    var soundBtn = $('btn-sound');
+    if (soundBtn) {
+      soundBtn.addEventListener('click', function () {
+        window.SoundKit.SFX.pop(1.2);
+        if (state.item && state.item.sound) {
+          window.SoundKit.Animal.play(state.item.sound);
+          soundBtn.classList.remove('wiggle');
+          void soundBtn.offsetWidth;
+          soundBtn.classList.add('wiggle');
+        }
+      });
+    }
     $('btn-hint').addEventListener('click', function () {
       window.SoundKit.SFX.pop(1.3);
       if (engine) engine.hint();

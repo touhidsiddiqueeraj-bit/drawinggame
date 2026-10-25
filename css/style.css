@@ -105,6 +105,18 @@ button:active { transform: scale(.92); }
 .music-btn .music-note { display: block; transition: transform .2s; }
 .music-btn.off .music-note { filter: grayscale(1); opacity: .55; transform: rotate(-14deg); }
 
+/* animal sound button (draw screen) */
+.sound-btn { background: #FFF3F8; border: 3px solid #FFD1E3; }
+#btn-sound.hidden { display: none; }
+.sound-btn.wiggle { animation: sound-wiggle .5s ease; }
+@keyframes sound-wiggle {
+  0% { transform: rotate(0) scale(1); }
+  20% { transform: rotate(-14deg) scale(1.15); }
+  45% { transform: rotate(12deg) scale(1.15); }
+  70% { transform: rotate(-7deg) scale(1.05); }
+  100% { transform: rotate(0) scale(1); }
+}
+
 /* ---------------- HOME ---------------- */
 #screen-home { align-items: center; justify-content: flex-end; }
 .home-inner {

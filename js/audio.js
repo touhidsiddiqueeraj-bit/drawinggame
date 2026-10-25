@@ -172,6 +172,219 @@
     }
   };
 
+  /* ================= Animal sounds ================= */
+
+  /*
+   * Every animal gets a tiny signature sound, synthesized live with WebAudio
+   * (same philosophy as the SFX — zero downloads, zero latency). Routing all
+   * through sfxGain keeps them under the master volume.
+   */
+
+  function lfo(t0, dur, rate, depth, param) {
+    var o = ctx.createOscillator();
+    var g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.value = rate;
+    g.gain.value = depth;
+    o.connect(g);
+    g.connect(param);
+    o.start(t0);
+    o.stop(t0 + dur + 0.05);
+  }
+
+  // one rich note: osc -> filter -> gain env -> sfxGain
+  function voice(t0, dur, type, f0, f1, vol, filter, fType) {
+    var o = ctx.createOscillator();
+    o.type = type;
+    o.frequency.setValueAtTime(f0, t0);
+    if (f1) o.frequency.exponentialRampToValueAtTime(Math.max(1, f1), t0 + dur);
+    var dest = sfxGain;
+    if (filter) {
+      var flt = ctx.createBiquadFilter();
+      flt.type = fType || 'bandpass';
+      flt.frequency.value = filter[0];
+      flt.Q.value = filter[1] || 1;
+      flt.connect(sfxGain);
+      dest = flt;
+    }
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + Math.min(0.05, dur * 0.3));
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g);
+    g.connect(dest);
+    o.start(t0);
+    o.stop(t0 + dur + 0.05);
+    return g;
+  }
+
+  var ANIMAL_SFX = {
+    // "meee-oww": pitch rises then falls through a sweeping formant
+    meow: function (t) {
+      var o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(330, t);
+      o.frequency.exponentialRampToValueAtTime(640, t + 0.16);
+      o.frequency.exponentialRampToValueAtTime(280, t + 0.55);
+      var f = ctx.createBiquadFilter();
+      f.type = 'bandpass'; f.Q.value = 2.2;
+      f.frequency.setValueAtTime(950, t);
+      f.frequency.exponentialRampToValueAtTime(1750, t + 0.16);
+      f.frequency.exponentialRampToValueAtTime(720, t + 0.55);
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.5, t + 0.07);
+      g.gain.setValueAtTime(0.5, t + 0.32);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+      o.connect(f); f.connect(g); g.connect(sfxGain);
+      o.start(t); o.stop(t + 0.65);
+    },
+
+    // two sharp barks: saw pitch drop + throat noise
+    woof: function (t) {
+      [0, 0.24].forEach(function (dt, i) {
+        var t0 = t + dt;
+        voice(t0, 0.12, 'sawtooth', i ? 380 : 330, 100, 0.5, [900, 0.7], 'lowpass');
+        noise(t0, 0.08, 0.16, 'lowpass', 750);
+      });
+    },
+
+    // long low moo with vibrato
+    moo: function (t) {
+      var o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(138, t);
+      o.frequency.exponentialRampToValueAtTime(92, t + 0.8);
+      lfo(t, 0.85, 5.5, 6, o.frequency); // gentle vibrato
+      var f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 460; f.Q.value = 0.8;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.42, t + 0.1);
+      g.gain.setValueAtTime(0.42, t + 0.62);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+      o.connect(f); f.connect(g); g.connect(sfxGain);
+      o.start(t); o.stop(t + 0.95);
+    },
+
+    // two greedy oinks
+    oink: function (t) {
+      [0, 0.21].forEach(function (dt, i) {
+        var t0 = t + dt;
+        voice(t0, 0.14, 'sawtooth', i ? 190 : 160, 70, 0.45, [480, 2]);
+        noise(t0, 0.1, 0.14, 'bandpass', 320, 700, 1.2);
+      });
+    },
+
+    // bleating baa: strong tremolo = woolly "ba-a-a"
+    baa: function (t) {
+      var o = ctx.createOscillator(); o.type = 'sawtooth';
+      o.frequency.value = 290;
+      var trem = ctx.createGain();
+      trem.gain.value = 0.22;
+      var l = ctx.createOscillator();
+      l.frequency.value = 8.5;
+      var lg = ctx.createGain();
+      lg.gain.value = 0.18;
+      l.connect(lg); lg.connect(trem.gain);   // amplitude wobble
+      var vib = ctx.createGain();
+      vib.gain.value = 9;
+      l.connect(vib); vib.connect(o.frequency); // pitch wobble
+      var f = ctx.createBiquadFilter();
+      f.type = 'bandpass'; f.frequency.value = 880; f.Q.value = 1.2;
+      var env = ctx.createGain();
+      env.gain.setValueAtTime(0.0001, t);
+      env.gain.exponentialRampToValueAtTime(1, t + 0.04);
+      env.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+      o.connect(f); f.connect(env); env.connect(trem); trem.connect(sfxGain);
+      o.start(t); o.stop(t + 0.6);
+      l.start(t); l.stop(t + 0.6);
+    },
+
+    // quack-quack: nasal buzzy quack, twice
+    quack: function (t) {
+      [0, 0.22].forEach(function (dt) {
+        var t0 = t + dt;
+        voice(t0, 0.15, 'sawtooth', 470, 290, 0.42, [1150, 3.5]);
+        voice(t0, 0.13, 'square', 235, 150, 0.1, [600, 1]);
+      });
+    },
+
+    // cheep-cheep-cheep: tiny high chirps
+    cheep: function (t) {
+      [0, 0.13, 0.26].forEach(function (dt, i) {
+        voice(t + dt, 0.07, 'sine', 2700 - i * 120, 2100, 0.26);
+        voice(t + dt, 0.05, 'sine', 5400 - i * 240, 4200, 0.07);
+      });
+    },
+
+    // blub-blub: underwater bubbles
+    blub: function (t) {
+      [0, 0.16].forEach(function (dt, i) {
+        voice(t + dt, 0.13, 'sine', 230 - i * 40, 85, 0.4);
+        noise(t + dt, 0.1, 0.1, 'lowpass', 260);
+      });
+    },
+
+    // buzzy bee: two detuned saws with a fast tremolo
+    buzz: function (t) {
+      var env = ctx.createGain();
+      env.gain.setValueAtTime(0.0001, t);
+      env.gain.exponentialRampToValueAtTime(0.3, t + 0.06);
+      env.gain.setValueAtTime(0.3, t + 0.55);
+      env.gain.exponentialRampToValueAtTime(0.0001, t + 0.78);
+      var trem = ctx.createGain();
+      trem.gain.value = 0.55;
+      var l = ctx.createOscillator();
+      l.frequency.value = 23;
+      var lg = ctx.createGain();
+      lg.gain.value = 0.4;
+      l.connect(lg); lg.connect(trem.gain);
+      var f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 780;
+      [165, 169.5].forEach(function (fr) {
+        var o = ctx.createOscillator();
+        o.type = 'sawtooth';
+        o.frequency.value = fr;
+        o.connect(f);
+        o.start(t); o.stop(t + 0.8);
+      });
+      f.connect(trem); trem.connect(env); env.connect(sfxGain);
+      l.start(t); l.stop(t + 0.8);
+    },
+
+    // butterfly wings: soft flutters of air
+    flutter: function (t) {
+      for (var i = 0; i < 5; i++) {
+        noise(t + i * 0.11, 0.07, i % 2 ? 0.13 : 0.2, 'bandpass', 1750, 900, 1.4);
+      }
+    },
+
+    // hoo-hooo: two soft owl notes
+    hoot: function (t) {
+      voice(t, 0.26, 'sine', 400, 372, 0.32);
+      voice(t, 0.26, 'sine', 800, 744, 0.05);
+      voice(t + 0.4, 0.5, 'sine', 385, 340, 0.34);
+      voice(t + 0.4, 0.5, 'sine', 770, 680, 0.05);
+    },
+
+    // boing: springy bounce with decaying hops
+    boing: function (t) {
+      [0, 0.13, 0.24].forEach(function (dt, i) {
+        var v = [0.42, 0.26, 0.15][i];
+        voice(t + dt, 0.16 - i * 0.03, 'triangle', 560 - i * 60, 175, v);
+      });
+    }
+  };
+
+  var Animal = {
+    play: function (name) {
+      if (!ensureCtx() || !unlocked) return;
+      var fn = ANIMAL_SFX[name];
+      if (fn) { try { fn(ctx.currentTime + 0.02); } catch (e) { /* noop */ } }
+    }
+  };
+
   /* ================= Background music ================= */
 
   var musicOn = (function () {
@@ -338,6 +551,7 @@
   window.SoundKit = {
     SFX: SFX,
     Voice: Voice,
+    Animal: Animal,
     unlock: unlock,
     isMusicOn: function () { return musicOn; },
     setMusic: setMusic

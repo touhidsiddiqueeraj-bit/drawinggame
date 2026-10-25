@@ -300,6 +300,78 @@
     "text": "Sun! Can you draw a sun?"
   },
   {
+    "id": "cat",
+    "group": "items",
+    "file": "items/cat",
+    "text": "A cat! Can you draw the cat?"
+  },
+  {
+    "id": "dog",
+    "group": "items",
+    "file": "items/dog",
+    "text": "A dog! Can you draw the dog?"
+  },
+  {
+    "id": "rabbit",
+    "group": "items",
+    "file": "items/rabbit",
+    "text": "A rabbit! Can you draw the rabbit?"
+  },
+  {
+    "id": "duck",
+    "group": "items",
+    "file": "items/duck",
+    "text": "A duck! Can you draw the duck?"
+  },
+  {
+    "id": "chick",
+    "group": "items",
+    "file": "items/chick",
+    "text": "A little chick! Can you draw the chick?"
+  },
+  {
+    "id": "cow",
+    "group": "items",
+    "file": "items/cow",
+    "text": "A cow! Can you draw the cow?"
+  },
+  {
+    "id": "pig",
+    "group": "items",
+    "file": "items/pig",
+    "text": "A pig! Can you draw the pig?"
+  },
+  {
+    "id": "sheep",
+    "group": "items",
+    "file": "items/sheep",
+    "text": "A sheep! Can you draw the sheep?"
+  },
+  {
+    "id": "fish",
+    "group": "items",
+    "file": "items/fish",
+    "text": "A fish! Can you draw the fish?"
+  },
+  {
+    "id": "bee",
+    "group": "items",
+    "file": "items/bee",
+    "text": "A buzzy bee! Can you draw the bee?"
+  },
+  {
+    "id": "butterfly",
+    "group": "items",
+    "file": "items/butterfly",
+    "text": "A butterfly! Can you draw the butterfly?"
+  },
+  {
+    "id": "owl",
+    "group": "items",
+    "file": "items/owl",
+    "text": "An owl! Can you draw the owl?"
+  },
+  {
     "id": "great-job",
     "group": "praise",
     "file": "praise/great-job",

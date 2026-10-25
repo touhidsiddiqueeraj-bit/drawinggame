@@ -12,7 +12,7 @@
  * - Brush: fat rounded crayon (opaque single-pass = no joint artifacts),
  *   rainbow mode cycles hue along the line.
  * - Coverage: guide is resampled every ~5px; a sample counts as "hit"
- *   when the finger comes within a generous radius. 72% = complete.
+ *   when the finger comes within a generous radius. 80% = complete.
  * - Hint: a glowing orb travels the guide path with a sparkle trail.
  * - Everything rescales on resize/orientation change (strokes replayed).
  */
@@ -153,6 +153,8 @@
   // 50° sits safely between the gentlest polygon corner (hexagon, 60°)
   // and the sharpest hand-authored curve joint (letter S, ~45°).
   var CORNER_TURN = 50 * Math.PI / 180;
+  // Fraction of the guide that must be covered before the win fires.
+  var COMPLETE_AT = 0.80;
 
   function _isCorner(prev, cur, next) {
     var ax = cur[0] - prev[0], ay = cur[1] - prev[1];
@@ -364,7 +366,7 @@
     var p = this.totalSamples ? this.hitCount / this.totalSamples : 0;
     this.progress = p;
     this.onProgress(p, silent);
-    if (!this.completed && p >= 0.72) {
+    if (!this.completed && p >= COMPLETE_AT) {
       this.completed = true;
       this.onComplete();
     }

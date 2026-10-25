@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>A big, bright, no-rules tracing game for toddlers (ages 2–5).</b><br>
-  Trace letters, numbers and shapes with a fat rainbow crayon — while a friendly voice cheers them on.
+  Trace animals, letters, numbers and shapes with a fat rainbow crayon — while a friendly voice cheers them on.
 </p>
 
 <p align="center">
@@ -24,22 +24,24 @@
 
 | | | |
 |:---:|:---:|:---:|
-| <img src="docs/screenshots/home.png" width="265" alt="Home screen"><br><sub><b>Pick a world</b> — shapes, letters or numbers</sub> | <img src="docs/screenshots/picker-letters.png" width="265" alt="Letters picker"><br><sub><b>50 cards</b> — every letter has its word 🍎⚽🐱</sub> | <img src="docs/screenshots/draw-letter.png" width="265" alt="Tracing the letter M"><br><sub><b>Follow the dotted road</b> — rainbow crayon!</sub> |
-| <img src="docs/screenshots/draw-shape.png" width="265" alt="Tracing a star"><br><sub><b>Sharp corners</b> — polygons trace like real polygons</sub> | <img src="docs/screenshots/celebration.png" width="265" alt="Celebration"><br><sub><b>Confetti!</b> — impossible to fail, always a win</sub> | <img src="docs/screenshots/picker-shapes.png" width="265" alt="Shapes picker"><br><sub><b>14 shapes</b> — circle to star to sunshine</sub> |
+| <img src="docs/screenshots/home.png" width="265" alt="Home screen"><br><sub><b>Pick a world</b> — animals, shapes, letters or numbers</sub> | <img src="docs/screenshots/picker-animals.png" width="265" alt="Animals picker"><br><sub><b>12 animals</b> — cat, dog, cow, duck… each with its sound 🐾</sub> | <img src="docs/screenshots/draw-animal.png" width="265" alt="Tracing a cat"><br><sub><b>What does the cat say?</b> — tap the 🐱 button: meow!</sub> |
+| <img src="docs/screenshots/picker-letters.png" width="265" alt="Letters picker"><br><sub><b>26 cards</b> — every letter has its word 🍎⚽🐱</sub> | <img src="docs/screenshots/draw-letter.png" width="265" alt="Tracing the letter M"><br><sub><b>Follow the dotted road</b> — rainbow crayon!</sub> | <img src="docs/screenshots/draw-shape.png" width="265" alt="Tracing a star"><br><sub><b>Sharp corners</b> — polygons trace like real polygons</sub> |
+| <img src="docs/screenshots/celebration.png" width="265" alt="Celebration"><br><sub><b>Confetti!</b> — impossible to fail, always a win</sub> | <img src="docs/screenshots/picker-shapes.png" width="265" alt="Shapes picker"><br><sub><b>14 shapes</b> — circle to star to sunshine</sub> |  |
 
 ## ✨ Made for little hands
 
-- 🖍️ **50 things to trace** — 26 capital letters (each with a word and emoji: 🍎 Apple, ⚽ Ball, 🌈 Rainbow…), the numbers 0–9, and 14 shapes from circle to star to sun.
+- 🖍️ **62 things to trace** — 🐾 12 animals (cat, dog, rabbit, duck, chick, cow, pig, sheep, fish, bee, butterfly, owl), 26 capital letters (each with a word and emoji: 🍎 Apple, ⚽ Ball, 🌈 Rainbow…), the numbers 0–9, and 14 shapes from circle to star to sun.
+- 🐮 **Animals that talk back** — every animal has its very own sound, synthesized live in the browser: meow, woof, moo, quack, oink, baa, buzz… It plays when the card opens, when they tap the animal button, and when they win.
 - 🌈 **A fat rainbow crayon** — 11 bright colors that *speak their own name* when picked, plus a rainbow brush that cycles hues as they draw.
-- 👆 **Impossible to fail** — no scores, no timers, no wrong answers. Follow the dotted road, wander off it, scribble all over — it's all fine. Cover enough of the guide and the confetti flies.
-- 🎈 **Guides that teach themselves** — numbered start badges show stroke order, marching candy dots show the direction, and a glowing hint orb demonstrates the path whenever they pause.
-- 🔊 **It talks** — 75 recorded lines: the voice names every item ("M is for Moon!"), cheers progress, and celebrates the win. Punchy pop / swish / sparkle sound effects and a gentle music loop are synthesized live in the browser — one tap to mute.
+- 👆 **Impossible to fail** — no scores, no timers, no wrong answers. Follow the dotted road, wander off it, scribble all over — it's all fine. Cover enough of the guide (about 80%) and the confetti flies.
+- 🎈 **Guides that teach themselves** — numbered start badges show stroke order, marching candy dots show the direction (letters like C, G, O are traced counter-clockwise, the way schools teach it), and a glowing hint orb demonstrates the path whenever they pause.
+- 🔊 **It talks** — 87 recorded lines: the voice names every item ("M is for Moon!", "A cat! Can you draw the cat?"), cheers progress, and celebrates the win. Punchy pop / swish / sparkle sound effects, 12 animal sounds and a gentle music loop are synthesized live in the browser — one tap to mute.
 - 🎉 **Celebrations!** — confetti bursts, a big "You did it!", and gold stars collected per category.
 - 📴 **Works offline** — install once (APK or PWA), then it's airplane-mode friendly. No account, no ads, no tracking, no in-app purchases. Nothing to tap but the game.
 
 ## 🎮 How a toddler plays it
 
-1. **Tap** a big picture button — ⭐ Shapes, 🐤 Letters or 🔢 Numbers — then tap any card.
+1. **Tap** a big picture button — 🐾 Animals, ⭐ Shapes, 🐤 Letters or 🔢 Numbers — then tap any card.
 2. **Trace** the dotted road with a finger. Any color, any speed, any order.
 3. **Confetti!** 🎉 A happy voice says *"You drew the star!"* — and the next card is one tap away.
 
@@ -50,7 +52,7 @@
 [**⬇️ Download the latest APK**](https://github.com/touhidsiddiqueeraj-bit/drawinggame/releases/latest)
 (~6 MB · Android 6.0+ · portrait · fully offline · no permissions needed)
 
-Grab `DrawAndLearn-v1.0.1.apk` from the release, copy it to a phone (or download it right on the phone), tap it and allow "install from unknown apps" once. Every future release tag gets a fresh APK attached automatically by CI.
+Grab the `DrawAndLearn-*.apk` from the release, copy it to a phone (or download it right on the phone), tap it and allow "install from unknown apps" once. Every future release tag gets a fresh APK attached automatically by CI.
 
 ### 🌐 Any browser
 
@@ -66,7 +68,7 @@ Installed from the browser as a **PWA**, it keeps working offline.
 
 ## 🔊 The voice
 
-All 75 lines ship as small MP3s (a cheerful child voice) so the game works offline with zero API calls, with an automatic fallback to the browser's built-in speech synthesis if a file is ever missing.
+All 87 lines ship as small MP3s (a cheerful child voice) so the game works offline with zero API calls, with an automatic fallback to the browser's built-in speech synthesis if a file is ever missing.
 
 Prefer **Gemini TTS** voices? Regenerate every line with your own key:
 
@@ -103,12 +105,12 @@ CI does the same on every push — `.github/workflows/build-apk.yml` builds the 
 ```
 index.html            the whole game — single-page app
 css/style.css         candy-bright styling + animations
-js/data.js            50 glyphs as stroke paths + voice manifest
-js/audio.js           WebAudio SFX + music + voice manager
+js/data.js            62 glyphs as stroke paths + voice manifest
+js/audio.js           WebAudio SFX + animal sounds + music + voice manager
 js/fx.js              sparkle / confetti particle layer
 js/game.js            tracing engine (guides, brush, coverage, hints)
 js/app.js             screens, palette, progress, celebration
-assets/audio/         75 spoken lines (mp3)
+assets/audio/         87 spoken lines (mp3)
 assets/fonts/         Fredoka (SIL OFL)
 tools/                www assembly + Gemini TTS regenerator
 android/              Capacitor Android project
@@ -124,7 +126,9 @@ docs/                 banner + screenshots
 
 ## 📝 Changelog
 
-**v1.0.1** — *shape-accuracy fix:* corner-preserving guide rendering. Rectangles, hexagons, pentagons, squares, triangles, stars and zig-zag letters (A E F H K L M N V W X Y Z…) now trace with crisp, correct corners; curvy glyphs (S, O, B, 3, hearts…) stay soft. All 50 glyphs visually verified.
+**v1.1.0** — *animals + smarter wins:* new 🐾 **Animals** category with 12 traceable animals, each with its own synthesized sound (meow, woof, moo, quack, oink, baa, cheep, blub, buzz, flutter, hoot, boing) — played on open, on the animal button, and at the celebration. Win threshold raised from 72% to 80% coverage so a win needs a little more of the shape. Letter-direction fix: the "magic C" family (C, G, O, Q, 0) now traces counter-clockwise from the top the way handwriting is taught — the G was reversed before.
+
+**v1.0.1** — *shape-accuracy fix:* corner-preserving guide rendering. Rectangles, hexagons, pentagons, squares, triangles, stars and zig-zag letters (A E F H K L M N V W X Y Z…) now trace with crisp, correct corners; curvy glyphs (S, O, B, 3, hearts…) stay soft. All glyphs visually verified.
 
 **v1.0.0** — first release: 50 traceable glyphs, 75 voice lines, 11-color rainbow crayon, confetti celebrations, offline PWA + signed Android APK.
 

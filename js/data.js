@@ -1,7 +1,7 @@
 /*
  * Draw & Learn — data.js
  * Single source of truth for:
- *  - The 50 traceable glyphs (26 letters, 10 numbers, 14 shapes)
+ *  - The 62 traceable glyphs (26 letters, 10 numbers, 14 shapes, 12 animals)
  *  - Brush color palette
  *  - Voice clip manifest (texts shared by the audio generator tools)
  *
@@ -127,12 +127,14 @@
     b: [[[22, 12], [22, 88]],
         [[22, 12], [60, 12], [74, 22], [74, 36], [60, 48], [22, 48]],
         [[22, 48], [64, 48], [79, 58], [79, 73], [64, 88], [22, 88]]],
-    c: [arc(50, 50, 34, 38, 45, 315, 34)],
+    // "magic C" letters (c, g, o, q, 0) sweep COUNTERclockwise from the
+    // top-right — the handwriting direction toddlers are taught.
+    c: [arc(50, 50, 34, 38, 315, 35, 34)],
     d: [[[22, 12], [22, 88]],
         [[22, 12], [52, 12], [74, 26], [78, 42], [78, 58], [74, 74], [52, 88], [22, 88]]],
     e: [[[78, 12], [22, 12], [22, 88], [78, 88]], [[22, 50], [68, 50]]],
     f: [[[78, 12], [22, 12], [22, 88]], [[22, 50], [68, 50]]],
-    g: [arc(50, 50, 34, 38, 45, 315, 34).concat([[74, 23], [74, 52], [50, 52]])],
+    g: [arc(50, 50, 34, 38, 320, 14, 46).concat([[50, 58]])],
     h: [[[22, 12], [22, 88]], [[78, 12], [78, 88]], [[22, 50], [78, 50]]],
     i: [[[32, 12], [68, 12]], [[50, 12], [50, 88]], [[32, 88], [68, 88]]],
     j: [[[66, 12], [66, 56]].concat(arc(50, 56, 16, 32, 0, 180, 24))],
@@ -140,10 +142,10 @@
     l: [[[24, 12], [24, 88], [78, 88]]],
     m: [[[16, 88], [16, 12], [50, 62], [84, 12], [84, 88]]],
     n: [[[20, 88], [20, 12], [80, 88], [80, 12]]],
-    o: [arc(50, 50, 36, 38, 270, 630, 44)],
+    o: [arc(50, 50, 36, 38, 270, -90, 44)],
     p: [[[24, 12], [24, 88]],
         [[24, 12], [58, 12], [74, 24], [74, 38], [58, 50], [24, 50]]],
-    q: [arc(50, 48, 36, 36, 270, 630, 44), [[60, 60], [84, 90]]],
+    q: [arc(50, 48, 36, 36, 270, -90, 44), [[60, 60], [84, 90]]],
     r: [[[24, 12], [24, 88]],
         [[24, 12], [58, 12], [74, 24], [74, 38], [58, 50], [24, 50]],
         [[42, 50], [78, 88]]],
@@ -163,7 +165,7 @@
   var NUMBER_WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
 
   var NUMBERS = {
-    0: [arc(50, 50, 30, 38, 270, 630, 40)],
+    0: [arc(50, 50, 30, 38, 270, -90, 40)],
     1: [[[36, 26], [52, 12]], [[52, 12], [52, 88]], [[32, 88], [72, 88]]],
     2: [[[26, 26], [36, 14], [52, 10], [66, 14], [74, 26], [68, 40], [56, 52],
          [40, 64], [26, 78], [22, 88], [78, 88]]],
@@ -201,6 +203,103 @@
   };
   var SHAPE_ORDER = ['circle', 'square', 'triangle', 'star', 'heart', 'diamond',
                      'rectangle', 'oval', 'hexagon', 'pentagon', 'moon', 'plus', 'arrow', 'sun'];
+
+  /* ---------- animals ---------- */
+
+  // Fluffy wool cloud for the sheep: a circle whose radius wobbles gently,
+  // traced counterclockwise (top -> left -> bottom -> right) like the O.
+  function cloudPts(cx, cy, rx, ry, bumps, amp) {
+    var pts = [];
+    for (var i = 0; i <= 96; i++) {
+      var t = Math.PI * 2 * i / 96;
+      var w = 1 + amp * Math.sin(bumps * t);
+      pts.push([cx + rx * w * Math.cos(t), cy - ry * w * Math.sin(t)]);
+    }
+    return pts;
+  }
+
+  // Each animal: traceable outline strokes + its very own sound (see audio.js).
+  var ANIMALS = [
+    { id: 'cat', name: 'Cat', emoji: '\uD83D\uDC31', sound: 'meow',
+      say: 'A cat! Can you draw the cat?',
+      strokes: [arc(50, 58, 30, 28, 270, -90, 40),
+                [[29, 40], [21, 14], [41, 33]],
+                [[71, 40], [79, 14], [59, 33]]] },
+    { id: 'dog', name: 'Dog', emoji: '\uD83D\uDC36', sound: 'woof',
+      say: 'A dog! Can you draw the dog?',
+      strokes: [arc(50, 55, 30, 27, 270, -90, 40),
+                [[37, 30], [14, 34], [9, 58], [19, 73]],
+                [[63, 30], [86, 34], [91, 58], [81, 73]],
+                arc(50, 70, 13, 10, 270, -90, 26)] },
+    { id: 'rabbit', name: 'Rabbit', emoji: '\uD83D\uDC30', sound: 'boing',
+      say: 'A rabbit! Can you draw the rabbit?',
+      strokes: [arc(38, 34, 8, 20, 270, -90, 28),
+                arc(62, 34, 8, 20, 270, -90, 28),
+                arc(50, 70, 24, 19, 270, -90, 36)] },
+    { id: 'duck', name: 'Duck', emoji: '\uD83E\uDD86', sound: 'quack',
+      say: 'A duck! Can you draw the duck?',
+      strokes: [arc(36, 30, 15, 14, 270, -90, 32),
+                [[48, 40], [58, 44], [68, 49], [79, 44], [75, 58], [68, 66],
+                 [56, 72], [42, 72], [30, 66], [23, 56], [22, 46], [30, 39], [42, 36]],
+                [[22, 28], [8, 32], [22, 36]]] },
+    { id: 'chick', name: 'Chick', emoji: '\uD83D\uDC24', sound: 'cheep',
+      say: 'A little chick! Can you draw the chick?',
+      strokes: [arc(48, 56, 26, 25, 270, -90, 36),
+                [[72, 50], [84, 56], [72, 62]],
+                [[40, 80], [36, 92]],
+                [[58, 80], [64, 92]]] },
+    { id: 'cow', name: 'Cow', emoji: '\uD83D\uDC2E', sound: 'moo',
+      say: 'A cow! Can you draw the cow?',
+      strokes: [arc(50, 58, 32, 26, 270, -90, 40),
+                [[26, 40], [8, 17], [34, 30]],
+                [[74, 40], [92, 17], [66, 30]],
+                [[19, 52], [7, 56], [18, 62]],
+                [[81, 52], [93, 56], [82, 62]],
+                arc(50, 70, 17, 11, 270, -90, 28)] },
+    { id: 'pig', name: 'Pig', emoji: '\uD83D\uDC37', sound: 'oink',
+      say: 'A pig! Can you draw the pig?',
+      strokes: [arc(50, 54, 32, 29, 270, -90, 40),
+                [[30, 32], [20, 15], [43, 27]],
+                [[70, 32], [80, 15], [57, 27]],
+                arc(50, 66, 13, 9, 270, -90, 26)] },
+    { id: 'sheep', name: 'Sheep', emoji: '\uD83D\uDC11', sound: 'baa',
+      say: 'A sheep! Can you draw the sheep?',
+      strokes: [cloudPts(50, 52, 30, 27, 9, 0.13),
+                arc(50, 76, 11, 9, 270, -90, 22),
+                [[38, 82], [36, 93]],
+                [[62, 82], [64, 93]]] },
+    { id: 'fish', name: 'Fish', emoji: '\uD83D\uDC1F', sound: 'blub',
+      say: 'A fish! Can you draw the fish?',
+      strokes: [arc(44, 50, 30, 21, 180, 0, 26).concat(arc(44, 50, 30, 21, 360, 180, 26)),
+                [[74, 50], [88, 34], [82, 50], [88, 66], [74, 50]]] },
+    { id: 'bee', name: 'Bee', emoji: '\uD83D\uDC1D', sound: 'buzz',
+      say: 'A buzzy bee! Can you draw the bee?',
+      strokes: [arc(50, 60, 26, 17, 270, -90, 40),
+                [[41, 46], [41, 74]],
+                [[61, 46], [61, 74]],
+                arc(36, 32, 14, 11, 270, -90, 28),
+                arc(64, 32, 14, 11, 270, -90, 28),
+                [[76, 60], [86, 55], [76, 65]]] },
+    { id: 'butterfly', name: 'Butterfly', emoji: '\uD83E\uDD8B', sound: 'flutter',
+      say: 'A butterfly! Can you draw the butterfly?',
+      strokes: [arc(33, 40, 16, 14, 270, -90, 32),
+                arc(67, 40, 16, 14, 270, -90, 32),
+                arc(35, 66, 11, 11, 270, -90, 28),
+                arc(65, 66, 11, 11, 270, -90, 28),
+                [[50, 30], [50, 82]],
+                [[47, 30], [40, 14]],
+                [[53, 30], [60, 14]]] },
+    { id: 'owl', name: 'Owl', emoji: '\uD83E\uDD89', sound: 'hoot',
+      say: 'An owl! Can you draw the owl?',
+      strokes: [arc(50, 54, 28, 30, 270, -90, 40),
+                arc(38, 44, 10, 10, 270, -90, 26),
+                arc(62, 44, 10, 10, 270, -90, 26),
+                [[50, 54], [44, 62], [56, 62]],
+                [[26, 32], [19, 15], [38, 26]],
+                [[74, 32], [81, 15], [62, 26]],
+                [[40, 84], [36, 94]],
+                [[60, 84], [64, 94]]] }
+  ];
 
   /* ---------- build glyph list ---------- */
 
@@ -249,6 +348,20 @@
     });
   });
 
+  ANIMALS.forEach(function (a, i) {
+    GLYPHS.push({
+      id: a.id,
+      cat: 'animals',
+      name: a.name,
+      caption: a.name,
+      emoji: a.emoji,
+      sound: a.sound,
+      color: ITEM_COLORS[(i + 6) % ITEM_COLORS.length],
+      say: a.say,
+      strokes: a.strokes
+    });
+  });
+
   /* ---------- voice clips (praise / colors / ui) ---------- */
 
   var PRAISE = [
@@ -288,6 +401,7 @@
   });
 
   var CATEGORIES = [
+    { id: 'animals', name: 'Animals', emoji: '\uD83D\uDC3E', color: '#EC407A', blurb: 'Meow! Woof! Moo!' },
     { id: 'shapes',  name: 'Shapes',  emoji: '\u2B50', color: '#FF9800', blurb: 'Stars, hearts & more' },
     { id: 'letters', name: 'Letters', emoji: '\uD83D\uDC24', color: '#43A047', blurb: 'A all the way to Z' },
     { id: 'numbers', name: 'Numbers', emoji: '\uD83D\uDD22', color: '#1E88E5', blurb: 'Zero to nine' }
