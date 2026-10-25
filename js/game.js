@@ -121,6 +121,17 @@
       });
     }
 
+    // decorative detail lines (scutes, spirals, door seams — not traced)
+    this.decorPaths = null;
+    if (this.glyph.decor) {
+      this.decorPaths = this.glyph.decor.map(function (d) {
+        var path = new Path2D();
+        var pts = d.p.map(function (p) { return [ox + p[0] * self.box.s, oy + p[1] * self.box.s]; });
+        _pathThrough(path, pts);
+        return { path: path, c: d.c, w: Math.max(1.5, d.w * self.box.s) };
+      });
+    }
+
     // rebuild coverage samples (silent)
     this.samples = [];
     var self2 = this;
@@ -497,7 +508,7 @@
     var gw = this.guideW;
     var dashOffset = (t / 34) % 40;
 
-    // 0. pre-applied animal colors + decorative eyes (recognizability layer)
+    // 0. pre-applied animal colors + decorative details + eyes (recognizability layer)
     if (this.fillPaths) {
       ctx.save();
       for (var fi = 0; fi < this.fillPaths.length; fi++) {
@@ -505,6 +516,17 @@
         ctx.globalAlpha = fp.a;
         ctx.fillStyle = fp.c;
         ctx.fill(fp.path);
+      }
+      if (this.decorPaths) {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.globalAlpha = 0.85;
+        for (var di = 0; di < this.decorPaths.length; di++) {
+          var dp = this.decorPaths[di];
+          ctx.strokeStyle = dp.c;
+          ctx.lineWidth = dp.w;
+          ctx.stroke(dp.path);
+        }
       }
       if (this.glyph.eyes) this._drawEyes(ctx);
       if (this.glyph.mouth) this._drawMouth(ctx);

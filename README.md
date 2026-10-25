@@ -32,7 +32,7 @@
 
 - 🖍️ **113 things to trace** — 🐾 **21 animals** (cat, dog, rabbit, duck, chick, cow, sheep, fish, bee, butterfly, owl, lion, elephant, monkey, penguin, frog, turtle, snail, ladybug, bear, mouse), 🚗 **16 objects** (ball, house, tree, flower, car, boat, rocket, kite, balloon, ice cream, umbrella, apple, banana, cake, cup, pencil), 🔠 **52 letters** (26 capitals *and* 26 lowercase — flip the Big/Small toggle in the picker), the numbers 0–9, and 14 shapes from circle to star to sun.
 - 🔡 **Big A and small a** — the Letters picker has a case toggle; lowercase letters are drawn with proper x-height, ascenders and descenders, in the same stroke order schools teach.
-- ⭐ **Two ways to pass a level** — pick on the home screen: **⚡ Auto-go** hops to the next picture at 80% (the classic flow), or **⭐ Stars + ✓ Done** lets little ones keep tracing for up to ⭐⭐⭐ (80% = 1⭐, 90% = 2⭐, 100% = 3⭐) and move on by tapping the big green ✅ button. Best stars are saved per picture.
+- ⭐ **Two ways to pass a level** — pick on the home screen: **⚡ Auto-go** hops to the next picture at 80% (the classic flow), or **⭐ Stars + ✓ Done** lets little ones keep tracing for up to ⭐⭐⭐ (80% = 1⭐, 90% = 2⭐, 100% = 3⭐) and move on by tapping the big green ✅ button. **Stars pop into a tray at the top of the canvas while they draw** — instant rewards, no waiting — and best stars are saved per picture.
 - 🎨 **Pre-colored animals with eyes** — every animal arrives softly pre-colored in its natural hue (yellow chick, brown owl, cream-wool sheep…) with cute decorative eyes and smiles, so little ones recognize the critter before they even start tracing.
 - 🐮 **Animals that talk back** — every animal has its very own sound, synthesized live in the browser: meow, woof, moo, roar, trumpet, ribbit, squeak… It plays when the card opens, when they tap the animal button, and when they win. Objects get in on it too — vroom, toot, pop, splat! 🚗🎈
 - 🌈 **A fat rainbow crayon** — 11 bright colors that *speak their own name* when picked, plus a rainbow brush that cycles hues as they draw.
@@ -47,7 +47,7 @@
 
 1. **Tap** a big picture button — 🐾 Animals, 🚗 Objects, ⭐ Shapes, 🐤 Letters or 🔢 Numbers — then tap any card.
 2. **Trace** the dotted road with a finger. Any color, any speed, any order. In 🐤 Letters, flip the **Big A / small a** toggle to switch cases.
-3. **Confetti!** 🎉 A happy voice says *"You drew the star!"* — in **⚡ Auto-go** mode the next card is one tap away; in **⭐ Stars mode** they keep tracing for ⭐⭐⭐, then tap the green ✅ Done to move on.
+3. **Confetti!** 🎉 A happy voice says *"You drew the star!"* — in **⚡ Auto-go** mode the next card is one tap away; in **⭐ Stars mode** the stars pop into the tray **as they trace** (80 / 90 / 100%), then they tap the green ✅ Done to move on.
 
 ## 📥 Get it
 
@@ -129,6 +129,9 @@ docs/                 banner + screenshots
 - Cursive mode
 
 ## 📝 Changelog
+
+**v1.2.1** — *polish pass:* 🐢 **Turtle, snail and elephant redesigned** from cartoon reference art — the turtle now has a big domed shell with scute lines and a cream rim, the snail got a huge spiral shell over a long slug body with ball-tipped eyestalks, and the elephant is a full side view with a giant fan ear, curled trunk, tusk and pillar legs. 🍌 **Banana and car redrawn** — a thick yellow crescent with a brown stem, and a classic side-view sedan with chunky wheels, hubs and a headlight. 🔡 **Lowercase letterforms fixed** — e, f, g, p, q and y redesigned to proper print shapes (a real hook on the f, a left-curling fishhook tail on the g, a rightward kick on the q, the y's v meets exactly on the baseline). 🖼️ **Thumbnail clipping fixed** — picker cards used to cut off descenders (q read as o, y as v); every thumbnail now auto-fits its whole glyph. ⭐ **Stars pop while you draw** — a 3-slot star tray at the top of the canvas fills at 80 / 90 / 100% instead of waiting for the Done tap. 🏠 The home screen footer was removed for a cleaner look.
+
 
 **v1.2.0** — *the big content update:* **52 new things to trace** (113 total). 🐾 **10 new animals** — lion, elephant, monkey, penguin, frog, turtle, snail, ladybug, bear and mouse, each pre-colored with its own face and its own synthesized sound (roar, trumpet, ribbit, squeak…). 🚗 **New Objects category** — 16 everyday things from toddler first-word flashcards: ball, house, tree, flower, car, boat, rocket, kite, balloon, ice cream, umbrella, apple, banana, cake, cup and pencil — with fun sounds (vroom, toot, pop, glug…) on the sound button. 🔡 **Lowercase letters** — the Letters picker now has a **Big A / small a toggle**; all 26 lowercase letters are drawn with proper x-height, ascenders and descenders. ⭐ **Toggleable pass mode** on the home screen: keep classic **⚡ Auto-go at 80%**, or switch to **⭐ Stars + ✓ Done** — trace past 80% for more stars (1⭐ / 2⭐ / 3⭐ at 80 / 90 / 100%), then tap the big green ✅ button to move on; best stars are saved per picture and shown on the cards. Voice lines grew to 145 ("Big A is for Apple!", "Small a is for apple!", "You earned two stars!"…).
 

@@ -263,7 +263,7 @@ button:active { transform: scale(.92); }
 .mode-btn.active .mode-txt b { color: #5E35B1; }
 .mode-btn:active { transform: scale(.97); }
 
-.foot-note { color: rgba(255,255,255,.85); font-size: 13px; padding: 10px 0 4px; text-shadow: 0 1px 3px rgba(74,59,124,.4); }
+/* (foot-note removed — home screen kept clean per user request) */
 
 /* ---------------- topbar ---------------- */
 .topbar {
@@ -426,6 +426,36 @@ button:active { transform: scale(.92); }
 
 .canvas-wrap { position: relative; flex: 1 1 auto; min-height: 0; }
 #draw-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+/* star mode: tray of 3 stars that pop in WHILE the child draws */
+.star-tray {
+  position: absolute;
+  top: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, .75);
+  border-radius: 999px;
+  box-shadow: 0 3px 0 rgba(74, 59, 124, .12);
+  z-index: 3;
+  pointer-events: none;
+}
+.star-tray.hidden { display: none; }
+.tray-star {
+  font-size: 26px;
+  line-height: 1;
+  filter: grayscale(1) opacity(.45);
+  transition: filter .2s ease;
+}
+.tray-star.earned {
+  filter: none;
+  text-shadow: 0 2px 6px rgba(255, 193, 7, .65);
+}
+.tray-star.pop { animation: tray-pop .7s cubic-bezier(.2, 2.2, .4, 1); }
+@keyframes tray-pop {
+  0% { transform: scale(.2) rotate(-40deg); }
+  55% { transform: scale(1.6) rotate(14deg); }
+  100% { transform: scale(1) rotate(0); }
+}
 
 .float-btn {
   position: absolute;

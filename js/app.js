@@ -23,6 +23,7 @@
   var almostSpoken = false;
   var autoAdvanceTimer = null;
   var starReady = false;      // star mode: has the 80% "more stars" cue fired?
+  var trayStars = 0;          // star mode: stars currently popped in the tray
   var demoMode = /[?&]demo=1/.test(location.search);
 
   /* ================= persistence ================= */
@@ -155,6 +156,10 @@
     grid.innerHTML = '';
 
     var items = categoryItems(catId);
+    // one shared scale for every card in this picker (from the union bbox of
+    // all items) so nothing is clipped — descenders (p q y g j), wide shapes,
+    // tall ears — everything fits, each glyph centered in its own card.
+    var fit = fitItemsScale(items);
     items.forEach(function (g, i) {
       var card = document.createElement('button');
       card.className = 'item-card';
@@ -179,14 +184,50 @@
         openDraw(g);
       });
       grid.appendChild(card);
-      requestAnimationFrame(function () { renderCardGlyph(cv, g); });
+      requestAnimationFrame(function () { renderCardGlyph(cv, g, fit); });
     });
 
     showScreen('picker');
     window.SoundKit.Voice.play('tap-a-picture');
   }
 
-  function renderCardGlyph(canvas, glyph) {
+  // Bounding box of a glyph's strokes (0..100 space).
+  function glyphBBox(glyph) {
+    var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    glyph.strokes.forEach(function (st) {
+      st.forEach(function (p) {
+        if (p[0] < x0) x0 = p[0];
+        if (p[0] > x1) x1 = p[0];
+        if (p[1] < y0) y0 = p[1];
+        if (p[1] > y1) y1 = p[1];
+      });
+    });
+    if (x0 > x1) { x0 = 0; y0 = 0; x1 = 100; y1 = 100; }
+    return { x0: x0, y0: y0, x1: x1, y1: y1 };
+  }
+
+  // Uniform card scale for a whole set of items: fit the union bbox into
+  // the thumbnail canvas (measured on first card) with a little padding.
+  var CARD_W = null;
+  function fitItemsScale(items) {
+    var w = 106, h = 62;
+    var probe = document.querySelector('#picker-grid .item-card');
+    if (probe) {
+      var pw = probe.clientWidth;
+      if (pw > 20) { w = pw - 8; h = 62; }
+    }
+    CARD_W = w;
+    var X0 = 1e9, Y0 = 1e9, X1 = -1e9, Y1 = -1e9;
+    items.forEach(function (g) {
+      var b = glyphBBox(g);
+      X0 = Math.min(X0, b.x0); Y0 = Math.min(Y0, b.y0);
+      X1 = Math.max(X1, b.x1); Y1 = Math.max(Y1, b.y1);
+    });
+    var s = Math.min((w - 10) / (X1 - X0), (h - 8) / (Y1 - Y0));
+    return { s: s };
+  }
+
+  function renderCardGlyph(canvas, glyph, fit) {
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = canvas.parentElement.clientWidth - 8 || 80;
     var h = 62;
@@ -195,8 +236,11 @@
     canvas.style.height = h + 'px';
     var ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var size = Math.min(w, h) * 1.28;
-    var ox = (w - size) / 2, oy = (h - size) / 2, s = size / 100;
+    // scale: shared per-picker fit, then center THIS glyph's own bbox
+    var s = fit ? fit.s : Math.min(w, h) * 1.0 / 100;
+    var bb = glyphBBox(glyph);
+    var ox = (w - (bb.x1 - bb.x0) * s) / 2 - bb.x0 * s;
+    var oy = (h - (bb.y1 - bb.y0) * s) / 2 - bb.y0 * s;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     // pre-applied animal colors + decorative eyes (recognizability)
@@ -212,18 +256,32 @@
       });
       ctx.restore();
     }
+    // decorative detail lines (scutes, spirals, seams)
+    if (glyph.decor) {
+      ctx.save();
+      ctx.globalAlpha = 0.85;
+      ctx.strokeStyle = glyph.decor[0].c;
+      glyph.decor.forEach(function (d) {
+        ctx.strokeStyle = d.c;
+        ctx.lineWidth = Math.max(1, d.w * s);
+        ctx.beginPath();
+        _pathOn(ctx, d.p, ox, oy, s);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
     if (glyph.eyes) _drawEyes(ctx, glyph, ox, oy, s);
     if (glyph.mouth) _drawMouth(ctx, glyph, ox, oy, s);
     ctx.globalAlpha = 0.16;
     ctx.strokeStyle = glyph.color;
-    ctx.lineWidth = size / 26;
+    ctx.lineWidth = s * 100 / 26;
     glyph.strokes.forEach(function (stroke) {
       ctx.beginPath();
       _pathOn(ctx, stroke, ox, oy, s);
       ctx.stroke();
     });
     ctx.globalAlpha = 1;
-    ctx.lineWidth = size / 62;
+    ctx.lineWidth = s * 100 / 62;
     glyph.strokes.forEach(function (stroke) {
       ctx.beginPath();
       _pathOn(ctx, stroke, ox, oy, s);
@@ -293,6 +351,8 @@
     milestones = { 25: false, 50: false, 75: false };
     almostSpoken = false;
     starReady = false;
+    trayStars = 0;
+    resetStarTray();
     hideCelebration();
     if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
 
@@ -379,6 +439,43 @@
         db.classList.add('wiggle');
       }
     }
+    // star mode: stars pop into the tray WHILE the child draws
+    // (80% = 1 star, 90% = 2 stars, 100% = 3 stars — same as the reward)
+    if (state.mode === 'stars') {
+      var earned = pct >= 100 ? 3 : pct >= 90 ? 2 : pct >= 80 ? 1 : 0;
+      while (trayStars < earned) {
+        trayStars++;
+        popTrayStar(trayStars);
+        if (trayStars === 2) window.SoundKit.Voice.play('two-stars');
+        if (trayStars === 3) window.SoundKit.Voice.play('three-stars');
+      }
+    }
+  }
+
+  // ---- star tray (auto-appearing stars while drawing, star mode only) ----
+
+  function resetStarTray() {
+    var tray = $('star-tray');
+    if (!tray) return;
+    tray.classList.toggle('hidden', state.mode !== 'stars');
+    for (var i = 1; i <= 3; i++) {
+      var el = $('tray-star-' + i);
+      if (el) {
+        el.classList.remove('earned', 'pop');
+        el.textContent = '\u2606'; // outline star
+      }
+    }
+  }
+
+  function popTrayStar(n) {
+    var el = $('tray-star-' + n);
+    if (!el || el.classList.contains('earned')) return;
+    el.textContent = '\u2B50';
+    el.classList.remove('pop');
+    void el.offsetWidth;
+    el.classList.add('earned', 'pop');
+    window.SoundKit.SFX.sparkle();
+    window.FX.starBurst(window.innerWidth * (0.30 + 0.20 * (n - 1)), window.innerHeight * 0.18, 8);
   }
 
   function onComplete() {
@@ -541,6 +638,8 @@
       milestones = { 25: false, 50: false, 75: false };
       almostSpoken = false;
       starReady = false;
+      trayStars = 0;
+      resetStarTray();
       var db = $('btn-done');
       if (db) db.classList.remove('ready');
     });
