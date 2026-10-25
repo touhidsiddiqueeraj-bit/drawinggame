@@ -2,7 +2,7 @@
  * Draw & Learn — sw.js
  * Cache-first offline shell. Bump CACHE_VERSION to force refresh.
  */
-var CACHE_VERSION = 'draw-learn-v1.2.1';
+var CACHE_VERSION = 'draw-learn-v1.2.2';
 var CORE = [
   './',
   './index.html',
