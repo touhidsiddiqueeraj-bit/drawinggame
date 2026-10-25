@@ -3,157 +3,313 @@
     "id": "a",
     "group": "items",
     "file": "items/a",
-    "text": "A is for Apple! Can you draw the letter A?"
+    "text": "Big A is for Apple! Can you draw the big A?"
   },
   {
     "id": "b",
     "group": "items",
     "file": "items/b",
-    "text": "B is for Ball! Can you draw the letter B?"
+    "text": "Big B is for Ball! Can you draw the big B?"
   },
   {
     "id": "c",
     "group": "items",
     "file": "items/c",
-    "text": "C is for Cat! Can you draw the letter C?"
+    "text": "Big C is for Cat! Can you draw the big C?"
   },
   {
     "id": "d",
     "group": "items",
     "file": "items/d",
-    "text": "D is for Dog! Can you draw the letter D?"
+    "text": "Big D is for Dog! Can you draw the big D?"
   },
   {
     "id": "e",
     "group": "items",
     "file": "items/e",
-    "text": "E is for Elephant! Can you draw the letter E?"
+    "text": "Big E is for Elephant! Can you draw the big E?"
   },
   {
     "id": "f",
     "group": "items",
     "file": "items/f",
-    "text": "F is for Fish! Can you draw the letter F?"
+    "text": "Big F is for Fish! Can you draw the big F?"
   },
   {
     "id": "g",
     "group": "items",
     "file": "items/g",
-    "text": "G is for Grapes! Can you draw the letter G?"
+    "text": "Big G is for Grapes! Can you draw the big G?"
   },
   {
     "id": "h",
     "group": "items",
     "file": "items/h",
-    "text": "H is for Hat! Can you draw the letter H?"
+    "text": "Big H is for Hat! Can you draw the big H?"
   },
   {
     "id": "i",
     "group": "items",
     "file": "items/i",
-    "text": "I is for Ice cream! Can you draw the letter I?"
+    "text": "Big I is for Ice cream! Can you draw the big I?"
   },
   {
     "id": "j",
     "group": "items",
     "file": "items/j",
-    "text": "J is for Juice! Can you draw the letter J?"
+    "text": "Big J is for Juice! Can you draw the big J?"
   },
   {
     "id": "k",
     "group": "items",
     "file": "items/k",
-    "text": "K is for Kite! Can you draw the letter K?"
+    "text": "Big K is for Kite! Can you draw the big K?"
   },
   {
     "id": "l",
     "group": "items",
     "file": "items/l",
-    "text": "L is for Lion! Can you draw the letter L?"
+    "text": "Big L is for Lion! Can you draw the big L?"
   },
   {
     "id": "m",
     "group": "items",
     "file": "items/m",
-    "text": "M is for Moon! Can you draw the letter M?"
+    "text": "Big M is for Moon! Can you draw the big M?"
   },
   {
     "id": "n",
     "group": "items",
     "file": "items/n",
-    "text": "N is for Nest! Can you draw the letter N?"
+    "text": "Big N is for Nest! Can you draw the big N?"
   },
   {
     "id": "o",
     "group": "items",
     "file": "items/o",
-    "text": "O is for Orange! Can you draw the letter O?"
+    "text": "Big O is for Orange! Can you draw the big O?"
   },
   {
     "id": "p",
     "group": "items",
     "file": "items/p",
-    "text": "P is for Panda! Can you draw the letter P?"
+    "text": "Big P is for Panda! Can you draw the big P?"
   },
   {
     "id": "q",
     "group": "items",
     "file": "items/q",
-    "text": "Q is for Queen! Can you draw the letter Q?"
+    "text": "Big Q is for Queen! Can you draw the big Q?"
   },
   {
     "id": "r",
     "group": "items",
     "file": "items/r",
-    "text": "R is for Rainbow! Can you draw the letter R?"
+    "text": "Big R is for Rainbow! Can you draw the big R?"
   },
   {
     "id": "s",
     "group": "items",
     "file": "items/s",
-    "text": "S is for Sun! Can you draw the letter S?"
+    "text": "Big S is for Sun! Can you draw the big S?"
   },
   {
     "id": "t",
     "group": "items",
     "file": "items/t",
-    "text": "T is for Tiger! Can you draw the letter T?"
+    "text": "Big T is for Tiger! Can you draw the big T?"
   },
   {
     "id": "u",
     "group": "items",
     "file": "items/u",
-    "text": "U is for Umbrella! Can you draw the letter U?"
+    "text": "Big U is for Umbrella! Can you draw the big U?"
   },
   {
     "id": "v",
     "group": "items",
     "file": "items/v",
-    "text": "V is for Van! Can you draw the letter V?"
+    "text": "Big V is for Van! Can you draw the big V?"
   },
   {
     "id": "w",
     "group": "items",
     "file": "items/w",
-    "text": "W is for Watermelon! Can you draw the letter W?"
+    "text": "Big W is for Watermelon! Can you draw the big W?"
   },
   {
     "id": "x",
     "group": "items",
     "file": "items/x",
-    "text": "X is for X-ray! Can you draw the letter X?"
+    "text": "Big X is for X-ray! Can you draw the big X?"
   },
   {
     "id": "y",
     "group": "items",
     "file": "items/y",
-    "text": "Y is for Yo-yo! Can you draw the letter Y?"
+    "text": "Big Y is for Yo-yo! Can you draw the big Y?"
   },
   {
     "id": "z",
     "group": "items",
     "file": "items/z",
-    "text": "Z is for Zebra! Can you draw the letter Z?"
+    "text": "Big Z is for Zebra! Can you draw the big Z?"
+  },
+  {
+    "id": "sm-a",
+    "group": "items",
+    "file": "items/sm-a",
+    "text": "Small a is for apple! Can you draw the small a?"
+  },
+  {
+    "id": "sm-b",
+    "group": "items",
+    "file": "items/sm-b",
+    "text": "Small b is for ball! Can you draw the small b?"
+  },
+  {
+    "id": "sm-c",
+    "group": "items",
+    "file": "items/sm-c",
+    "text": "Small c is for cat! Can you draw the small c?"
+  },
+  {
+    "id": "sm-d",
+    "group": "items",
+    "file": "items/sm-d",
+    "text": "Small d is for dog! Can you draw the small d?"
+  },
+  {
+    "id": "sm-e",
+    "group": "items",
+    "file": "items/sm-e",
+    "text": "Small e is for elephant! Can you draw the small e?"
+  },
+  {
+    "id": "sm-f",
+    "group": "items",
+    "file": "items/sm-f",
+    "text": "Small f is for fish! Can you draw the small f?"
+  },
+  {
+    "id": "sm-g",
+    "group": "items",
+    "file": "items/sm-g",
+    "text": "Small g is for grapes! Can you draw the small g?"
+  },
+  {
+    "id": "sm-h",
+    "group": "items",
+    "file": "items/sm-h",
+    "text": "Small h is for hat! Can you draw the small h?"
+  },
+  {
+    "id": "sm-i",
+    "group": "items",
+    "file": "items/sm-i",
+    "text": "Small i is for ice cream! Can you draw the small i?"
+  },
+  {
+    "id": "sm-j",
+    "group": "items",
+    "file": "items/sm-j",
+    "text": "Small j is for juice! Can you draw the small j?"
+  },
+  {
+    "id": "sm-k",
+    "group": "items",
+    "file": "items/sm-k",
+    "text": "Small k is for kite! Can you draw the small k?"
+  },
+  {
+    "id": "sm-l",
+    "group": "items",
+    "file": "items/sm-l",
+    "text": "Small l is for lion! Can you draw the small l?"
+  },
+  {
+    "id": "sm-m",
+    "group": "items",
+    "file": "items/sm-m",
+    "text": "Small m is for moon! Can you draw the small m?"
+  },
+  {
+    "id": "sm-n",
+    "group": "items",
+    "file": "items/sm-n",
+    "text": "Small n is for nest! Can you draw the small n?"
+  },
+  {
+    "id": "sm-o",
+    "group": "items",
+    "file": "items/sm-o",
+    "text": "Small o is for orange! Can you draw the small o?"
+  },
+  {
+    "id": "sm-p",
+    "group": "items",
+    "file": "items/sm-p",
+    "text": "Small p is for panda! Can you draw the small p?"
+  },
+  {
+    "id": "sm-q",
+    "group": "items",
+    "file": "items/sm-q",
+    "text": "Small q is for queen! Can you draw the small q?"
+  },
+  {
+    "id": "sm-r",
+    "group": "items",
+    "file": "items/sm-r",
+    "text": "Small r is for rainbow! Can you draw the small r?"
+  },
+  {
+    "id": "sm-s",
+    "group": "items",
+    "file": "items/sm-s",
+    "text": "Small s is for sun! Can you draw the small s?"
+  },
+  {
+    "id": "sm-t",
+    "group": "items",
+    "file": "items/sm-t",
+    "text": "Small t is for tiger! Can you draw the small t?"
+  },
+  {
+    "id": "sm-u",
+    "group": "items",
+    "file": "items/sm-u",
+    "text": "Small u is for umbrella! Can you draw the small u?"
+  },
+  {
+    "id": "sm-v",
+    "group": "items",
+    "file": "items/sm-v",
+    "text": "Small v is for van! Can you draw the small v?"
+  },
+  {
+    "id": "sm-w",
+    "group": "items",
+    "file": "items/sm-w",
+    "text": "Small w is for watermelon! Can you draw the small w?"
+  },
+  {
+    "id": "sm-x",
+    "group": "items",
+    "file": "items/sm-x",
+    "text": "Small x is for x-ray! Can you draw the small x?"
+  },
+  {
+    "id": "sm-y",
+    "group": "items",
+    "file": "items/sm-y",
+    "text": "Small y is for yo-yo! Can you draw the small y?"
+  },
+  {
+    "id": "sm-z",
+    "group": "items",
+    "file": "items/sm-z",
+    "text": "Small z is for zebra! Can you draw the small z?"
   },
   {
     "id": "n0",
@@ -366,6 +522,162 @@
     "text": "An owl! Can you draw the owl?"
   },
   {
+    "id": "lion",
+    "group": "items",
+    "file": "items/lion",
+    "text": "A lion! Can you draw the lion?"
+  },
+  {
+    "id": "elephant",
+    "group": "items",
+    "file": "items/elephant",
+    "text": "An elephant! Can you draw the elephant?"
+  },
+  {
+    "id": "monkey",
+    "group": "items",
+    "file": "items/monkey",
+    "text": "A monkey! Can you draw the monkey?"
+  },
+  {
+    "id": "penguin",
+    "group": "items",
+    "file": "items/penguin",
+    "text": "A penguin! Can you draw the penguin?"
+  },
+  {
+    "id": "frog",
+    "group": "items",
+    "file": "items/frog",
+    "text": "A frog! Can you draw the frog?"
+  },
+  {
+    "id": "turtle",
+    "group": "items",
+    "file": "items/turtle",
+    "text": "A turtle! Can you draw the turtle?"
+  },
+  {
+    "id": "snail",
+    "group": "items",
+    "file": "items/snail",
+    "text": "A snail! Can you draw the snail?"
+  },
+  {
+    "id": "ladybug",
+    "group": "items",
+    "file": "items/ladybug",
+    "text": "A ladybug! Can you draw the ladybug?"
+  },
+  {
+    "id": "bear",
+    "group": "items",
+    "file": "items/bear",
+    "text": "A bear! Can you draw the bear?"
+  },
+  {
+    "id": "mouse",
+    "group": "items",
+    "file": "items/mouse",
+    "text": "A little mouse! Can you draw the mouse?"
+  },
+  {
+    "id": "ball",
+    "group": "items",
+    "file": "items/ball",
+    "text": "A ball! Can you draw the ball?"
+  },
+  {
+    "id": "house",
+    "group": "items",
+    "file": "items/house",
+    "text": "A house! Can you draw the house?"
+  },
+  {
+    "id": "tree",
+    "group": "items",
+    "file": "items/tree",
+    "text": "A tree! Can you draw the tree?"
+  },
+  {
+    "id": "flower",
+    "group": "items",
+    "file": "items/flower",
+    "text": "A flower! Can you draw the flower?"
+  },
+  {
+    "id": "car",
+    "group": "items",
+    "file": "items/car",
+    "text": "A car! Can you draw the car?"
+  },
+  {
+    "id": "boat",
+    "group": "items",
+    "file": "items/boat",
+    "text": "A boat! Can you draw the boat?"
+  },
+  {
+    "id": "rocket",
+    "group": "items",
+    "file": "items/rocket",
+    "text": "A rocket! Can you draw the rocket?"
+  },
+  {
+    "id": "kite",
+    "group": "items",
+    "file": "items/kite",
+    "text": "A kite! Can you draw the kite?"
+  },
+  {
+    "id": "balloon",
+    "group": "items",
+    "file": "items/balloon",
+    "text": "A balloon! Can you draw the balloon?"
+  },
+  {
+    "id": "icecream",
+    "group": "items",
+    "file": "items/icecream",
+    "text": "An ice cream! Can you draw the ice cream?"
+  },
+  {
+    "id": "umbrella",
+    "group": "items",
+    "file": "items/umbrella",
+    "text": "An umbrella! Can you draw the umbrella?"
+  },
+  {
+    "id": "apple",
+    "group": "items",
+    "file": "items/apple",
+    "text": "An apple! Can you draw the apple?"
+  },
+  {
+    "id": "banana",
+    "group": "items",
+    "file": "items/banana",
+    "text": "A banana! Can you draw the banana?"
+  },
+  {
+    "id": "cake",
+    "group": "items",
+    "file": "items/cake",
+    "text": "A birthday cake! Can you draw the cake?"
+  },
+  {
+    "id": "cup",
+    "group": "items",
+    "file": "items/cup",
+    "text": "A cup! Can you draw the cup?"
+  },
+  {
+    "id": "pencil",
+    "group": "items",
+    "file": "items/pencil",
+    "text": "A pencil! Can you draw the pencil?"
+  },
+  {
     "id": "great-job",
     "group": "praise",
     "file": "praise/great-job",
@@ -514,5 +826,47 @@
     "group": "ui",
     "file": "ui/almost-there",
     "text": "Almost there!"
+  },
+  {
+    "id": "tap-done",
+    "group": "ui",
+    "file": "ui/tap-done",
+    "text": "Tap the green check when you are done!"
+  },
+  {
+    "id": "more-stars",
+    "group": "ui",
+    "file": "ui/more-stars",
+    "text": "You did it! Keep tracing to earn more stars!"
+  },
+  {
+    "id": "one-star",
+    "group": "ui",
+    "file": "ui/one-star",
+    "text": "You earned one star!"
+  },
+  {
+    "id": "two-stars",
+    "group": "ui",
+    "file": "ui/two-stars",
+    "text": "You earned two stars!"
+  },
+  {
+    "id": "three-stars",
+    "group": "ui",
+    "file": "ui/three-stars",
+    "text": "Wow! Three stars! You are a super star!"
+  },
+  {
+    "id": "big-letters",
+    "group": "ui",
+    "file": "ui/big-letters",
+    "text": "Big letters!"
+  },
+  {
+    "id": "small-letters",
+    "group": "ui",
+    "file": "ui/small-letters",
+    "text": "Small letters!"
   }
 ]

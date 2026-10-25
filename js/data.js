@@ -1,7 +1,8 @@
 /*
  * Draw & Learn — data.js
  * Single source of truth for:
- *  - The 61 traceable glyphs (26 letters, 10 numbers, 14 shapes, 11 animals)
+ *  - The 113 traceable glyphs (26 big + 26 small letters, 10 numbers,
+ *    14 shapes, 21 animals, 16 objects)
  *  - Brush color palette
  *  - Voice clip manifest (texts shared by the audio generator tools)
  *
@@ -160,6 +161,46 @@
     z: [[[20, 12], [80, 12], [20, 88], [80, 88]]]
   };
 
+  /* ---------- small letters ---------- */
+
+  // Lowercase design rules (toddler handwriting style):
+  //   x-height band y = 46..86  (small letters live here)
+  //   ascenders reach up to y = 14, descenders drop to y ~ 96
+  //   same stroke directions as the capitals: stems go top -> bottom,
+  //   "magic c" bowls (a c d g o q) sweep counterclockwise from the top.
+  var LOWERCASE = {
+    a: [arc(56, 66, 18, 20, 270, -90, 36), [[74, 46], [74, 86]]],
+    b: [[[28, 14], [28, 86]], arc(28, 66, 26, 20, -90, 90, 32)],
+    c: [arc(52, 66, 24, 21, 315, 45, 30)],
+    d: [[[74, 14], [74, 86]], arc(74, 66, 26, 20, 270, 90, 32)],
+    e: [[[31, 58], [67, 58]], arc(50, 64, 17, 19, 315, 120, 30)],
+    f: [arc(37, 29, 14, 13, 180, 360, 20).concat([[50, 86]]), [[33, 56], [67, 56]]],
+    g: [arc(52, 66, 22, 20, 270, -90, 38),
+        [[74, 64], [74, 80]].concat(arc(58, 88, 16, 8, 0, 150, 18))],
+    h: [[[28, 14], [28, 86]], arc(51, 56, 23, 10, 180, 360, 24).concat([[74, 86]])],
+    i: [[[50, 46], [50, 86]], [[50, 27], [50, 32]]],
+    j: [[[62, 46], [62, 76]].concat(arc(50, 80, 12, 12, 0, 150, 16)), [[62, 27], [62, 32]]],
+    k: [[[28, 14], [28, 86]], [[74, 46], [28, 68]], [[40, 58], [74, 86]]],
+    l: [[[50, 14], [50, 86]]],
+    m: [[[26, 46], [26, 86]],
+        arc(39, 56, 13, 10, 180, 360, 16).concat([[52, 86]]),
+        arc(65, 56, 13, 10, 180, 360, 16).concat([[78, 86]])],
+    n: [[[28, 46], [28, 86]], arc(51, 56, 23, 10, 180, 360, 24).concat([[74, 86]])],
+    o: [arc(52, 66, 24, 21, 270, -90, 40)],
+    p: [[[30, 46], [30, 96]], arc(30, 66, 26, 20, -90, 90, 32)],
+    q: [arc(48, 66, 22, 20, 270, -90, 38), [[70, 62], [70, 96]]],
+    r: [[[30, 46], [30, 86]], [[30, 62], [44, 50], [56, 45]]],
+    s: [[[69, 50], [54, 46], [42, 49], [36, 57], [40, 64], [52, 68],
+         [63, 72], [69, 80], [64, 88], [50, 90], [38, 87]]],
+    t: [[[50, 28], [50, 74], [62, 84]], [[33, 52], [67, 52]]],
+    u: [[[28, 46], [28, 60]].concat(arc(50, 60, 22, 26, 180, 0, 26), [[72, 60], [72, 46]])],
+    v: [[[26, 46], [50, 86], [74, 46]]],
+    w: [[[18, 46], [34, 86], [50, 52], [66, 86], [82, 46]]],
+    x: [[[28, 46], [72, 86]], [[72, 46], [28, 86]]],
+    y: [[[28, 46], [52, 80]], [[76, 46], [52, 80], [42, 96]]],
+    z: [[[30, 46], [72, 46], [30, 86], [72, 86]]]
+  };
+
   /* ---------- numbers ---------- */
 
   var NUMBER_WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
@@ -229,6 +270,17 @@
       var t = ((a0 + (a1 - a0) * i / n) * Math.PI) / 180;
       var rx = rxBottom + (rxTop - rxBottom) * (1 - Math.sin(t)) / 2;
       pts.push([cx + rx * Math.cos(t), cy + ry * Math.sin(t)]);
+    }
+    return pts;
+  }
+
+  // Snail shell: an inward spiral (radius eases r0 -> r1 over `turns` turns).
+  function spiralPts(cx, cy, r0, r1, turns, n) {
+    var pts = [];
+    for (var i = 0; i <= n; i++) {
+      var t = 2 * Math.PI * turns * i / n;
+      var r = r0 + (r1 - r0) * (i / n);
+      pts.push([cx + r * Math.cos(t), cy + r * Math.sin(t)]);
     }
     return pts;
   }
@@ -389,7 +441,280 @@
                 arc(61, 40, 10, 10, 270, -90, 26),
                 [[50, 52], [45, 61], [55, 61]],
                 [[24, 46], [15, 60], [24, 74]],
-                [[76, 46], [85, 60], [76, 74]]] }
+                [[76, 46], [85, 60], [76, 74]]] },
+    { id: 'lion', name: 'Lion', emoji: '\uD83E\uDD81', sound: 'roar', color: '#F9A825',
+      say: 'A lion! Can you draw the lion?',
+      fill: [{ c: '#FFB74D', p: cloudPts(50, 50, 34, 32, 11, 0.13) },
+             { c: '#FFE0B2', p: arc(50, 50, 21, 19, 270, 630, 36) },
+             { c: '#8D5A2B', a: 0.85, p: [[45, 48], [55, 48], [50, 54]] }],
+      eyes: [[41, 44, 3.2], [59, 44, 3.2]],
+      mouth: [50, 58, 5.5, 4, 'cat'],
+      strokes: [cloudPts(50, 50, 34, 32, 11, 0.13),
+                arc(50, 50, 21, 19, 270, -90, 36),
+                [[45, 48], [55, 48], [50, 54], [45, 48]],
+                [[30, 48], [16, 44]], [[30, 54], [16, 56]],
+                [[70, 48], [84, 44]], [[70, 54], [84, 56]]] },
+    { id: 'elephant', name: 'Elephant', emoji: '\uD83D\uDC18', sound: 'trumpet', color: '#78909C',
+      say: 'An elephant! Can you draw the elephant?',
+      fill: [{ c: '#B0BEC5', p: arc(50, 52, 24, 22, 270, 630, 36) },
+             { c: '#B0BEC5', p: arc(21, 50, 13, 16, 270, 630, 28) },
+             { c: '#B0BEC5', p: arc(79, 50, 13, 16, 270, 630, 28) },
+             { c: '#CFD8DC', a: 0.8, p: arc(21, 50, 7, 9, 270, 630, 20) },
+             { c: '#CFD8DC', a: 0.8, p: arc(79, 50, 7, 9, 270, 630, 20) }],
+      eyes: [[42, 47, 3.2], [58, 47, 3.2]],
+      strokes: [arc(50, 52, 24, 22, 270, -90, 36),
+                arc(21, 50, 13, 16, 270, -90, 28),
+                arc(79, 50, 13, 16, 270, -90, 28),
+                [[50, 70], [51, 80], [46, 88], [37, 93]]] },
+    { id: 'monkey', name: 'Monkey', emoji: '\uD83D\uDC35', sound: 'chatter', color: '#8D6E63',
+      say: 'A monkey! Can you draw the monkey?',
+      fill: [{ c: '#A1887F', p: arc(50, 52, 25, 23, 270, 630, 36) },
+             { c: '#A1887F', p: arc(22, 52, 9, 11, 270, 630, 24) },
+             { c: '#A1887F', p: arc(78, 52, 9, 11, 270, 630, 24) },
+             { c: '#D7CCC8', a: 0.9, p: arc(22, 52, 5, 6.5, 270, 630, 18) },
+             { c: '#D7CCC8', a: 0.9, p: arc(78, 52, 5, 6.5, 270, 630, 18) },
+             { c: '#FFE0B2', p: arc(50, 56, 16, 15, 270, 630, 32) },
+             { c: '#6D4C41', a: 0.7, p: arc(46, 52, 1.6, 1.2, 270, 630, 10) },
+             { c: '#6D4C41', a: 0.7, p: arc(54, 52, 1.6, 1.2, 270, 630, 10) }],
+      eyes: [[43, 47, 3], [57, 47, 3]],
+      mouth: [50, 62, 6, 4, 'cat'],
+      strokes: [arc(50, 52, 25, 23, 270, -90, 36),
+                arc(22, 52, 9, 11, 270, -90, 24),
+                arc(78, 52, 9, 11, 270, -90, 24),
+                [[46, 30], [44, 21]],
+                [[50, 29], [50, 19]],
+                [[54, 30], [56, 21]]] },
+    { id: 'penguin', name: 'Penguin', emoji: '\uD83D\uDC27', sound: 'honk', color: '#37474F',
+      say: 'A penguin! Can you draw the penguin?',
+      fill: [{ c: '#455A64', p: eggPts(50, 50, 22, 28, 34, 270, 630, 44) },
+             { c: '#FFFFFF', p: eggPts(50, 57, 13, 19, 24, 270, 630, 36) },
+             { c: '#FFA000', a: 0.9, p: [[45, 44], [50, 40], [55, 44], [50, 48], [45, 44]] },
+             { c: '#FFA000', a: 0.7, p: arc(40, 84, 7, 4, 0, 180, 14) },
+             { c: '#FFA000', a: 0.7, p: arc(60, 84, 7, 4, 0, 180, 14) }],
+      eyes: [[43, 36, 3.2, 'w'], [57, 36, 3.2, 'w']],
+      strokes: [eggPts(50, 50, 22, 28, 34, 270, -90, 44),
+                [[28, 42], [15, 58], [24, 68]],
+                [[72, 42], [85, 58], [76, 68]],
+                [[45, 44], [50, 40], [55, 44], [50, 48], [45, 44]],
+                arc(40, 84, 7, 4, 0, 180, 14),
+                arc(60, 84, 7, 4, 0, 180, 14)] },
+    { id: 'frog', name: 'Frog', emoji: '\uD83D\uDC38', sound: 'ribbit', color: '#43A047',
+      say: 'A frog! Can you draw the frog?',
+      fill: [{ c: '#66BB6A', p: arc(50, 60, 32, 24, 270, 630, 40) },
+             { c: '#66BB6A', p: arc(34, 40, 9, 9, 270, 630, 22) },
+             { c: '#66BB6A', p: arc(66, 40, 9, 9, 270, 630, 22) },
+             { c: '#F8BBD0', a: 0.5, p: arc(30, 64, 4.5, 3, 270, 630, 14) },
+             { c: '#F8BBD0', a: 0.5, p: arc(70, 64, 4.5, 3, 270, 630, 14) },
+             { c: '#2E7D32', a: 0.6, p: arc(46, 52, 1.8, 1.4, 270, 630, 10) },
+             { c: '#2E7D32', a: 0.6, p: arc(54, 52, 1.8, 1.4, 270, 630, 10) }],
+      eyes: [[34, 40, 3.2], [66, 40, 3.2]],
+      mouth: [50, 64, 11, 5, 'cat'],
+      strokes: [arc(50, 60, 32, 24, 270, -90, 40),
+                arc(34, 40, 9, 9, 180, 360, 20),
+                arc(66, 40, 9, 9, 180, 360, 20)] },
+    { id: 'turtle', name: 'Turtle', emoji: '\uD83D\uDC22', sound: 'chomp', color: '#2E7D32',
+      say: 'A turtle! Can you draw the turtle?',
+      fill: [{ c: '#81C784', p: arc(42, 46, 28, 22, 180, 360, 32) },
+             { c: '#A5D6A7', a: 0.8, p: cloudPts(34, 38, 6, 4, 5, 0.2) },
+             { c: '#A5D6A7', a: 0.8, p: cloudPts(50, 42, 5, 4, 5, 0.2) },
+             { c: '#A5D6A7', a: 0.8, p: cloudPts(42, 30, 4.5, 3.5, 5, 0.2) },
+             { c: '#A5D6A7', p: arc(76, 46, 12, 11, 270, 630, 26) }],
+      eyes: [[76, 42, 2.8]],
+      mouth: [76, 49, 3.5, 2.5, 'arc'],
+      strokes: [arc(42, 46, 28, 22, 180, 360, 32),
+                [[14, 46], [70, 46]],
+                arc(76, 46, 12, 11, 270, -90, 26),
+                [[24, 46], [24, 62]],
+                [[58, 46], [58, 62]],
+                [[14, 46], [6, 52]]] },
+    { id: 'snail', name: 'Snail', emoji: '\uD83D\uDC0C', sound: 'squelch', color: '#A1887F',
+      say: 'A snail! Can you draw the snail?',
+      fill: [{ c: '#FFB74D', p: spiralPts(42, 40, 24, 3.5, 2.25, 96) },
+             { c: '#FFCC80', p: arc(46, 74, 30, 10, 270, 630, 36) }],
+      eyes: [[70, 41, 2.2], [84, 39, 2.2]],
+      mouth: [77, 58, 3, 2, 'arc'],
+      strokes: [spiralPts(42, 40, 24, 3.5, 2.25, 110),
+                [[16, 78], [22, 72], [36, 78], [52, 80], [66, 74], [76, 62], [78, 52]],
+                [[75, 54], [70, 42]],
+                [[78, 52], [84, 40]]] },
+    { id: 'ladybug', name: 'Ladybug', emoji: '\uD83D\uDC1E', sound: 'tinkle', color: '#E53935',
+      say: 'A ladybug! Can you draw the ladybug?',
+      // classic top view: big round red body, small dark head bump on top
+      fill: [{ c: '#EF5350', p: arc(50, 62, 28, 26, 270, 630, 40) },
+             { c: '#37474F', p: arc(50, 38, 12, 9, 180, 360, 20) },
+             { c: '#37474F', a: 0.85, p: arc(38, 55, 5, 5, 270, 630, 16) },
+             { c: '#37474F', a: 0.85, p: arc(62, 55, 5, 5, 270, 630, 16) },
+             { c: '#37474F', a: 0.85, p: arc(42, 72, 4, 4, 270, 630, 14) },
+             { c: '#37474F', a: 0.85, p: arc(58, 72, 4, 4, 270, 630, 14) }],
+      eyes: [[46, 34, 2.2, 'w'], [54, 34, 2.2, 'w']],
+      strokes: [arc(50, 62, 28, 26, 270, -90, 40),
+                arc(50, 38, 12, 9, 180, 360, 20),
+                [[50, 41], [50, 88]],
+                [[45, 31], [40, 20]], [[55, 31], [60, 20]],
+                [[24, 58], [14, 52]], [[22, 66], [12, 66]], [[26, 74], [16, 80]],
+                [[76, 58], [86, 52]], [[78, 66], [88, 66]], [[74, 74], [84, 80]]] },
+    { id: 'bear', name: 'Bear', emoji: '\uD83D\uDC3B', sound: 'growl', color: '#8D6E63',
+      say: 'A bear! Can you draw the bear?',
+      fill: [{ c: '#A1887F', p: arc(50, 56, 27, 25, 270, 630, 40) },
+             { c: '#A1887F', p: arc(30, 32, 9, 9, 270, 630, 22) },
+             { c: '#A1887F', p: arc(70, 32, 9, 9, 270, 630, 22) },
+             { c: '#D7CCC8', a: 0.9, p: arc(30, 32, 5, 5, 270, 630, 16) },
+             { c: '#D7CCC8', a: 0.9, p: arc(70, 32, 5, 5, 270, 630, 16) },
+             { c: '#D7CCC8', p: arc(50, 64, 11, 8, 270, 630, 24) },
+             { c: '#4E342E', p: [[46, 61], [54, 61], [50, 66]] }],
+      eyes: [[41, 50, 3.2], [59, 50, 3.2]],
+      mouth: [50, 70, 4, 2.5, 'arc'],
+      strokes: [arc(50, 56, 27, 25, 270, -90, 40),
+                arc(30, 32, 9, 9, 270, -90, 22),
+                arc(70, 32, 9, 9, 270, -90, 22)] },
+    { id: 'mouse', name: 'Mouse', emoji: '\uD83D\uDC2D', sound: 'squeak', color: '#90A4AE',
+      say: 'A little mouse! Can you draw the mouse?',
+      fill: [{ c: '#B0BEC5', p: eggPts(50, 58, 26, 18, 24, 270, 630, 40) },
+             { c: '#B0BEC5', p: arc(28, 32, 13, 13, 270, 630, 28) },
+             { c: '#B0BEC5', p: arc(72, 32, 13, 13, 270, 630, 28) },
+             { c: '#F8BBD0', a: 0.85, p: arc(28, 32, 7.5, 7.5, 270, 630, 20) },
+             { c: '#F8BBD0', a: 0.85, p: arc(72, 32, 7.5, 7.5, 270, 630, 20) },
+             { c: '#F06292', p: arc(50, 79, 3, 2.4, 270, 630, 12) }],
+      eyes: [[43, 52, 3], [57, 52, 3]],
+      mouth: [50, 72, 3.5, 2.5, 'arc'],
+      strokes: [eggPts(50, 58, 26, 18, 24, 270, -90, 40),
+                arc(28, 32, 13, 13, 270, -90, 28),
+                arc(72, 32, 13, 13, 270, -90, 28),
+                [[37, 62], [22, 56]], [[37, 67], [22, 68]],
+                [[63, 62], [78, 56]], [[63, 67], [78, 68]]] }
+  ];
+
+  /* ---------- objects ---------- */
+
+  // Everyday things from toddler first-word flashcards. Same schema as
+  // animals: traceable strokes + soft fills + a fun little sound each.
+  var OBJECTS = [
+    { id: 'ball', name: 'Ball', emoji: '\u26BD', sound: 'bounce', color: '#E53935',
+      say: 'A ball! Can you draw the ball?',
+      fill: [{ c: '#EF5350', p: arc(50, 50, 34, 34, 270, 630, 44) }],
+      strokes: [arc(50, 50, 34, 34, 270, -90, 44),
+                arc(50, 50, 14, 34, 90, 270, 24),
+                arc(50, 50, 14, 34, -90, 90, 24)] },
+    { id: 'house', name: 'House', emoji: '\uD83C\uDFE1', sound: 'knock', color: '#F4511E',
+      say: 'A house! Can you draw the house?',
+      fill: [{ c: '#FFE0B2', p: [[26, 54], [74, 54], [74, 88], [26, 88]] },
+             { c: '#EF5350', p: [[22, 54], [50, 20], [78, 54]] },
+             { c: '#8D6E63', p: [[44, 88], [44, 68], [56, 68], [56, 88]] }],
+      strokes: [[[22, 54], [50, 20], [78, 54], [22, 54]],
+                [[26, 54], [74, 54], [74, 88], [26, 88], [26, 54]],
+                [[44, 88], [44, 68], [56, 68], [56, 88]]] },
+    { id: 'tree', name: 'Tree', emoji: '\uD83C\uDF33', sound: 'rustle', color: '#2E7D32',
+      say: 'A tree! Can you draw the tree?',
+      fill: [{ c: '#81C784', p: cloudPts(50, 38, 25, 17, 7, 0.12) },
+             { c: '#8D6E63', p: [[41, 54], [59, 54], [59, 90], [41, 90]] }],
+      strokes: [cloudPts(50, 38, 25, 17, 7, 0.12),
+                [[42, 52], [42, 88], [58, 88], [58, 52]]] },
+    { id: 'flower', name: 'Flower', emoji: '\uD83C\uDF38', sound: 'twinkle', color: '#D81B60',
+      say: 'A flower! Can you draw the flower?',
+      fill: [{ c: '#F8BBD0', p: arc(50, 25, 8, 8, 270, 630, 22) },
+             { c: '#F8BBD0', p: arc(62, 34, 8, 8, 270, 630, 22) },
+             { c: '#F8BBD0', p: arc(58, 49, 8, 8, 270, 630, 22) },
+             { c: '#F8BBD0', p: arc(42, 49, 8, 8, 270, 630, 22) },
+             { c: '#F8BBD0', p: arc(38, 34, 8, 8, 270, 630, 22) },
+             { c: '#FFD54F', p: arc(50, 38, 7.5, 7.5, 270, 630, 20) },
+             { c: '#66BB6A', p: [[47, 46], [53, 46], [53, 86], [47, 86]] }],
+      strokes: [arc(50, 25, 8, 8, 270, -90, 22),
+                arc(62, 34, 8, 8, 270, -90, 22),
+                arc(58, 49, 8, 8, 270, -90, 22),
+                arc(42, 49, 8, 8, 270, -90, 22),
+                arc(38, 34, 8, 8, 270, -90, 22),
+                arc(50, 38, 7.5, 7.5, 270, -90, 20),
+                [[50, 46], [50, 90]]] },
+    { id: 'car', name: 'Car', emoji: '\uD83D\uDE97', sound: 'vroom', color: '#E53935',
+      say: 'A car! Can you draw the car?',
+      fill: [{ c: '#EF5350', p: [[16, 74], [16, 60], [30, 60], [38, 46], [62, 46], [70, 60], [86, 60], [86, 74]] },
+             { c: '#B3E5FC', p: [[36, 58], [40, 49], [50, 49], [50, 58]] },
+             { c: '#B3E5FC', p: [[53, 58], [53, 49], [61, 49], [65, 58]] }],
+      strokes: [[[16, 74], [16, 60], [30, 60], [38, 46], [62, 46], [70, 60], [86, 60], [86, 74], [16, 74]],
+                [[34, 60], [40, 50], [50, 50], [50, 60]],
+                arc(32, 76, 9, 9, 270, -90, 24),
+                arc(68, 76, 9, 9, 270, -90, 24)] },
+    { id: 'boat', name: 'Boat', emoji: '\u26F5', sound: 'toot', color: '#00897B',
+      say: 'A boat! Can you draw the boat?',
+      fill: [{ c: '#A1887F', p: [[20, 66], [30, 84], [70, 84], [80, 66]] },
+             { c: '#FFB74D', p: [[50, 22], [50, 60], [78, 60]] }],
+      strokes: [[[20, 66], [30, 84], [70, 84], [80, 66], [20, 66]],
+                [[50, 66], [50, 20]],
+                [[50, 24], [50, 62], [80, 62], [50, 24]]] },
+    { id: 'rocket', name: 'Rocket', emoji: '\uD83D\uDE80', sound: 'blast', color: '#5E35B1',
+      say: 'A rocket! Can you draw the rocket?',
+      fill: [{ c: '#ECEFF1', p: [[38, 64], [38, 34], [50, 18], [62, 34], [62, 64]] },
+             { c: '#EF5350', p: [[38, 34], [50, 18], [62, 34]] },
+             { c: '#EF5350', a: 0.85, p: [[38, 64], [26, 82], [38, 78]] },
+             { c: '#EF5350', a: 0.85, p: [[62, 64], [74, 82], [62, 78]] },
+             { c: '#B3E5FC', p: arc(50, 46, 7, 7, 270, 630, 20) }],
+      strokes: [[[38, 64], [38, 34]].concat(arc(50, 34, 12, 16, 180, 360, 20), [[62, 64]]),
+                [[38, 64], [26, 82], [38, 78]],
+                [[62, 64], [74, 82], [62, 78]],
+                arc(50, 46, 7, 7, 270, -90, 20),
+                [[38, 64], [62, 64]]] },
+    { id: 'kite', name: 'Kite', emoji: '\uD83E\uDE81', sound: 'wind', color: '#8E24AA',
+      say: 'A kite! Can you draw the kite?',
+      fill: [{ c: '#CE93D8', p: [[50, 12], [74, 42], [50, 72], [26, 42]] },
+             { c: '#F48FB1', a: 0.6, p: [[50, 12], [74, 42], [50, 42]] }],
+      strokes: [[[50, 12], [74, 42], [50, 72], [26, 42], [50, 12]],
+                [[50, 12], [50, 72]],
+                [[26, 42], [74, 42]],
+                [[50, 72], [44, 82], [56, 88], [48, 96]]] },
+    { id: 'balloon', name: 'Balloon', emoji: '\uD83C\uDF88', sound: 'pop', color: '#E53935',
+      say: 'A balloon! Can you draw the balloon?',
+      fill: [{ c: '#EF5350', p: arc(50, 36, 23, 27, 270, 630, 40) }],
+      strokes: [arc(50, 36, 23, 27, 270, -90, 40),
+                [[44, 66], [50, 62], [56, 66]],
+                [[50, 66], [46, 78], [54, 88], [48, 97]]] },
+    { id: 'icecream', name: 'Ice cream', emoji: '\uD83C\uDF66', sound: 'slurp', color: '#F06292',
+      say: 'An ice cream! Can you draw the ice cream?',
+      fill: [{ c: '#D7A86E', p: [[36, 58], [64, 58], [50, 92]] },
+             { c: '#F8BBD0', p: arc(50, 44, 20, 16, 270, 630, 36) }],
+      strokes: [arc(50, 44, 20, 16, 270, -90, 36),
+                [[36, 58], [50, 92], [64, 58]]] },
+    { id: 'umbrella', name: 'Umbrella', emoji: '\u2602\uFE0F', sound: 'rain', color: '#00ACC1',
+      say: 'An umbrella! Can you draw the umbrella?',
+      fill: [{ c: '#4DD0E1', p: arc(50, 44, 32, 26, 180, 360, 32) }],
+      strokes: [arc(50, 44, 32, 26, 180, 360, 32),
+                [[50, 26], [50, 72]].concat(arc(43, 74, 7, 7, 0, 180, 14))] },
+    { id: 'apple', name: 'Apple', emoji: '\uD83C\uDF4E', sound: 'crunch', color: '#E53935',
+      say: 'An apple! Can you draw the apple?',
+      fill: [{ c: '#EF5350', p: arc(50, 56, 26, 24, 270, 630, 44) }],
+      strokes: [arc(50, 56, 26, 24, 270, -90, 44),
+                [[50, 34], [54, 20]],
+                arc(60, 24, 9, 5, 180, 360, 14)] },
+    { id: 'banana', name: 'Banana', emoji: '\uD83C\uDF4C', sound: 'splat', color: '#F9A825',
+      say: 'A banana! Can you draw the banana?',
+      fill: [{ c: '#FFE082', p: arc(50, 42, 28, 38, 180, 0, 26).concat([[50, 54], [22, 42]]) }],
+      strokes: [arc(50, 42, 28, 38, 180, 0, 26).concat([[50, 54], [22, 42]]),
+                [[22, 42], [15, 36]], [[78, 42], [85, 36]]] },
+    { id: 'cake', name: 'Cake', emoji: '\uD83C\uDF82', sound: 'party', color: '#F06292',
+      say: 'A birthday cake! Can you draw the cake?',
+      fill: [{ c: '#F8BBD0', p: [[28, 58], [72, 58], [72, 86], [28, 86]] },
+             { c: '#FFF3E0', p: [[28, 58], [35, 52], [42, 58], [50, 52], [58, 58], [65, 52], [72, 58]] },
+             { c: '#4FC3F7', p: [[47, 52], [53, 52], [53, 36], [47, 36]] },
+             { c: '#FFA000', p: [[50, 26], [53, 31], [50, 34], [47, 31]] }],
+      strokes: [[[28, 58], [72, 58], [72, 86], [28, 86], [28, 58]],
+                [[28, 58], [35, 52], [42, 58], [50, 52], [58, 58], [65, 52], [72, 58]],
+                [[50, 52], [50, 36]],
+                [[50, 26], [53, 31], [50, 34], [47, 31], [50, 26]]] },
+    { id: 'cup', name: 'Cup', emoji: '\uD83E\uDD64', sound: 'glug', color: '#1E88E5',
+      say: 'A cup! Can you draw the cup?',
+      fill: [{ c: '#64B5F6', p: [[34, 40], [37, 60], [41, 82], [59, 82], [63, 60], [66, 40]] }],
+      strokes: [[[34, 38], [37, 60], [41, 84], [59, 84], [63, 60], [66, 38]],
+                [[29, 38], [71, 38]],
+                arc(63, 56.5, 14, 11.5, 280, 100, 18)] },
+    { id: 'pencil', name: 'Pencil', emoji: '\u270F\uFE0F', sound: 'scribble', color: '#FB8C00',
+      say: 'A pencil! Can you draw the pencil?',
+      fill: [{ c: '#FFB74D', p: [[40, 30], [60, 30], [60, 78], [40, 78]] },
+             { c: '#FFE0B2', p: [[40, 30], [50, 8], [60, 30]] },
+             { c: '#4E342E', p: [[46.4, 16], [53.6, 16], [50, 8]] },
+             { c: '#F48FB1', p: [[40, 78], [60, 78], [60, 88], [40, 88]] }],
+      strokes: [[[40, 30], [60, 30], [60, 88], [40, 88], [40, 30]],
+                [[40, 30], [50, 8], [60, 30]],
+                [[46.4, 16], [53.6, 16]],
+                [[40, 78], [60, 78]]] }
   ];
 
   /* ---------- build glyph list ---------- */
@@ -403,12 +728,28 @@
     GLYPHS.push({
       id: id,
       cat: 'letters',
+      letterCase: 'big',
       name: upper,
       caption: word[0],
       emoji: word[1],
       color: ITEM_COLORS[i % ITEM_COLORS.length],
-      say: upper + ' is for ' + word[0] + '! Can you draw the letter ' + upper + '?',
+      say: 'Big ' + upper + ' is for ' + word[0] + '! Can you draw the big ' + upper + '?',
       strokes: LETTERS[id]
+    });
+  });
+
+  LETTER_IDS.forEach(function (id, i) {
+    var word = LETTER_WORDS[id];
+    GLYPHS.push({
+      id: 'sm-' + id,
+      cat: 'letters',
+      letterCase: 'small',
+      name: id,
+      caption: word[0].toLowerCase(),
+      emoji: word[1],
+      color: ITEM_COLORS[i % ITEM_COLORS.length],
+      say: 'Small ' + id + ' is for ' + word[0].toLowerCase() + '! Can you draw the small ' + id + '?',
+      strokes: LOWERCASE[id]
     });
   });
 
@@ -456,6 +797,23 @@
     });
   });
 
+  OBJECTS.forEach(function (o) {
+    GLYPHS.push({
+      id: o.id,
+      cat: 'objects',
+      name: o.name,
+      caption: o.name,
+      emoji: o.emoji,
+      sound: o.sound,
+      color: o.color,
+      fill: o.fill,
+      eyes: o.eyes,
+      mouth: o.mouth,
+      say: o.say,
+      strokes: o.strokes
+    });
+  });
+
   /* ---------- voice clips (praise / colors / ui) ---------- */
 
   var PRAISE = [
@@ -475,7 +833,14 @@
     ['tap-a-picture', 'Tap a picture to play!'],
     ['wow', 'Wow! So pretty!'],
     ['keep-going', 'Keep going! You can do it!'],
-    ['almost-there', 'Almost there!']
+    ['almost-there', 'Almost there!'],
+    ['tap-done', 'Tap the green check when you are done!'],
+    ['more-stars', 'You did it! Keep tracing to earn more stars!'],
+    ['one-star', 'You earned one star!'],
+    ['two-stars', 'You earned two stars!'],
+    ['three-stars', 'Wow! Three stars! You are a super star!'],
+    ['big-letters', 'Big letters!'],
+    ['small-letters', 'Small letters!']
   ];
 
   var VOICE_CLIPS = [];
@@ -495,9 +860,10 @@
   });
 
   var CATEGORIES = [
-    { id: 'animals', name: 'Animals', emoji: '\uD83D\uDC3E', color: '#EC407A', blurb: 'Meow! Woof! Moo!' },
+    { id: 'animals', name: 'Animals', emoji: '\uD83D\uDC3E', color: '#EC407A', blurb: 'Meow! Roar! Moo!' },
+    { id: 'objects', name: 'Objects', emoji: '\uD83D\uDE97', color: '#26A69A', blurb: 'Balls, cars & houses' },
     { id: 'shapes',  name: 'Shapes',  emoji: '\u2B50', color: '#FF9800', blurb: 'Stars, hearts & more' },
-    { id: 'letters', name: 'Letters', emoji: '\uD83D\uDC24', color: '#43A047', blurb: 'A all the way to Z' },
+    { id: 'letters', name: 'Letters', emoji: '\uD83D\uDC24', color: '#43A047', blurb: 'Big A and small a' },
     { id: 'numbers', name: 'Numbers', emoji: '\uD83D\uDD22', color: '#1E88E5', blurb: 'Zero to nine' }
   ];
 

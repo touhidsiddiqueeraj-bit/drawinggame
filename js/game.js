@@ -49,6 +49,8 @@
     this.time = 0;
     this.rect = { left: 0, top: 0 };
     this.destroyed = false;
+    // star mode: the app turns autoWin OFF and completes via the Done button
+    this.autoWin = true;
 
     var self = this;
     this._loop = function (t) { self._frame(t); };
@@ -380,11 +382,15 @@
     var p = this.totalSamples ? this.hitCount / this.totalSamples : 0;
     this.progress = p;
     this.onProgress(p, silent);
-    if (!this.completed && p >= COMPLETE_AT) {
+    if (!this.completed && p >= COMPLETE_AT && this.autoWin) {
       this.completed = true;
       this.onComplete();
     }
   };
+
+  // star mode: pass false to stop the 80% auto-fire; the app then
+  // finishes the glyph itself (via the Done button) using engine.progress.
+  DrawEngine.prototype.setAutoWin = function (on) { this.autoWin = !!on; };
 
   DrawEngine.prototype._replay = function () {
     // redraw stored strokes after a resize

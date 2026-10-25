@@ -365,6 +365,270 @@
         var v = [0.42, 0.26, 0.15][i];
         voice(t + dt, 0.16 - i * 0.03, 'triangle', 560 - i * 60, 175, v);
       });
+    },
+
+    /* ---- new animals (v1.2.0) ---- */
+
+    // lion: low raspy roar — saw glide down + growl wobble + breath
+    roar: function (t) {
+      var o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(115, t);
+      o.frequency.exponentialRampToValueAtTime(70, t + 0.75);
+      lfo(t, 0.8, 21, 14, o.frequency);
+      var f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 650; f.Q.value = 1.1;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.5, t + 0.12);
+      g.gain.setValueAtTime(0.5, t + 0.55);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.8);
+      o.connect(f); f.connect(g); g.connect(sfxGain);
+      o.start(t); o.stop(t + 0.85);
+      noise(t + 0.05, 0.6, 0.09, 'bandpass', 300, 200, 0.8);
+    },
+
+    // elephant: brassy trumpet — rising square with vibrato
+    trumpet: function (t) {
+      var o = ctx.createOscillator();
+      o.type = 'square';
+      o.frequency.setValueAtTime(210, t);
+      o.frequency.exponentialRampToValueAtTime(392, t + 0.28);
+      o.frequency.setValueAtTime(392, t + 0.5);
+      o.frequency.exponentialRampToValueAtTime(300, t + 0.75);
+      lfo(t, 0.78, 7, 9, o.frequency);
+      var f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 1400; f.Q.value = 2;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.38, t + 0.06);
+      g.gain.setValueAtTime(0.38, t + 0.6);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.78);
+      o.connect(f); f.connect(g); g.connect(sfxGain);
+      o.start(t); o.stop(t + 0.82);
+    },
+
+    // monkey: two quick "oo-oo" pitch hops
+    chatter: function (t) {
+      [0, 0.17].forEach(function (dt) {
+        voice(t + dt, 0.11, 'sine', 430, 610, 0.4);
+        voice(t + dt, 0.11, 'triangle', 860, 1220, 0.12);
+      });
+      voice(t + 0.36, 0.16, 'sine', 520, 380, 0.36);
+    },
+
+    // penguin: goose-style braying honk (two nasal notes)
+    honk: function (t) {
+      [0, 0.28].forEach(function (dt, i) {
+        voice(t + dt, 0.2, 'square', i ? 250 : 300, i ? 235 : 285, 0.3, [1100, 1.6], 'bandpass');
+        noise(t + dt, 0.06, 0.05, 'bandpass', 1600, 1200, 1.5);
+      });
+    },
+
+    // frog: two croaks — pulsed low saw gliss
+    ribbit: function (t) {
+      [0, 0.3].forEach(function (dt) {
+        var o = ctx.createOscillator();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(150, t + dt);
+        o.frequency.exponentialRampToValueAtTime(95, t + dt + 0.2);
+        var g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, t + dt);
+        g.gain.exponentialRampToValueAtTime(0.4, t + dt + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dt + 0.22);
+        var f = ctx.createBiquadFilter();
+        f.type = 'lowpass'; f.frequency.value = 500;
+        o.connect(f); f.connect(g); g.connect(sfxGain);
+        o.start(t + dt); o.stop(t + dt + 0.25);
+      });
+    },
+
+    // turtle: two slow, deep chomps
+    chomp: function (t) {
+      [0, 0.4].forEach(function (dt) {
+        voice(t + dt, 0.13, 'sine', 120, 62, 0.5);
+        noise(t + dt, 0.07, 0.1, 'lowpass', 400, 200);
+      });
+    },
+
+    // snail: bubbly squelch — slippery gliss with pops
+    squelch: function (t) {
+      voice(t, 0.5, 'sine', 160, 420, 0.3, [700, 2], 'bandpass');
+      voice(t + 0.1, 0.4, 'triangle', 300, 130, 0.14);
+      [0.22, 0.34, 0.48].forEach(function (dt, i) {
+        osc('sine', 500 + i * 190, t + dt, 0.05, 0.16);
+      });
+    },
+
+    // ladybug: delicate high chimes
+    tinkle: function (t) {
+      [1046, 1318, 1568, 2093].forEach(function (fr, i) {
+        osc('sine', fr, t + i * 0.09, 0.22, 0.18);
+        osc('sine', fr * 1.5, t + i * 0.09, 0.1, 0.05);
+      });
+    },
+
+    // bear: slow low growl with throat wobble
+    growl: function (t) {
+      var o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(85, t);
+      o.frequency.exponentialRampToValueAtTime(62, t + 0.85);
+      lfo(t, 0.9, 16, 10, o.frequency);
+      var f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 420; f.Q.value = 1.4;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.42, t + 0.15);
+      g.gain.setValueAtTime(0.42, t + 0.6);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+      o.connect(f); f.connect(g); g.connect(sfxGain);
+      o.start(t); o.stop(t + 0.95);
+    },
+
+    // mouse: two tiny high squeaks
+    squeak: function (t) {
+      [0, 0.16].forEach(function (dt, i) {
+        voice(t + dt, 0.1, 'sine', 1750 + i * 250, 2450 + i * 250, 0.22);
+      });
+    },
+
+    /* ---- objects (v1.2.0) ---- */
+
+    // ball: three bounces, each lower and quieter
+    bounce: function (t) {
+      [0, 0.26, 0.46].forEach(function (dt, i) {
+        var v = [0.4, 0.28, 0.16][i];
+        voice(t + dt, 0.13, 'sine', 330 - i * 55, 150 - i * 25, v);
+        noise(t + dt, 0.03, 0.07, 'lowpass', 900, 500);
+      });
+    },
+
+    // house: knock knock
+    knock: function (t) {
+      [0, 0.22].forEach(function (dt) {
+        voice(t + dt, 0.07, 'triangle', 195, 140, 0.5);
+        noise(t + dt, 0.05, 0.2, 'bandpass', 850, 500, 1.2);
+      });
+    },
+
+    // tree: leaves rustling in the breeze
+    rustle: function (t) {
+      noise(t, 0.35, 0.16, 'bandpass', 2400, 1500, 0.7);
+      noise(t + 0.24, 0.4, 0.19, 'bandpass', 2000, 2800, 0.7);
+    },
+
+    // flower: twinkly shimmer
+    twinkle: function (t) {
+      var notes = [1318, 1568, 2093, 2637];
+      notes.forEach(function (fr, i) {
+        osc('sine', fr, t + i * 0.06, 0.3, 0.14);
+      });
+    },
+
+    // car: engine vroom — low saw revving up and settling
+    vroom: function (t) {
+      var o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(65, t);
+      o.frequency.exponentialRampToValueAtTime(155, t + 0.45);
+      o.frequency.setValueAtTime(155, t + 0.6);
+      o.frequency.exponentialRampToValueAtTime(110, t + 0.95);
+      var f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 520; f.Q.value = 1.2;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.42, t + 0.1);
+      g.gain.setValueAtTime(0.42, t + 0.7);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1);
+      o.connect(f); f.connect(g); g.connect(sfxGain);
+      o.start(t); o.stop(t + 1.05);
+      noise(t, 0.9, 0.06, 'lowpass', 400, 700);
+    },
+
+    // boat: two soft steam-whistle toots
+    toot: function (t) {
+      voice(t, 0.24, 'square', 233, 226, 0.24, [900, 1.2], 'lowpass');
+      voice(t, 0.24, 'triangle', 466, 452, 0.1);
+      voice(t + 0.36, 0.34, 'square', 196, 190, 0.26, [760, 1.2], 'lowpass');
+      voice(t + 0.36, 0.34, 'triangle', 392, 380, 0.1);
+    },
+
+    // rocket: blast-off — noise swell + rising pitch
+    blast: function (t) {
+      noise(t, 0.9, 0.22, 'bandpass', 250, 1800, 0.6);
+      voice(t, 0.85, 'sawtooth', 90, 400, 0.2, [700, 1], 'lowpass');
+      voice(t + 0.5, 0.5, 'triangle', 500, 700, 0.12);
+    },
+
+    // kite: wind whistling past
+    wind: function (t) {
+      noise(t, 0.4, 0.18, 'bandpass', 700, 1400, 1.8);
+      noise(t + 0.2, 0.45, 0.2, 'bandpass', 1400, 600, 1.8);
+      osc('sine', 900, t + 0.15, 0.3, 0.05, 1250);
+    },
+
+    // balloon: squeaky rub then a pop
+    pop: function (t) {
+      voice(t, 0.3, 'sine', 500, 1100, 0.14);
+      voice(t + 0.02, 0.28, 'triangle', 505, 1150, 0.06);
+      noise(t + 0.34, 0.06, 0.5, 'lowpass', 3000, 800);
+      osc('sine', 240, t + 0.34, 0.1, 0.3, 90);
+    },
+
+    // ice cream: long slurp with a happy finish
+    slurp: function (t) {
+      voice(t, 0.55, 'sawtooth', 190, 480, 0.2, [900, 2.5], 'bandpass');
+      [0.18, 0.32, 0.46].forEach(function (dt, i) {
+        noise(t + dt, 0.05, 0.08, 'bandpass', 1200 + i * 300, 900, 2);
+      });
+      voice(t + 0.6, 0.14, 'sine', 520, 780, 0.2);
+    },
+
+    // umbrella: light rain patter
+    rain: function (t) {
+      for (var i = 0; i < 9; i++) {
+        noise(t + i * 0.09 + (i % 3) * 0.02, 0.04, 0.11, 'bandpass',
+          2600 + (i % 4) * 500, 1800, 3);
+      }
+      noise(t, 0.85, 0.045, 'highpass', 5000, 6000);
+    },
+
+    // apple: two crunchy bites
+    crunch: function (t) {
+      [0, 0.3].forEach(function (dt) {
+        noise(t + dt, 0.09, 0.34, 'bandpass', 2000, 700, 0.9);
+        noise(t + dt + 0.04, 0.06, 0.22, 'bandpass', 1400, 500, 1);
+      });
+    },
+
+    // banana: soft low splat
+    splat: function (t) {
+      voice(t, 0.14, 'sine', 170, 65, 0.4);
+      noise(t, 0.12, 0.2, 'lowpass', 900, 300);
+      noise(t + 0.05, 0.09, 0.12, 'bandpass', 500, 250, 1);
+    },
+
+    // cake: party horn — two cheery notes
+    party: function (t) {
+      voice(t, 0.18, 'square', 392, 396, 0.22, [1000, 1.5], 'lowpass');
+      voice(t + 0.2, 0.32, 'square', 523, 530, 0.24, [1100, 1.5], 'lowpass');
+      voice(t + 0.2, 0.3, 'triangle', 1046, 1060, 0.08);
+    },
+
+    // cup: water glug-glugging
+    glug: function (t) {
+      [0, 0.18, 0.33].forEach(function (dt, i) {
+        voice(t + dt, 0.1, 'sine', 420 - i * 70, 190 - i * 35, 0.32);
+        noise(t + dt, 0.05, 0.06, 'lowpass', 700, 400);
+      });
+    },
+
+    // pencil: scratchy scribbles
+    scribble: function (t) {
+      [0, 0.16, 0.32].forEach(function (dt, i) {
+        noise(t + dt, 0.11, 0.16, 'bandpass', 2200 - i * 250, 2600 - i * 200, 2.2);
+      });
     }
   };
 

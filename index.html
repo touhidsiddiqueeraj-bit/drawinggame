@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Draw &amp; Learn">
-  <meta name="description" content="A joyful tracing game for toddlers — draw animals, shapes, letters and numbers with colors, sparkles, animal sounds and cheerful voices.">
+  <meta name="description" content="A joyful tracing game for toddlers — draw animals, objects, shapes, letters and numbers with colors, sparkles, sounds and cheerful voices.">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -54,9 +54,23 @@
           <span class="tl"><b style="--i:5;--c:#1E88E5">L</b><b style="--i:6;--c:#5E35B1">e</b><b style="--i:7;--c:#D81B60">a</b><b style="--i:8;--c:#F4511E">r</b><b style="--i:9;--c:#00897B">n</b></span>
           <span class="tl">!</span>
         </h1>
-        <p class="tagline">Trace animals, shapes, letters &amp; numbers!</p>
+        <p class="tagline">Trace animals, objects, shapes, letters &amp; numbers!</p>
 
         <div class="category-list" id="category-list"></div>
+
+        <div class="mode-setting" id="mode-setting">
+          <div class="mode-title">&#127918; How to finish a picture</div>
+          <div class="mode-toggle" id="mode-toggle">
+            <button class="mode-btn" data-mode="auto" type="button">
+              <span class="mode-emoji">&#9889;</span>
+              <span class="mode-txt"><b>Auto-go</b><i>Hop to the next one at 80%</i></span>
+            </button>
+            <button class="mode-btn" data-mode="stars" type="button">
+              <span class="mode-emoji">&#11088;</span>
+              <span class="mode-txt"><b>Stars + &#10003; Done</b><i>Trace more for &#11088;&#11088;&#11088;, then tap Done</i></span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <p class="foot-note">Made with &#10084;&#65039; for little artists</p>
@@ -69,6 +83,10 @@
         <div class="topbar-title" id="picker-title">Shapes</div>
         <div class="topbar-spacer"></div>
       </header>
+      <div class="case-toggle hidden" id="case-toggle">
+        <button class="case-btn" id="case-big" type="button">&#128292; Big A</button>
+        <button class="case-btn" id="case-small" type="button">&#128293; small a</button>
+      </div>
       <p class="picker-hint" id="picker-hint">Tap a picture to play!</p>
       <div class="grid" id="picker-grid"></div>
     </section>
@@ -78,7 +96,7 @@
       <header class="topbar">
         <button class="icon-btn back-btn" id="btn-back-draw" aria-label="Back">&#11013;&#65039;</button>
         <div class="topbar-title name-pill" id="draw-name">A</div>
-        <button class="icon-btn sound-btn" id="btn-sound" aria-label="Play the animal sound">&#128063;</button>
+        <button class="icon-btn sound-btn" id="btn-sound" aria-label="Play the sound">&#128063;</button>
         <button class="icon-btn replay-btn" id="btn-replay" aria-label="Hear it again">&#128266;</button>
         <button class="icon-btn music-btn" id="btn-music-draw" aria-label="Music on or off"><span class="music-note">&#127925;</span></button>
       </header>
@@ -94,6 +112,7 @@
         <canvas id="draw-canvas"></canvas>
         <button class="float-btn hint-btn" id="btn-hint" aria-label="Show me">&#129668;</button>
         <button class="float-btn clear-btn" id="btn-clear" aria-label="Start over">&#129529;</button>
+        <button class="float-btn done-btn hidden" id="btn-done" aria-label="Done!">&#9989;</button>
       </div>
 
       <div class="palette-bar" id="palette-bar"></div>

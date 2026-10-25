@@ -12,13 +12,17 @@
     category: null,
     item: null,
     color: window.BRUSH_COLORS[0],
-    completed: loadCompleted()
+    completed: loadCompleted(),
+    stars: loadStars(),
+    mode: loadMode(),          // 'auto' (hop on at 80%) | 'stars' (Done button + 1-3 stars)
+    letterCase: loadCase()     // 'big' | 'small' (letters picker toggle)
   };
 
   var engine = null;
   var milestones = {};
   var almostSpoken = false;
   var autoAdvanceTimer = null;
+  var starReady = false;      // star mode: has the 80% "more stars" cue fired?
   var demoMode = /[?&]demo=1/.test(location.search);
 
   /* ================= persistence ================= */
@@ -35,6 +39,26 @@
       state.completed.push(id);
       saveCompleted();
     }
+  }
+  function loadStars() {
+    try { return JSON.parse(localStorage.getItem('dl_stars') || '{}'); }
+    catch (e) { return {}; }
+  }
+  // keep the BEST star count per glyph (re-tracing can only improve it)
+  function saveStars(id, n) {
+    if ((state.stars[id] || 0) >= n) return;
+    state.stars[id] = n;
+    try { localStorage.setItem('dl_stars', JSON.stringify(state.stars)); } catch (e) {}
+  }
+  function loadMode() {
+    return localStorage.getItem('dl_mode') === 'stars' ? 'stars' : 'auto';
+  }
+  function loadCase() {
+    return localStorage.getItem('dl_case') === 'small' ? 'small' : 'big';
+  }
+  // 1 star at 80%, 2 at 90%, 3 at (almost) perfect
+  function starsFor(p) {
+    return p >= 0.995 ? 3 : p >= 0.9 ? 2 : p >= 0.8 ? 1 : 0;
   }
 
   /* ================= screens ================= */
@@ -68,7 +92,54 @@
       });
       list.appendChild(btn);
     });
+    refreshModeToggle();
     refreshMusicButtons();
+  }
+
+  /* ================= pass-mode setting ================= */
+
+  function refreshModeToggle() {
+    document.querySelectorAll('#mode-toggle .mode-btn').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-mode') === state.mode);
+    });
+  }
+  function refreshDoneButton() {
+    var b = $('btn-done');
+    if (b) b.classList.toggle('hidden', state.mode !== 'stars');
+  }
+  function setMode(m) {
+    if (state.mode === m) return;
+    state.mode = m;
+    try { localStorage.setItem('dl_mode', m); } catch (e) {}
+    refreshModeToggle();
+    refreshDoneButton();
+    if (engine) engine.setAutoWin(m === 'auto');
+    window.SoundKit.SFX.pop(m === 'stars' ? 0.8 : 1.2);
+  }
+
+  /* ================= letters case toggle ================= */
+
+  function refreshCaseButtons() {
+    var b = $('case-big'), s = $('case-small');
+    if (b) b.classList.toggle('active', state.letterCase === 'big');
+    if (s) s.classList.toggle('active', state.letterCase === 'small');
+  }
+  function setLetterCase(c) {
+    if (state.letterCase === c) return;
+    state.letterCase = c;
+    try { localStorage.setItem('dl_case', c); } catch (e) {}
+    window.SoundKit.SFX.pop(1.15);
+    window.SoundKit.Voice.play(c === 'small' ? 'small-letters' : 'big-letters');
+    openPicker('letters');
+  }
+
+  // items of a category — the letters picker only shows the active case
+  function categoryItems(cat) {
+    return window.GLYPHS.filter(function (g) {
+      if (g.cat !== cat) return false;
+      if (cat === 'letters') return (g.letterCase || 'big') === state.letterCase;
+      return true;
+    });
   }
 
   /* ================= PICKER ================= */
@@ -77,10 +148,13 @@
     state.category = catId;
     var cat = window.CATEGORIES.filter(function (c) { return c.id === catId; })[0];
     $('picker-title').textContent = cat.emoji + ' ' + cat.name;
+    var toggle = $('case-toggle');
+    if (toggle) toggle.classList.toggle('hidden', catId !== 'letters');
+    refreshCaseButtons();
     var grid = $('picker-grid');
     grid.innerHTML = '';
 
-    var items = window.GLYPHS.filter(function (g) { return g.cat === catId; });
+    var items = categoryItems(catId);
     items.forEach(function (g, i) {
       var card = document.createElement('button');
       card.className = 'item-card';
@@ -92,10 +166,12 @@
       label.className = 'card-label';
       label.textContent = g.caption;
       card.appendChild(label);
-      if (state.completed.indexOf(g.id) !== -1) {
+      var starCount = state.stars[g.id] ||
+        (state.completed.indexOf(g.id) !== -1 ? 1 : 0); // legacy: done pre-stars
+      if (starCount > 0) {
         var star = document.createElement('span');
         star.className = 'card-star';
-        star.textContent = '\u2B50';
+        star.textContent = new Array(starCount + 1).join('\u2B50');
         card.appendChild(star);
       }
       card.addEventListener('click', function () {
@@ -216,17 +292,25 @@
     state.item = glyph;
     milestones = { 25: false, 50: false, 75: false };
     almostSpoken = false;
+    starReady = false;
     hideCelebration();
     if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
 
     var nameEl = $('draw-name');
     nameEl.textContent = glyph.cat === 'letters' ? (glyph.name + ' is for ' + glyph.caption) : (glyph.cat === 'numbers' ? glyph.caption : glyph.name);
 
-    // animal sound button: only for critters, shows the animal itself
+    // sound button: animals & objects with a sound (shows the thing itself)
     var soundBtn = $('btn-sound');
     if (soundBtn) {
       soundBtn.classList.toggle('hidden', !glyph.sound);
       if (glyph.sound) soundBtn.textContent = glyph.emoji;
+    }
+
+    // star mode: show the big green Done button
+    var doneBtn = $('btn-done');
+    if (doneBtn) {
+      doneBtn.classList.toggle('hidden', state.mode !== 'stars');
+      doneBtn.classList.remove('ready');
     }
 
     if (!engine) {
@@ -236,6 +320,7 @@
       });
     }
     engine.setColor(state.color);
+    engine.setAutoWin(state.mode === 'auto');
     engine.setItem(glyph);
     showScreen('draw');
     buildPalette();
@@ -256,7 +341,7 @@
   }
 
   function nextItemsIds(glyph, n) {
-    var items = window.GLYPHS.filter(function (g) { return g.cat === glyph.cat; });
+    var items = categoryItems(glyph.cat);
     var idx = items.indexOf(glyph);
     var out = [];
     for (var i = 1; i <= n; i++) out.push(items[(idx + i) % items.length].id);
@@ -282,16 +367,43 @@
       almostSpoken = true;
       window.SoundKit.Voice.play('almost-there');
     }
+    // star mode: at 80% the Done button wakes up and invites more tracing
+    if (state.mode === 'stars' && pct >= 80 && !starReady) {
+      starReady = true;
+      window.SoundKit.Voice.play('more-stars');
+      var db = $('btn-done');
+      if (db) {
+        db.classList.add('ready');
+        db.classList.remove('wiggle');
+        void db.offsetWidth;
+        db.classList.add('wiggle');
+      }
+    }
   }
 
   function onComplete() {
-    markCompleted(state.item.id);
-    window.SoundKit.SFX.fanfare();
-    var glyph = state.item;
-    var praises = ['great-job', 'amazing', 'wonderful', 'perfect', 'you-did-it', 'super-star', 'fantastic', 'beautiful'];
-    window.SoundKit.Voice.play(praises[(Math.random() * praises.length) | 0]);
+    // fired by the engine in auto mode at >= 80% coverage
+    finishWithStars(engine ? Math.max(engine.progress, 0.8) : 1);
+  }
 
-    // the animal says thanks in its own voice
+  function finishWithStars(p) {
+    if (!state.item) return;
+    var glyph = state.item;
+    var stars = starsFor(p);
+    markCompleted(glyph.id);
+    if (stars > 0) saveStars(glyph.id, stars);
+    window.SoundKit.SFX.fanfare();
+
+    // voice: star count in star mode, classic praise in auto mode
+    var praises = ['great-job', 'amazing', 'wonderful', 'perfect', 'you-did-it', 'super-star', 'fantastic', 'beautiful'];
+    var pickedPraise = praises[(Math.random() * praises.length) | 0];
+    if (state.mode === 'stars' && stars > 0) {
+      window.SoundKit.Voice.play(stars >= 3 ? 'three-stars' : stars === 2 ? 'two-stars' : 'one-star');
+    } else {
+      window.SoundKit.Voice.play(pickedPraise);
+    }
+
+    // the animal / object says thanks in its own voice
     if (glyph.sound) {
       setTimeout(function () {
         if (state.item === glyph) window.SoundKit.Animal.play(glyph.sound);
@@ -308,11 +420,18 @@
     $('celebrate-caption').textContent = glyph.cat === 'letters'
       ? glyph.name + ' is for ' + glyph.caption + '!'
       : 'You drew the ' + glyph.caption.toLowerCase() + '!';
+    var starsHtml = '';
+    for (var i = 1; i <= 3; i++) {
+      starsHtml += '<span class="cstar' + (i <= stars ? ' on' : '') + '">\u2B50</span>';
+    }
+    $('celebrate-stars').innerHTML = starsHtml;
     var praiseTexts = { 'great-job': 'Great job!', 'amazing': 'Amazing!', 'wonderful': 'Wonderful!',
       'perfect': 'Perfect!', 'you-did-it': 'You did it!', 'super-star': 'Super star!',
       'fantastic': 'Fantastic!', 'beautiful': 'So beautiful!' };
-    var picked = praises[(Math.random() * praises.length) | 0];
-    $('celebrate-text').textContent = praiseTexts[picked] || 'Great job!';
+    var starTexts = { 1: 'One star!', 2: 'Two stars!', 3: 'Three stars!' };
+    $('celebrate-text').textContent = (state.mode === 'stars' && stars > 0)
+      ? (starTexts[stars] || 'Great job!')
+      : (praiseTexts[pickedPraise] || 'Great job!');
     showCelebration();
 
     autoAdvanceTimer = setTimeout(function () {
@@ -338,7 +457,7 @@
 
   function goNext() {
     if (!state.item) return;
-    var items = window.GLYPHS.filter(function (g) { return g.cat === state.item.cat; });
+    var items = categoryItems(state.item.cat);
     var idx = items.indexOf(state.item);
     openDraw(items[(idx + 1) % items.length]);
   }
@@ -421,6 +540,9 @@
       if (engine) engine.clear();
       milestones = { 25: false, 50: false, 75: false };
       almostSpoken = false;
+      starReady = false;
+      var db = $('btn-done');
+      if (db) db.classList.remove('ready');
     });
     $('btn-next').addEventListener('click', function () {
       window.SoundKit.SFX.pop(1.4);
@@ -428,6 +550,32 @@
     });
     $('btn-music-home').addEventListener('click', toggleMusic);
     $('btn-music-draw').addEventListener('click', toggleMusic);
+
+    // pass-mode setting (home) + letters case toggle (picker)
+    document.querySelectorAll('#mode-toggle .mode-btn').forEach(function (b) {
+      b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); });
+    });
+    var caseBig = $('case-big'), caseSmall = $('case-small');
+    if (caseBig) caseBig.addEventListener('click', function () { setLetterCase('big'); });
+    if (caseSmall) caseSmall.addEventListener('click', function () { setLetterCase('small'); });
+
+    // star mode: the big green Done button
+    var doneBtn = $('btn-done');
+    if (doneBtn) {
+      doneBtn.addEventListener('click', function () {
+        window.SoundKit.SFX.pop(1.5);
+        if (!engine || !state.item || autoAdvanceTimer) return; // already celebrating
+        if (engine.progress < 0.8) {
+          window.SoundKit.Voice.play('keep-going');
+          engine.hint();
+          doneBtn.classList.remove('wiggle');
+          void doneBtn.offsetWidth;
+          doneBtn.classList.add('wiggle');
+          return;
+        }
+        finishWithStars(engine.progress);
+      });
+    }
 
     // welcome voice once interaction is possible (autoplay-safe)
     var welcomed = false;
