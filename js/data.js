@@ -221,11 +221,25 @@
     return pts;
   }
 
+  // Egg outline (narrow at the top, wider at the bottom — chibi critter head).
+  // Same angle convention as arc(); rx interpolates rxTop→rxBottom.
+  function eggPts(cx, cy, rxTop, rxBottom, ry, a0, a1, n) {
+    var pts = [];
+    for (var i = 0; i <= n; i++) {
+      var t = ((a0 + (a1 - a0) * i / n) * Math.PI) / 180;
+      var rx = rxBottom + (rxTop - rxBottom) * (1 - Math.sin(t)) / 2;
+      pts.push([cx + rx * Math.cos(t), cy + ry * Math.sin(t)]);
+    }
+    return pts;
+  }
+
   // Each animal: traceable outline strokes + its very own sound (see audio.js)
-  // PLUS the two things that make a critter readable BEFORE it is traced:
+  // PLUS the things that make a critter readable BEFORE it is traced:
   //   fill — soft pre-applied color regions: [{ c: '#hex', p: [closed pts], a: alpha }]
   //   eyes — decorative (non-traceable) eyes: [x, y, radius] or [x, y, radius, 'w']
-  //          ('w' = white sclera + pupil, for dark faces like the sheep's)
+  //          ('w' = white sclera + pupil, for dark faces)
+  //   mouth — decorative smile: [cx, cy, halfWidth, depth, 'arc'|'cat']
+  //          ('arc' = single smile curve, 'cat' = classic ω double bump)
   //   color — the road/card color, tuned to the animal's natural hue.
   var DUCK_BODY = [[48, 40], [58, 44], [68, 49], [79, 44], [75, 58], [68, 66],
                    [56, 72], [42, 72], [30, 66], [23, 56], [22, 46], [30, 39], [42, 36]];
@@ -233,8 +247,12 @@
   var ANIMALS = [
     { id: 'cat', name: 'Cat', emoji: '\uD83D\uDC31', sound: 'meow', color: '#FB8C00',
       say: 'A cat! Can you draw the cat?',
-      fill: [{ c: '#FFC66E', p: arc(50, 58, 30, 28, 270, 630, 40) }],
-      eyes: [[41, 53, 3.4], [59, 53, 3.4]],
+      fill: [{ c: '#FFC66E', p: arc(50, 58, 30, 28, 270, 630, 40) },
+             { c: '#F06292', a: 0.8, p: [[46.5, 58], [53.5, 58], [50, 63]] },
+             { c: '#FF9E80', a: 0.35, p: arc(33, 60, 4.5, 3, 270, 630, 16) },
+             { c: '#FF9E80', a: 0.35, p: arc(67, 60, 4.5, 3, 270, 630, 16) }],
+      eyes: [[41, 52, 3.4], [59, 52, 3.4]],
+      mouth: [50, 65, 5.5, 4.5, 'cat'],
       strokes: [arc(50, 58, 30, 28, 270, -90, 40),
                 [[29, 40], [21, 14], [41, 33]],
                 [[71, 40], [79, 14], [59, 33]]] },
@@ -253,8 +271,11 @@
       fill: [{ c: '#FCE4EC', p: arc(50, 70, 24, 19, 270, 630, 36) },
              { c: '#FFC1D8', a: 0.4, p: arc(38, 34, 4, 14, 270, 630, 20) },
              { c: '#FFC1D8', a: 0.4, p: arc(62, 34, 4, 14, 270, 630, 20) },
-             { c: '#F06292', a: 0.5, p: arc(50, 71, 2.5, 1.8, 270, 630, 12) }],
-      eyes: [[43, 66, 3], [57, 66, 3]],
+             { c: '#F06292', a: 0.8, p: [[46.5, 67], [53.5, 67], [50, 72]] },
+             { c: '#F8BBD0', a: 0.45, p: arc(37, 72, 4, 3, 270, 630, 14) },
+             { c: '#F8BBD0', a: 0.45, p: arc(63, 72, 4, 3, 270, 630, 14) }],
+      eyes: [[43, 64, 3.2], [57, 64, 3.2]],
+      mouth: [50, 76, 5, 3.5, 'arc'],
       strokes: [arc(38, 34, 8, 20, 270, -90, 28),
                 arc(62, 34, 8, 20, 270, -90, 28),
                 arc(50, 70, 24, 19, 270, -90, 36)] },
@@ -269,16 +290,19 @@
                 [[22, 28], [8, 32], [22, 36]]] },
     { id: 'chick', name: 'Chick', emoji: '\uD83D\uDC24', sound: 'cheep', color: '#F57F17',
       say: 'A little chick! Can you draw the chick?',
-      fill: [{ c: '#FFD93B', p: arc(48, 52, 27, 25, 270, 630, 40) },
-             { c: '#FF9F43', a: 0.45, p: [[73, 46], [88, 53], [73, 60]] }],
-      eyes: [[40, 46, 3.2], [56, 46, 3.2]],
-      strokes: [arc(48, 52, 27, 25, 270, -90, 40),
-                [[73, 46], [88, 53], [73, 60]],
-                arc(45, 57, 11, 8, 150, 30, 18),
-                [[44, 26], [40, 17]],
-                [[54, 26], [58, 17]],
-                [[42, 77], [37, 92]],
-                [[56, 77], [61, 92]]] },
+      fill: [{ c: '#FFD93B', a: 0.5, p: arc(50, 54, 26, 24, 270, 630, 40) },
+             { c: '#FFA000', a: 0.85, p: [[45, 53], [50, 48], [55, 53], [50, 58]] },
+             { c: '#FFAB40', a: 0.35, p: arc(34, 51, 3.5, 2.8, 270, 630, 14) },
+             { c: '#FFAB40', a: 0.35, p: arc(66, 51, 3.5, 2.8, 270, 630, 14) }],
+      eyes: [[41, 46, 3.2], [59, 46, 3.2]],
+      strokes: [arc(50, 54, 26, 24, 270, -90, 40),
+                [[45, 53], [50, 48], [55, 53], [50, 58], [45, 53]],
+                [[44, 31], [40, 22]],
+                [[56, 31], [60, 22]],
+                arc(41, 63, 11, 9, 120, 240, 14),
+                arc(59, 63, 11, 9, -60, 60, 14),
+                [[42, 78], [37, 93]],
+                [[56, 78], [61, 93]]] },
     { id: 'cow', name: 'Cow', emoji: '\uD83D\uDC2E', sound: 'moo', color: '#6D4C41',
       say: 'A cow! Can you draw the cow?',
       fill: [{ c: '#FDF3E7', p: arc(50, 56, 38, 24, 270, 630, 44) },
@@ -296,15 +320,20 @@
                 arc(50, 68, 20, 10, 270, -90, 28)] },
     { id: 'sheep', name: 'Sheep', emoji: '\uD83D\uDC11', sound: 'baa', color: '#8D6E63',
       say: 'A sheep! Can you draw the sheep?',
-      fill: [{ c: '#F4EEE1', a: 0.5, p: cloudPts(50, 40, 34, 25, 7, 0.11) },
-             { c: '#4E342E', a: 0.85, p: arc(50, 67, 14, 13, 270, 630, 32) }],
-      eyes: [[44, 62, 3.4, 'w'], [56, 62, 3.4, 'w']],
-      strokes: [cloudPts(50, 40, 34, 25, 7, 0.11, -55, 235),
-                arc(50, 67, 14, 13, 270, -90, 32),
-                [[38, 58], [25, 62], [38, 68]],
-                [[62, 58], [75, 62], [62, 68]],
-                [[40, 76], [37, 92]],
-                [[60, 76], [63, 92]]] },
+      // Chibi head-only sheep (classic clipart look): big soft face, woolly
+      // "hat" cloud with a scalloped brim, leaf ears, ω nose marks.
+      fill: [{ c: '#FBF3E3', a: 0.95, p: eggPts(50, 58, 19, 27, 31, 270, 630, 44) },
+             { c: '#EFE5D0', a: 0.92, p: cloudPts(50, 25, 26, 15, 7, 0.11) },
+             { c: '#F8BBD0', a: 0.6, p: arc(17, 60, 4.5, 5, 270, 630, 16) },
+             { c: '#F8BBD0', a: 0.6, p: arc(83, 60, 4.5, 5, 270, 630, 16) },
+             { c: '#F48FB1', a: 0.4, p: arc(36, 61, 4, 3, 270, 630, 14) },
+             { c: '#F48FB1', a: 0.4, p: arc(64, 61, 4, 3, 270, 630, 14) }],
+      eyes: [[42, 51, 3.4], [58, 51, 3.4]],
+      mouth: [50, 65, 5.5, 4, 'cat'],
+      strokes: [cloudPts(50, 25, 26, 15, 7, 0.11, 0, 360),
+                eggPts(50, 58, 19, 27, 31, 180, 0, 30),
+                [[26, 53], [18, 52], [10, 55], [7, 60], [10, 65], [18, 68], [26, 68]],
+                [[74, 53], [82, 52], [90, 55], [93, 60], [90, 65], [82, 68], [74, 68]]] },
     { id: 'fish', name: 'Fish', emoji: '\uD83D\uDC1F', sound: 'blub', color: '#FF7043',
       say: 'A fish! Can you draw the fish?',
       fill: [{ c: '#FFAB91', p: arc(44, 50, 30, 21, 270, 630, 44) },
@@ -314,15 +343,19 @@
                 [[74, 50], [88, 34], [82, 50], [88, 66], [74, 50]]] },
     { id: 'bee', name: 'Bee', emoji: '\uD83D\uDC1D', sound: 'buzz', color: '#FFA000',
       say: 'A buzzy bee! Can you draw the bee?',
-      fill: [{ c: '#FFE66D', p: arc(50, 60, 26, 17, 270, 630, 40) },
-             { c: '#6D4C41', a: 0.35, p: [[38, 54], [44, 54], [44, 74], [38, 74]] },
-             { c: '#6D4C41', a: 0.35, p: [[58, 54], [64, 54], [64, 74], [58, 74]] },
+      // Yellow face zone on top (eyes + smile + rosy cheeks), dark stripes below.
+      fill: [{ c: '#FFE66D', a: 0.45, p: arc(50, 60, 26, 17, 270, 630, 40) },
+             { c: '#6D4C41', a: 0.35, p: [[38, 59], [44, 59], [44, 73], [38, 73]] },
+             { c: '#6D4C41', a: 0.35, p: [[56, 59], [62, 59], [62, 73], [56, 73]] },
              { c: '#D7ECFF', a: 0.5, p: arc(36, 32, 14, 11, 270, 630, 28) },
-             { c: '#D7ECFF', a: 0.5, p: arc(64, 32, 14, 11, 270, 630, 28) }],
-      eyes: [[44, 50, 2.8], [56, 50, 2.8]],
+             { c: '#D7ECFF', a: 0.5, p: arc(64, 32, 14, 11, 270, 630, 28) },
+             { c: '#F48FB1', a: 0.4, p: arc(37, 53, 3.5, 2.5, 270, 630, 14) },
+             { c: '#F48FB1', a: 0.4, p: arc(63, 53, 3.5, 2.5, 270, 630, 14) }],
+      eyes: [[44, 50, 3.2], [56, 50, 3.2]],
+      mouth: [50, 56, 4.5, 3, 'arc'],
       strokes: [arc(50, 60, 26, 17, 270, -90, 40),
-                [[41, 54], [41, 74]],
-                [[61, 54], [61, 74]],
+                [[41, 59], [41, 73]],
+                [[61, 59], [61, 73]],
                 arc(36, 32, 14, 11, 270, -90, 28),
                 arc(64, 32, 14, 11, 270, -90, 28),
                 [[76, 60], [86, 55], [76, 65]]] },
@@ -417,6 +450,7 @@
       color: a.color,
       fill: a.fill,
       eyes: a.eyes,
+      mouth: a.mouth,
       say: a.say,
       strokes: a.strokes
     });

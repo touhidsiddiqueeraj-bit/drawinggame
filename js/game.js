@@ -501,6 +501,7 @@
         ctx.fill(fp.path);
       }
       if (this.glyph.eyes) this._drawEyes(ctx);
+      if (this.glyph.mouth) this._drawMouth(ctx);
       ctx.restore();
     }
 
@@ -622,6 +623,31 @@
         ctx.fill();
       }
     });
+  };
+
+  // Decorative smile: 'arc' = single downward curve, 'cat' = classic ω
+  // double bump (used by cat + sheep noses/mouths).
+  DrawEngine.prototype._drawMouth = function (ctx) {
+    var m = this.glyph.mouth;
+    var x = this.box.x + m[0] * this.box.s;
+    var y = this.box.y + m[1] * this.box.s;
+    var hw = m[2] * this.box.s;
+    var d = m[3] * this.box.s;
+    ctx.save();
+    ctx.strokeStyle = '#2B2B33';
+    ctx.globalAlpha = 0.85;
+    ctx.lineWidth = Math.max(2, 2.0 * this.box.s);
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x - hw, y);
+    if (m[4] === 'cat') {
+      ctx.quadraticCurveTo(x - hw / 2, y + d, x, y);
+      ctx.quadraticCurveTo(x + hw / 2, y + d, x + hw, y);
+    } else {
+      ctx.quadraticCurveTo(x, y + d, x + hw, y);
+    }
+    ctx.stroke();
+    ctx.restore();
   };
 
   function _tinyStar(ctx, cx, cy, r) {

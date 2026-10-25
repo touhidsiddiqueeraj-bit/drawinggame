@@ -24,7 +24,7 @@
 
 | | | |
 |:---:|:---:|:---:|
-| <img src="docs/screenshots/home.png" width="265" alt="Home screen"><br><sub><b>Pick a world</b> — animals, shapes, letters or numbers</sub> | <img src="docs/screenshots/picker-animals.png" width="265" alt="Animals picker"><br><sub><b>11 animals</b> — cat, dog, cow, duck… each with its sound 🐾</sub> | <img src="docs/screenshots/draw-animal.png" width="265" alt="Tracing a sheep"><br><sub><b>Fluffy sheep!</b> — pre-colored with eyes, tap 🐑: baa!</sub> |
+| <img src="docs/screenshots/home.png" width="265" alt="Home screen"><br><sub><b>Pick a world</b> — animals, shapes, letters or numbers</sub> | <img src="docs/screenshots/picker-animals.png" width="265" alt="Animals picker"><br><sub><b>11 animals</b> — cat, dog, cow, duck… each with its sound 🐾</sub> | <img src="docs/screenshots/draw-animal.png" width="265" alt="Tracing a sheep"><br><sub><b>Fluffy sheep!</b> — wool hat, leaf ears, smiley face, tap 🐑: baa!</sub> |
 | <img src="docs/screenshots/picker-letters.png" width="265" alt="Letters picker"><br><sub><b>26 cards</b> — every letter has its word 🍎⚽🐱</sub> | <img src="docs/screenshots/draw-letter.png" width="265" alt="Tracing the letter M"><br><sub><b>Follow the dotted road</b> — rainbow crayon!</sub> | <img src="docs/screenshots/draw-shape.png" width="265" alt="Tracing a star"><br><sub><b>Sharp corners</b> — polygons trace like real polygons</sub> |
 | <img src="docs/screenshots/celebration.png" width="265" alt="Celebration"><br><sub><b>Confetti!</b> — impossible to fail, always a win</sub> | <img src="docs/screenshots/picker-shapes.png" width="265" alt="Shapes picker"><br><sub><b>14 shapes</b> — circle to star to sunshine</sub> |  |
 
@@ -37,6 +37,7 @@
 - 👆 **Impossible to fail** — no scores, no timers, no wrong answers. Follow the dotted road, wander off it, scribble all over — it's all fine. Cover enough of the guide (about 80%) and the confetti flies.
 - 🎈 **Guides that teach themselves** — numbered start badges show stroke order, marching candy dots show the direction (letters like C, G, O are traced counter-clockwise, the way schools teach it), and a glowing hint orb demonstrates the path whenever they pause.
 - 🔊 **It talks** — 86 recorded lines: the voice names every item ("M is for Moon!", "A cat! Can you draw the cat?"), cheers progress, and celebrates the win. Punchy pop / swish / sparkle sound effects, 11 animal sounds and a gentle music loop are synthesized live in the browser — one tap to mute.
+- 😊 **Faces with character** — eyes, smiles and ω noses are pre-drawn on every animal (smiling cat and rabbit, beaked chick, woolly sheep), so each critter reads instantly at toddler-eye level.
 - 🎉 **Celebrations!** — confetti bursts, a big "You did it!", and gold stars collected per category.
 - 📴 **Works offline** — install once (APK or PWA), then it's airplane-mode friendly. No account, no ads, no tracking, no in-app purchases. Nothing to tap but the game.
 
@@ -126,6 +127,8 @@ docs/                 banner + screenshots
 - A tiny shape-matching mini-game
 
 ## 📝 Changelog
+
+**v1.1.2** — *smiling faces + a cuter sheep:* the **sheep was redesigned** as a chibi head-only cutie — fluffy scalloped wool sitting like a hat on a big soft face, leaf ears, round eyes and little ω nose marks (classic clipart look). The **chick got a proper front-facing face** (orange diamond beak right between the eyes, rosy cheeks, symmetric wings), and the **bee's face zone moved up** — eyes, smile and cheeks sit clearly above the stripes. The **cat and rabbit are smiling now** (pink triangle nose + ω / curved smile), and every smile renders in the picker thumbnails too.
 
 **v1.1.1** — *recognizable animals:* every animal now arrives **pre-colored in its natural hue** (yellow chick, brown owl, pink rabbit, cream-wool sheep…) with **cute decorative eyes**, so toddlers recognize each critter before tracing. Chick, sheep and owl redesigned from scratch; cow rebuilt with a wide face, top horns and leaf ears; bee got a proper face zone above its stripes. The pig was removed. Everything verified in a 4-round visual review — 11/11 animals recognizable.
 

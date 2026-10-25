@@ -137,6 +137,7 @@
       ctx.restore();
     }
     if (glyph.eyes) _drawEyes(ctx, glyph, ox, oy, s);
+    if (glyph.mouth) _drawMouth(ctx, glyph, ox, oy, s);
     ctx.globalAlpha = 0.16;
     ctx.strokeStyle = glyph.color;
     ctx.lineWidth = size / 26;
@@ -152,6 +153,27 @@
       _pathOn(ctx, stroke, ox, oy, s);
       ctx.stroke();
     });
+  }
+
+  // Decorative smile for picker cards (same look as the engine's).
+  function _drawMouth(ctx, glyph, ox, oy, s) {
+    var m = glyph.mouth;
+    var x = ox + m[0] * s, y = oy + m[1] * s, hw = m[2] * s, d = m[3] * s;
+    ctx.save();
+    ctx.strokeStyle = '#2B2B33';
+    ctx.globalAlpha = 0.85;
+    ctx.lineWidth = Math.max(1.5, 2.0 * s);
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x - hw, y);
+    if (m[4] === 'cat') {
+      ctx.quadraticCurveTo(x - hw / 2, y + d, x, y);
+      ctx.quadraticCurveTo(x + hw / 2, y + d, x + hw, y);
+    } else {
+      ctx.quadraticCurveTo(x, y + d, x + hw, y);
+    }
+    ctx.stroke();
+    ctx.restore();
   }
 
   function _pathOn(ctx, pts, ox, oy, s) {
