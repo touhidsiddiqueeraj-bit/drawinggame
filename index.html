@@ -59,15 +59,12 @@
         <div class="category-list" id="category-list"></div>
 
         <div class="mode-setting" id="mode-setting">
-          <div class="mode-title">&#127918; How to finish a picture</div>
-          <div class="mode-toggle" id="mode-toggle">
-            <button class="mode-btn" data-mode="auto" type="button">
-              <span class="mode-emoji">&#9889;</span>
-              <span class="mode-txt"><b>Auto-go</b><i>Hop to the next one at 80%</i></span>
-            </button>
-            <button class="mode-btn" data-mode="stars" type="button">
-              <span class="mode-emoji">&#11088;</span>
-              <span class="mode-txt"><b>Stars + &#10003; Done</b><i>Trace more for &#11088;&#11088;&#11088;, then tap Done</i></span>
+          <div class="mode-title">&#11088; Trace to earn stars, then tap &#9989; Done!</div>
+          <div class="mode-toggle" id="buzz-toggle">
+            <button class="mode-btn" id="btn-buzz" type="button" aria-label="Phone vibrations on or off">
+              <span class="mode-emoji">&#128242;</span>
+              <span class="mode-txt"><b>Phone buzz</b><i>A gentle wiggle for taps, stars &amp; wins</i></span>
+              <span class="buzz-pill" id="buzz-state">ON</span>
             </button>
           </div>
         </div>
@@ -132,12 +129,16 @@
       <div class="celebrate-stars" id="celebrate-stars">&#11088;&#11088;&#11088;</div>
       <div class="celebrate-text" id="celebrate-text">Great job!</div>
       <div class="celebrate-caption" id="celebrate-caption">You drew the circle!</div>
-      <button class="big-btn next-btn" id="btn-next">&#128074; Next!</button>
+      <div class="celebrate-actions">
+        <button class="big-btn again-btn" id="btn-again">&#128472; Again</button>
+        <button class="big-btn next-btn" id="btn-next">&#128074; Next!</button>
+      </div>
     </div>
   </div>
 
   <script src="js/data.js"></script>
   <script src="js/audio.js"></script>
+  <script src="js/haptics.js"></script>
   <script src="js/fx.js"></script>
   <script src="js/game.js"></script>
   <script src="js/app.js"></script>

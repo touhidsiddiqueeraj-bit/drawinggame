@@ -189,9 +189,14 @@
     d: [[[74, 14], [74, 86]], arc(74, 66, 26, 20, 270, 90, 32)],
     e: [arc(50, 66, 20, 20, 349, 22, 60), [[31, 62], [70, 62]]],
     f: [arc(50, 28, 18, 13, 345, 270, 18), [[50, 15], [50, 86]], [[33, 51], [67, 51]]],
-    g: [arc(46, 66, 18, 20, 270, -90, 40),
-        [[68, 48], [74, 58], [74, 70], [70, 81], [63, 90], [54, 95.5],
-         [45, 96.5], [37, 95]]],
+    // single-story g (worksheet-faithful fishhook): round bowl on the
+    // baseline, then a tail that starts LOW on the bowl's right side, drops
+    // with clear white space beside the bowl, and curls left + up well below
+    // the baseline — the silhouette preschool worksheets use. (Chosen via
+    // reference-worksheet analysis + 4-design VLM bake-off, v1.2.3.)
+    g: [arc(50, 63, 19, 18, 270, -90, 36),
+        [[66, 67], [70, 77], [70, 85], [66, 92], [58, 96.5], [48, 97],
+         [40, 93.5], [36.5, 88]]],
     h: [[[28, 14], [28, 86]], arc(51, 56, 23, 10, 180, 360, 24).concat([[74, 86]])],
     i: [[[50, 46], [50, 86]], [[50, 27], [50, 32]]],
     j: [[[62, 46], [62, 76]].concat(arc(50, 80, 12, 12, 0, 150, 16)), [[62, 27], [62, 32]]],

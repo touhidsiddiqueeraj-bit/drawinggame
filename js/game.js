@@ -49,8 +49,9 @@
     this.time = 0;
     this.rect = { left: 0, top: 0 };
     this.destroyed = false;
-    // star mode: the app turns autoWin OFF and completes via the Done button
-    this.autoWin = true;
+    // finishing is ALWAYS child-driven now: the Done button in the app reads
+    // engine.progress; the engine never auto-fires onComplete on its own.
+    this.autoWin = false;
 
     var self = this;
     this._loop = function (t) { self._frame(t); };
@@ -259,6 +260,7 @@
         self._stamp(p.x, p.y, null, 0);
         self._drawTo(p.x, p.y, e.pointerId);
         window.SoundKit.SFX.pop(1.25);
+        if (window.Hap) window.Hap.stroke();
       });
       c.addEventListener('pointermove', function (e) {
         if (!(e.pointerId in self.pointers)) return;
@@ -291,6 +293,7 @@
           self._drawTo(p.x, p.y, t.identifier);
         }
         window.SoundKit.SFX.pop(1.25);
+        if (window.Hap) window.Hap.stroke();
       }, { passive: false });
       c.addEventListener('touchmove', function (e) {
         e.preventDefault();
@@ -399,8 +402,8 @@
     }
   };
 
-  // star mode: pass false to stop the 80% auto-fire; the app then
-  // finishes the glyph itself (via the Done button) using engine.progress.
+  // Optional escape hatch for tools/tests: pass true to bring back the old
+  // auto-win at 80% coverage. The shipping app never enables it.
   DrawEngine.prototype.setAutoWin = function (on) { this.autoWin = !!on; };
 
   DrawEngine.prototype._replay = function () {

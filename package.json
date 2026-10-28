@@ -1,6 +1,6 @@
 {
   "name": "draw-and-learn",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Draw & Learn — a joyful tracing game for toddlers (shapes, letters, numbers). Static web app + Capacitor Android wrapper.",
   "private": true,
   "scripts": {

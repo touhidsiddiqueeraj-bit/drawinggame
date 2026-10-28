@@ -597,6 +597,35 @@ button:active { transform: scale(.92); }
 }
 @keyframes next-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
 
+/* celebration action row: Again + Next */
+.celebrate-actions { display: flex; gap: 12px; margin-top: 10px; align-items: center; }
+.again-btn {
+  background: #7C4DFF;
+  color: #fff;
+  font-size: 21px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 999px;
+  box-shadow: 0 6px 0 #6034D6;
+}
+.again-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #6034D6; }
+
+/* phone-buzz toggle pill (home settings) */
+#buzz-toggle .mode-btn { cursor: pointer; }
+.buzz-pill {
+  margin-left: auto;
+  align-self: center;
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #E4DCFF;
+  color: #5E35B1;
+}
+.mode-btn.off .buzz-pill { background: #F1F0F4; color: #A3A3B8; }
+
 /* ---------------- small screens / landscape tweaks ---------------- */
 @media (max-height: 620px) {
   .mascot { width: 96px; height: 96px; }

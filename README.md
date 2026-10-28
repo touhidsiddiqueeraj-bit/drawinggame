@@ -32,7 +32,9 @@
 
 - 🖍️ **113 things to trace** — 🐾 **21 animals** (cat, dog, rabbit, duck, chick, cow, sheep, fish, bee, butterfly, owl, lion, elephant, monkey, penguin, frog, turtle, snail, ladybug, bear, mouse), 🚗 **16 objects** (ball, house, tree, flower, car, boat, rocket, kite, balloon, ice cream, umbrella, apple, banana, cake, cup, pencil), 🔠 **52 letters** (26 capitals *and* 26 lowercase — flip the Big/Small toggle in the picker), the numbers 0–9, and 14 shapes from circle to star to sun.
 - 🔡 **Big A and small a** — the Letters picker has a case toggle; lowercase letters are drawn with proper x-height, ascenders and descenders, in the same stroke order schools teach.
-- ⭐ **Two ways to pass a level** — pick on the home screen: **⚡ Auto-go** hops to the next picture at 80% (the classic flow), or **⭐ Stars + ✓ Done** lets little ones keep tracing for up to ⭐⭐⭐ (80% = 1⭐, 90% = 2⭐, 100% = 3⭐) and move on by tapping the big green ✅ button. **Stars pop into a tray at the top of the canvas while they draw** — instant rewards, no waiting — and best stars are saved per picture.
+- ⭐ **Stars + ✓ Done** — little ones trace for up to ⭐⭐⭐ (80% = 1⭐, 90% = 2⭐, 100% = 3⭐) and move on whenever they like by tapping the big green ✅ button — nothing jumps away on its own. **Stars pop into a tray at the top of the canvas while they draw** — instant rewards, no waiting — and best stars are saved per picture.
+- 📳 **Gentle phone buzz** — a tiny vibration on every tap, star and win (the wiggle toddlers love), with an on/off switch on the home screen. Silent no-op on devices without vibration.
+- 🔙 **Real back-button support** — the Android hardware back button (and the browser/PWA back gesture) steps back one screen — drawing → picker → home — instead of closing the app.
 - 🎨 **Pre-colored animals with eyes** — every animal arrives softly pre-colored in its natural hue (yellow chick, brown owl, cream-wool sheep…) with cute decorative eyes and smiles, so little ones recognize the critter before they even start tracing.
 - 🐮 **Animals that talk back** — every animal has its very own sound, synthesized live in the browser: meow, woof, moo, roar, trumpet, ribbit, squeak… It plays when the card opens, when they tap the animal button, and when they win. Objects get in on it too — vroom, toot, pop, splat! 🚗🎈
 - 🌈 **A fat rainbow crayon** — 11 bright colors that *speak their own name* when picked, plus a rainbow brush that cycles hues as they draw.
@@ -47,14 +49,14 @@
 
 1. **Tap** a big picture button — 🐾 Animals, 🚗 Objects, ⭐ Shapes, 🐤 Letters or 🔢 Numbers — then tap any card.
 2. **Trace** the dotted road with a finger. Any color, any speed, any order. In 🐤 Letters, flip the **Big A / small a** toggle to switch cases.
-3. **Confetti!** 🎉 A happy voice says *"You drew the star!"* — in **⚡ Auto-go** mode the next card is one tap away; in **⭐ Stars mode** the stars pop into the tray **as they trace** (80 / 90 / 100%), then they tap the green ✅ Done to move on.
+3. **Confetti!** 🎉 A happy voice counts the stars — they pop into the tray **as they trace** (80 / 90 / 100%) — then the child taps the green ✅ Done whenever they're ready. The celebration card waits patiently for **↻ Again** (trace it once more) or **👏 Next!** — nothing auto-advances.
 
 ## 📥 Get it
 
 ### 🤖 Android (APK)
 
 [**⬇️ Download the latest APK**](https://github.com/touhidsiddiqueeraj-bit/drawinggame/releases/latest)
-(~6 MB · Android 6.0+ · portrait · fully offline · no permissions needed)
+(~7 MB · Android 6.0+ · portrait · fully offline · only permission: vibrate, for the optional buzz)
 
 Grab the `DrawAndLearn-*.apk` from the release, copy it to a phone (or download it right on the phone), tap it and allow "install from unknown apps" once. Every future release tag gets a fresh APK attached automatically by CI.
 
@@ -130,6 +132,7 @@ docs/                 banner + screenshots
 
 ## 📝 Changelog
 
+**v1.2.3** — *feel & control pass:* 🔡 **Lowercase g rebuilt (again)** — a worksheet-faithful single-story g: round bowl sitting on the baseline and a fishhook tail that starts low on the bowl's right side, drops with clear white space beside it, and curls left and up well below the baseline — the exact silhouette preschool workbooks use (previous versions read as *q* or *9*). 📳 **Phone vibrations** — a gentle buzz on taps, stars and wins, with an on/off **Phone buzz** switch on the home screen. 🔙 **Back button support** — the Android hardware back button and the browser back gesture now step back one screen (drawing → picker → home) instead of leaving the app. ⭐ **Auto-go removed** — the pass-mode toggle is gone; finishing is always the child's choice: stars pop into the tray while they trace (80 / 90 / 100%), the green ✅ Done button finishes the picture, and the celebration waits for **↻ Again** or **👏 Next!** instead of hopping away after a few seconds.
 **v1.2.2** — *reference-art pass:* 🐘 **Elephant redesigned from the tutorial reference** — a cute 3/4 view with one smooth body+head outline, a big fan ear with pink inner, one big shiny anime eye, a thick J-hook trunk sweeping right and curling UP, four stubby legs with white toenails and a tufted tail. 🐝 **Bee goes side-view** — bee eyes sit on the *front* of the head, so the bee is now a proper profile with exactly ONE eye on the head end, a fat striped body, two swept-back wings, forward antennae and a pointy stinger. 🦋 **Butterfly redrawn in one-line style** — two tall upper wings sweeping up, two round lower wings angling down, a slim body with a little head, and antennae finishing in tight curls. 🔡 **Lowercase g, f, y and q rebuilt to true print forms** — the g is a bowl + clear fishhook tail hanging below the baseline, the f's top hook now curves right (it read as a 7 before), the y's arms meet above the baseline with a long descender tail, and the q's tail drops straight from the x-height with a rightward kick — all matching how the game already draws a and q.
 
 

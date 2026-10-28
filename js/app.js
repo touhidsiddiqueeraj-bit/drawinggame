@@ -14,17 +14,18 @@
     color: window.BRUSH_COLORS[0],
     completed: loadCompleted(),
     stars: loadStars(),
-    mode: loadMode(),          // 'auto' (hop on at 80%) | 'stars' (Done button + 1-3 stars)
     letterCase: loadCase()     // 'big' | 'small' (letters picker toggle)
   };
 
   var engine = null;
   var milestones = {};
   var almostSpoken = false;
-  var autoAdvanceTimer = null;
-  var starReady = false;      // star mode: has the 80% "more stars" cue fired?
-  var trayStars = 0;          // star mode: stars currently popped in the tray
+  var celebrating = false;    // celebration card is up (Done/Next guarded)
+  var starReady = false;      // has the 80% "more stars" cue fired?
+  var trayStars = 0;          // stars currently popped in the tray
   var demoMode = /[?&]demo=1/.test(location.search);
+  var navLock = false;        // popstate is driving the current screen change
+  var pushedEntries = 0;      // history entries this page pushed (safe back)
 
   /* ================= persistence ================= */
 
@@ -51,9 +52,6 @@
     state.stars[id] = n;
     try { localStorage.setItem('dl_stars', JSON.stringify(state.stars)); } catch (e) {}
   }
-  function loadMode() {
-    return localStorage.getItem('dl_mode') === 'stars' ? 'stars' : 'auto';
-  }
   function loadCase() {
     return localStorage.getItem('dl_case') === 'small' ? 'small' : 'big';
   }
@@ -68,6 +66,92 @@
     document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
     $('screen-' + name).classList.add('active');
     state.screen = name;
+    syncHistory();
+  }
+
+  /* ================= phone back button (history) =================
+   * Every screen change pushes a browser history entry, so the Android
+   * hardware back button (and the browser/PWA back gesture) walks the app
+   * back one screen instead of leaving it. Home is the base entry.
+   * The on-screen back buttons call history.back() too, so software and
+   * hardware back stay perfectly in sync. */
+
+  function glyphById(id) {
+    for (var i = 0; i < window.GLYPHS.length; i++) {
+      if (window.GLYPHS[i].id === id) return window.GLYPHS[i];
+    }
+    return null;
+  }
+
+  function syncHistory() {
+    var wasPop = navLock;
+    navLock = false;
+    if (wasPop) return;                  // popstate already owns this entry
+    if (state.screen === 'home') return; // home = the base entry, nothing pushed
+    var want = {
+      scr: state.screen,
+      cat: state.category,
+      id: state.screen === 'draw' && state.item ? state.item.id : null
+    };
+    var h = null;
+    try { h = history.state; } catch (e) {}
+    try {
+      if (h && h.scr === state.screen) history.replaceState(want, '');
+      else { history.pushState(want, ''); pushedEntries++; }
+    } catch (e) {}
+  }
+
+  // real transitions (they own the goodbye sound + haptic)
+  function backToPicker() {
+    window.SoundKit.SFX.whoosh();
+    if (window.Hap) window.Hap.tap();
+    hideCelebration();
+    openPicker(state.category);
+  }
+  function backToHome() {
+    window.SoundKit.SFX.whoosh();
+    if (window.Hap) window.Hap.tap();
+    hideCelebration();
+    buildHome();
+    showScreen('home');
+  }
+
+  window.addEventListener('popstate', function (e) {
+    var st = e.state;
+    if (pushedEntries > 0) pushedEntries--;
+    if (st && st.scr === 'draw') {
+      // forward-restore into a draw screen
+      if (state.screen !== 'draw' || (state.item && st.id && state.item.id !== st.id)) {
+        var g = glyphById(st.id);
+        if (g) { navLock = true; openDraw(g); }
+      }
+      return;
+    }
+    if (st && st.scr === 'picker') {
+      if (state.screen === 'draw') {
+        backToPicker();
+      } else if (state.screen === 'home') {
+        navLock = true;
+        openPicker(st.cat || state.category);
+      }
+      return;
+    }
+    // base / home entry
+    if (state.screen !== 'home') backToHome();
+  });
+
+  // on-screen back buttons: pop our own entry when we can (keeps hardware
+  // + software back in sync), otherwise navigate directly.
+  function softBack(target) {
+    var h = null;
+    try { h = history.state; } catch (e) {}
+    if (h && h.scr === target && pushedEntries > 0) {
+      history.back();
+    } else if (target === 'draw') {
+      backToPicker();
+    } else {
+      backToHome();
+    }
   }
 
   /* ================= HOME ================= */
@@ -89,33 +173,29 @@
         '<span class="cat-arrow">\u27A1\uFE0F</span>';
       btn.addEventListener('click', function () {
         window.SoundKit.SFX.pop();
+        if (window.Hap) window.Hap.tap();
         openPicker(cat.id);
       });
       list.appendChild(btn);
     });
-    refreshModeToggle();
+    refreshBuzzButton();
     refreshMusicButtons();
   }
 
-  /* ================= pass-mode setting ================= */
+  /* ================= phone buzz setting ================= */
 
-  function refreshModeToggle() {
-    document.querySelectorAll('#mode-toggle .mode-btn').forEach(function (b) {
-      b.classList.toggle('active', b.getAttribute('data-mode') === state.mode);
-    });
+  function refreshBuzzButton() {
+    var btn = $('btn-buzz'), pill = $('buzz-state');
+    if (!btn || !pill) return;
+    var on = window.Hap.isOn();
+    btn.classList.toggle('off', !on);
+    btn.classList.toggle('active', on);
+    pill.textContent = on ? 'ON' : 'OFF';
   }
-  function refreshDoneButton() {
-    var b = $('btn-done');
-    if (b) b.classList.toggle('hidden', state.mode !== 'stars');
-  }
-  function setMode(m) {
-    if (state.mode === m) return;
-    state.mode = m;
-    try { localStorage.setItem('dl_mode', m); } catch (e) {}
-    refreshModeToggle();
-    refreshDoneButton();
-    if (engine) engine.setAutoWin(m === 'auto');
-    window.SoundKit.SFX.pop(m === 'stars' ? 0.8 : 1.2);
+  function toggleBuzz() {
+    window.Hap.setOn(!window.Hap.isOn());
+    refreshBuzzButton();
+    window.SoundKit.SFX.pop(window.Hap.isOn() ? 1.2 : 0.7);
   }
 
   /* ================= letters case toggle ================= */
@@ -130,6 +210,7 @@
     state.letterCase = c;
     try { localStorage.setItem('dl_case', c); } catch (e) {}
     window.SoundKit.SFX.pop(1.15);
+    if (window.Hap) window.Hap.tap();
     window.SoundKit.Voice.play(c === 'small' ? 'small-letters' : 'big-letters');
     openPicker('letters');
   }
@@ -181,6 +262,7 @@
       }
       card.addEventListener('click', function () {
         window.SoundKit.SFX.pop();
+        if (window.Hap) window.Hap.tap();
         openDraw(g);
       });
       grid.appendChild(card);
@@ -354,7 +436,6 @@
     trayStars = 0;
     resetStarTray();
     hideCelebration();
-    if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
 
     var nameEl = $('draw-name');
     nameEl.textContent = glyph.cat === 'letters' ? (glyph.name + ' is for ' + glyph.caption) : (glyph.cat === 'numbers' ? glyph.caption : glyph.name);
@@ -366,21 +447,17 @@
       if (glyph.sound) soundBtn.textContent = glyph.emoji;
     }
 
-    // star mode: show the big green Done button
+    // the big green Done button is always there now — finishing is the
+    // child's choice (stars + tick), never an auto-go
     var doneBtn = $('btn-done');
-    if (doneBtn) {
-      doneBtn.classList.toggle('hidden', state.mode !== 'stars');
-      doneBtn.classList.remove('ready');
-    }
+    if (doneBtn) doneBtn.classList.remove('hidden', 'ready');
 
     if (!engine) {
       engine = new window.DrawEngine($('draw-canvas'), {
-        onProgress: onProgress,
-        onComplete: onComplete
+        onProgress: onProgress
       });
     }
     engine.setColor(state.color);
-    engine.setAutoWin(state.mode === 'auto');
     engine.setItem(glyph);
     showScreen('draw');
     buildPalette();
@@ -417,6 +494,7 @@
       if (pct >= m && !milestones[m]) {
         milestones[m] = true;
         window.SoundKit.SFX.bell();
+        if (window.Hap) window.Hap.star();
         var star = $('progress-star');
         star.classList.remove('pop');
         void star.offsetWidth;
@@ -427,8 +505,8 @@
       almostSpoken = true;
       window.SoundKit.Voice.play('almost-there');
     }
-    // star mode: at 80% the Done button wakes up and invites more tracing
-    if (state.mode === 'stars' && pct >= 80 && !starReady) {
+    // at 80% the Done button wakes up and invites more tracing
+    if (pct >= 80 && !starReady) {
       starReady = true;
       window.SoundKit.Voice.play('more-stars');
       var db = $('btn-done');
@@ -439,25 +517,23 @@
         db.classList.add('wiggle');
       }
     }
-    // star mode: stars pop into the tray WHILE the child draws
+    // stars pop into the tray WHILE the child draws
     // (80% = 1 star, 90% = 2 stars, 100% = 3 stars — same as the reward)
-    if (state.mode === 'stars') {
-      var earned = pct >= 100 ? 3 : pct >= 90 ? 2 : pct >= 80 ? 1 : 0;
-      while (trayStars < earned) {
-        trayStars++;
-        popTrayStar(trayStars);
-        if (trayStars === 2) window.SoundKit.Voice.play('two-stars');
-        if (trayStars === 3) window.SoundKit.Voice.play('three-stars');
-      }
+    var earned = pct >= 100 ? 3 : pct >= 90 ? 2 : pct >= 80 ? 1 : 0;
+    while (trayStars < earned) {
+      trayStars++;
+      popTrayStar(trayStars);
+      if (trayStars === 2) window.SoundKit.Voice.play('two-stars');
+      if (trayStars === 3) window.SoundKit.Voice.play('three-stars');
     }
   }
 
-  // ---- star tray (auto-appearing stars while drawing, star mode only) ----
+  // ---- star tray (auto-appearing stars while drawing) ----
 
   function resetStarTray() {
     var tray = $('star-tray');
     if (!tray) return;
-    tray.classList.toggle('hidden', state.mode !== 'stars');
+    tray.classList.remove('hidden');
     for (var i = 1; i <= 3; i++) {
       var el = $('tray-star-' + i);
       if (el) {
@@ -475,26 +551,24 @@
     void el.offsetWidth;
     el.classList.add('earned', 'pop');
     window.SoundKit.SFX.sparkle();
+    if (window.Hap) window.Hap.star();
     window.FX.starBurst(window.innerWidth * (0.30 + 0.20 * (n - 1)), window.innerHeight * 0.18, 8);
-  }
-
-  function onComplete() {
-    // fired by the engine in auto mode at >= 80% coverage
-    finishWithStars(engine ? Math.max(engine.progress, 0.8) : 1);
   }
 
   function finishWithStars(p) {
     if (!state.item) return;
+    celebrating = true;
     var glyph = state.item;
     var stars = starsFor(p);
     markCompleted(glyph.id);
     if (stars > 0) saveStars(glyph.id, stars);
     window.SoundKit.SFX.fanfare();
+    if (window.Hap) window.Hap.win();
 
-    // voice: star count in star mode, classic praise in auto mode
+    // voice: the star count (classic praise as a safety fallback)
     var praises = ['great-job', 'amazing', 'wonderful', 'perfect', 'you-did-it', 'super-star', 'fantastic', 'beautiful'];
     var pickedPraise = praises[(Math.random() * praises.length) | 0];
-    if (state.mode === 'stars' && stars > 0) {
+    if (stars > 0) {
       window.SoundKit.Voice.play(stars >= 3 ? 'three-stars' : stars === 2 ? 'two-stars' : 'one-star');
     } else {
       window.SoundKit.Voice.play(pickedPraise);
@@ -526,15 +600,11 @@
       'perfect': 'Perfect!', 'you-did-it': 'You did it!', 'super-star': 'Super star!',
       'fantastic': 'Fantastic!', 'beautiful': 'So beautiful!' };
     var starTexts = { 1: 'One star!', 2: 'Two stars!', 3: 'Three stars!' };
-    $('celebrate-text').textContent = (state.mode === 'stars' && stars > 0)
+    $('celebrate-text').textContent = stars > 0
       ? (starTexts[stars] || 'Great job!')
       : (praiseTexts[pickedPraise] || 'Great job!');
     showCelebration();
-
-    autoAdvanceTimer = setTimeout(function () {
-      autoAdvanceTimer = null;
-      goNext();
-    }, 4600);
+    // no auto-go any more: the card patiently waits for Again or Next
   }
 
   function showCelebration() {
@@ -547,6 +617,7 @@
     card.style.animation = '';
   }
   function hideCelebration() {
+    celebrating = false;
     var c = $('celebration');
     c.classList.add('hidden');
     c.setAttribute('aria-hidden', 'true');
@@ -575,6 +646,7 @@
         bar.querySelectorAll('.swatch').forEach(function (s) { s.classList.remove('selected'); });
         sw.classList.add('selected');
         window.SoundKit.SFX.colorPop(i);
+        if (window.Hap) window.Hap.tap();
         window.SoundKit.Voice.play(c.id);
       });
       bar.appendChild(sw);
@@ -601,18 +673,14 @@
     buildHome();
 
     $('btn-back-picker').addEventListener('click', function () {
-      window.SoundKit.SFX.whoosh();
-      buildHome();
-      showScreen('home');
+      softBack('picker');
     });
     $('btn-back-draw').addEventListener('click', function () {
-      window.SoundKit.SFX.whoosh();
-      hideCelebration();
-      if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
-      openPicker(state.category);
+      softBack('draw');
     });
     $('btn-replay').addEventListener('click', function () {
       window.SoundKit.SFX.pop(1.1);
+      if (window.Hap) window.Hap.tap();
       if (state.item) window.SoundKit.Voice.play(state.item.id);
       if (engine) engine.hint();
     });
@@ -620,6 +688,7 @@
     if (soundBtn) {
       soundBtn.addEventListener('click', function () {
         window.SoundKit.SFX.pop(1.2);
+        if (window.Hap) window.Hap.tap();
         if (state.item && state.item.sound) {
           window.SoundKit.Animal.play(state.item.sound);
           soundBtn.classList.remove('wiggle');
@@ -630,10 +699,12 @@
     }
     $('btn-hint').addEventListener('click', function () {
       window.SoundKit.SFX.pop(1.3);
+      if (window.Hap) window.Hap.tap();
       if (engine) engine.hint();
     });
     $('btn-clear').addEventListener('click', function () {
       window.SoundKit.SFX.whoosh();
+      if (window.Hap) window.Hap.tap();
       if (engine) engine.clear();
       milestones = { 25: false, 50: false, 75: false };
       almostSpoken = false;
@@ -645,15 +716,15 @@
     });
     $('btn-next').addEventListener('click', function () {
       window.SoundKit.SFX.pop(1.4);
+      if (window.Hap) window.Hap.tap();
       goNext();
     });
     $('btn-music-home').addEventListener('click', toggleMusic);
     $('btn-music-draw').addEventListener('click', toggleMusic);
 
-    // pass-mode setting (home) + letters case toggle (picker)
-    document.querySelectorAll('#mode-toggle .mode-btn').forEach(function (b) {
-      b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); });
-    });
+    // phone buzz setting (home) + letters case toggle (picker)
+    var buzzBtn = $('btn-buzz');
+    if (buzzBtn) buzzBtn.addEventListener('click', toggleBuzz);
     var caseBig = $('case-big'), caseSmall = $('case-small');
     if (caseBig) caseBig.addEventListener('click', function () { setLetterCase('big'); });
     if (caseSmall) caseSmall.addEventListener('click', function () { setLetterCase('small'); });
@@ -663,9 +734,11 @@
     if (doneBtn) {
       doneBtn.addEventListener('click', function () {
         window.SoundKit.SFX.pop(1.5);
-        if (!engine || !state.item || autoAdvanceTimer) return; // already celebrating
+        if (window.Hap) window.Hap.tap();
+        if (!engine || !state.item || celebrating) return; // already celebrating
         if (engine.progress < 0.8) {
           window.SoundKit.Voice.play('keep-going');
+          if (window.Hap) window.Hap.no();
           engine.hint();
           doneBtn.classList.remove('wiggle');
           void doneBtn.offsetWidth;
@@ -673,6 +746,16 @@
           return;
         }
         finishWithStars(engine.progress);
+      });
+    }
+
+    // celebration: trace the same picture again
+    var againBtn = $('btn-again');
+    if (againBtn) {
+      againBtn.addEventListener('click', function () {
+        window.SoundKit.SFX.pop(1.1);
+        if (window.Hap) window.Hap.tap();
+        if (state.item) openDraw(state.item);
       });
     }
 

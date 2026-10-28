@@ -33,4 +33,6 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- phone vibrations (navigator.vibrate in the WebView) -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 </manifest>
